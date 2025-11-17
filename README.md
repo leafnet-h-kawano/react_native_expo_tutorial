@@ -25,6 +25,42 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## Environment-specific builds
+
+This project is configured with three environments: develop, staging, and production.
+
+### Development Environment
+For local development and testing:
+```bash
+eas build --profile develop --platform ios
+eas build --profile develop --platform android
+```
+
+### Staging Environment
+For internal testing and QA:
+```bash
+eas build --profile staging --platform ios
+eas build --profile staging --platform android
+```
+
+### Production Environment
+For app store releases:
+```bash
+eas build --profile production --platform ios
+eas build --profile production --platform android
+```
+
+### Submit to App Stores
+```bash
+# Staging (internal testing)
+eas submit --profile staging --platform ios
+eas submit --profile staging --platform android
+
+# Production
+eas submit --profile production --platform ios
+eas submit --profile production --platform android
+```
+
 ## Get a fresh project
 
 When you're ready, run:

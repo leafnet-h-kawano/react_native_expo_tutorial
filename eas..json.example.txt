@@ -1,0 +1,70 @@
+{
+  "cli": {
+    "version": ">= 16.26.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "develop": {
+      "channel": "develop",
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "APP_VARIANT": "develop"
+      },
+      "ios": {
+        "simulator": true
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "staging": {
+      "channel": "staging",
+      "autoIncrement": true, 
+      //"distribution": "internal",　//だとinternal build(add hoc)になる。TestFlightで配布したいときは削除する
+      "env": {
+        "APP_VARIANT": "staging"
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "channel": "production",
+      "autoIncrement": true,
+      "env": {
+        "APP_VARIANT": "production"
+      },
+      "android": {
+        "buildType": "app-bundle"
+      }
+    }
+  },
+  "submit": {
+    "develop": {
+      "ios": {
+        //AppStoreConnectの[Apple ID]
+        "ascAppId": "your-develop-app-id"
+      },
+      "android": {
+        "track": "internal"
+      }
+    },
+    "staging": {
+      "ios": {
+        "ascAppId": "your-staging-app-id"
+      },
+      "android": {
+        "track": "production"
+      }
+    },
+    "production": {
+      "ios": {
+        "ascAppId": "your-production-app-id"
+      },
+      "android": {
+        "track": "production"
+      }
+    }
+  }
+}
