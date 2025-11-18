@@ -45,6 +45,34 @@ export default function HomeStackLayout() {
           },
         }}
       />
+      <Stack.Screen
+        name="api-sample"
+        options={{
+          title: 'API通信サンプル',
+          headerStyle: {
+            backgroundColor: 'white',
+          },
+          headerTintColor: '#333',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="advanced-api"
+        options={{
+          title: '高度なAPI通信',
+          headerStyle: {
+            backgroundColor: 'white',
+          },
+          headerTintColor: '#333',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+          },
+        }}
+      />
     </Stack>
   );
 }

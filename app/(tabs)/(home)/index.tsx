@@ -2,11 +2,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import {
-    debugLog,
-    useEnvironment,
-    useIsDevelopment,
-    useIsProduction,
-    useIsStaging
+  debugLog,
+  useEnvironment,
+  useIsDevelopment,
+  useIsProduction,
+  useIsStaging
 } from '../../../hooks/useEnvironment';
 
 export default function HomeTab() {
@@ -183,6 +183,60 @@ export default function HomeTab() {
                 fontWeight: '500' 
               }}>
                 ユーザー詳細
+              </Text>
+              <Ionicons name="chevron-forward" size={16} color="#999" style={{ marginLeft: 'auto' }} />
+            </TouchableOpacity>
+          </Link>
+
+          <Link href="/api-sample" asChild>
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: '#f8f9fa',
+                paddingVertical: 12,
+                paddingHorizontal: 16,
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: '#e9ecef',
+              }}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="cloud-outline" size={20} color={getThemeColor()} />
+              <Text style={{ 
+                marginLeft: 10, 
+                fontSize: 16, 
+                color: '#333',
+                fontWeight: '500' 
+              }}>
+                API通信サンプル
+              </Text>
+              <Ionicons name="chevron-forward" size={16} color="#999" style={{ marginLeft: 'auto' }} />
+            </TouchableOpacity>
+          </Link>
+
+          <Link href="/advanced-api" asChild>
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: '#f8f9fa',
+                paddingVertical: 12,
+                paddingHorizontal: 16,
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: '#e9ecef',
+              }}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="rocket-outline" size={20} color={getThemeColor()} />
+              <Text style={{ 
+                marginLeft: 10, 
+                fontSize: 16, 
+                color: '#333',
+                fontWeight: '500' 
+              }}>
+                高度なAPI通信
               </Text>
               <Ionicons name="chevron-forward" size={16} color="#999" style={{ marginLeft: 'auto' }} />
             </TouchableOpacity>
