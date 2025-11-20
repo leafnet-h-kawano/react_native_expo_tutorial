@@ -73,6 +73,20 @@ export default function HomeStackLayout() {
           },
         }}
       />
+      <Stack.Screen
+        name="immer-demo"
+        options={{
+          title: 'Immerデモ',
+          headerStyle: {
+            backgroundColor: 'white',
+          },
+          headerTintColor: '#333',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+          },
+        }}
+      />
     </Stack>
   );
 }
