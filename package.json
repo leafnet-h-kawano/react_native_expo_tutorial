@@ -32,13 +32,23 @@
     "submit:ios-dev": "eas submit --profile develop --platform ios",
     "submit:ios-stg": "eas submit --profile staging --platform ios",
     "submit:ios-prod": "eas submit --profile production --platform ios",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "generate-schemas": "npm run generate:schemas:users && npm run generate:schemas:posts && npm run generate:schemas:todos && npm run generate:schemas:common",
+    "generate:schemas:users": "npx ts-to-zod model/genSchemasTypes/users.ts model/schemas/users.ts",
+    "generate:schemas:posts": "npx ts-to-zod model/genSchemasTypes/posts.ts model/schemas/posts.ts",
+    "generate:schemas:todos": "npx ts-to-zod model/genSchemasTypes/todos.ts model/schemas/todos.ts",
+    "generate:schemas:common": "npx ts-to-zod model/genSchemasTypes/common.ts model/schemas/common.ts",
+    "build-schemas": "npm run generate-schemas && echo 'Zod schemas generated successfully'"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
     "@react-navigation/bottom-tabs": "^7.4.0",
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/native": "^7.1.8",
+    "@tanstack/react-query": "^5.90.11",
     "axios": "^1.13.2",
     "dotenv": "^17.2.3",
     "expo": "~54.0.20",
@@ -69,9 +79,19 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@jest/globals": "^30.2.0",
+    "@testing-library/jest-native": "^5.4.3",
+    "@testing-library/react-native": "^13.3.3",
+    "@types/jest": "^30.0.0",
     "@types/react": "~19.1.0",
+    "babel-jest": "^30.2.0",
+    "babel-plugin-module-resolver": "^5.0.2",
+    "babel-preset-expo": "^54.0.7",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
+    "jest": "^30.2.0",
+    "jest-expo": "^54.0.13",
+    "ts-to-zod": "^5.0.1",
     "typescript": "~5.9.2"
   },
   "private": true

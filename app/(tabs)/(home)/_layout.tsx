@@ -74,13 +74,13 @@ export default function HomeStackLayout() {
         }}
       />
       <Stack.Screen
-        name="immer-demo"
+        name="comprehensive-demo"
         options={{
-          title: 'Immerデモ',
+          title: '包括的技術デモ',
           headerStyle: {
-            backgroundColor: 'white',
+            backgroundColor: '#007AFF',
           },
-          headerTintColor: '#333',
+          headerTintColor: 'white',
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,

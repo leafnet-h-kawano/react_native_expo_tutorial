@@ -215,7 +215,7 @@ export default function HomeTab() {
             </TouchableOpacity>
           </Link>
 
-          <Link href="/advanced-api" asChild>
+          {/* <Link href="/advanced-api" asChild>
             <TouchableOpacity
               style={{
                 flexDirection: 'row',
@@ -240,86 +240,41 @@ export default function HomeTab() {
               </Text>
               <Ionicons name="chevron-forward" size={16} color="#999" style={{ marginLeft: 'auto' }} />
             </TouchableOpacity>
-          </Link>
+          </Link> */}
 
-          <Link href="/immer-demo" asChild>
+          <Link href="/comprehensive-demo" asChild>
             <TouchableOpacity
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                backgroundColor: '#f8f9fa',
-                paddingVertical: 12,
+                backgroundColor: '#f0f9ff',
+                paddingVertical: 15,
                 paddingHorizontal: 16,
                 borderRadius: 8,
-                borderWidth: 1,
-                borderColor: '#e9ecef',
+                borderWidth: 2,
+                borderColor: '#007AFF',
+                marginTop: 10,
               }}
               activeOpacity={0.7}
             >
-              <Ionicons name="construct-outline" size={20} color={getThemeColor()} />
-              <Text style={{ 
-                marginLeft: 10, 
-                fontSize: 16, 
-                color: '#333',
-                fontWeight: '500' 
-              }}>
-                Immerデモ
-              </Text>
-              <Ionicons name="chevron-forward" size={16} color="#999" style={{ marginLeft: 'auto' }} />
-            </TouchableOpacity>
-          </Link>
-
-          <Link href="/validation-demo" asChild>
-            <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                backgroundColor: '#f8f9fa',
-                paddingVertical: 12,
-                paddingHorizontal: 16,
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: '#e9ecef',
-              }}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="shield-checkmark-outline" size={20} color={getThemeColor()} />
-              <Text style={{ 
-                marginLeft: 10, 
-                fontSize: 16, 
-                color: '#333',
-                fontWeight: '500' 
-              }}>
-                Zodバリデーションデモ
-              </Text>
-              <Ionicons name="chevron-forward" size={16} color="#999" style={{ marginLeft: 'auto' }} />
-            </TouchableOpacity>
-          </Link>
-
-          <Link href="/typed-api-demo" asChild>
-            <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                backgroundColor: '#f8f9fa',
-                paddingVertical: 12,
-                paddingHorizontal: 16,
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: '#e9ecef',
-              }}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="code-working-outline" size={20} color={getThemeColor()} />
-              <Text style={{ 
-                marginLeft: 10, 
-                fontSize: 16, 
-                color: '#333',
-                fontWeight: '500' 
-              }}>
-                型安全APIデモ
-              </Text>
-              <Ionicons name="chevron-forward" size={16} color="#999" style={{ marginLeft: 'auto' }} />
+              <Ionicons name="rocket-outline" size={24} color="#007AFF" />
+              <View style={{ marginLeft: 12, flex: 1 }}>
+                <Text style={{ 
+                  fontSize: 18, 
+                  color: '#007AFF',
+                  fontWeight: 'bold' 
+                }}>
+                  包括的技術デモ
+                </Text>
+                <Text style={{ 
+                  fontSize: 12, 
+                  color: '#0066cc',
+                  marginTop: 2,
+                }}>
+                  Axios + Zod + ts-to-zod + Jest + Zustand
+                </Text>
+              </View>
+              <Ionicons name="chevron-forward" size={18} color="#007AFF" />
             </TouchableOpacity>
           </Link>
         </View>
