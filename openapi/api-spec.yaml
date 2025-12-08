@@ -340,6 +340,26 @@ components:
               type: string
         selected:
           type: boolean
+      example:
+        id: 1
+        name: "山田太郎"
+        username: "yamada_taro"
+        email: "taro@example.com"
+        phone: "090-1234-5678"
+        website: "https://yamada.example.com"
+        address:
+          street: "渋谷1-2-3"
+          suite: "マンション101"
+          city: "渋谷区"
+          zipcode: "150-0001"
+          geo:
+            lat: "35.6762"
+            lng: "139.6503"
+        company:
+          name: "株式会社サンプル"
+          catchPhrase: "革新的なソリューションを提供"
+          bs: "synergize scalable solutions"
+        selected: false
 
     CreateUserRequest:
       type: object
@@ -395,6 +415,13 @@ components:
           type: boolean
         modified:
           type: boolean
+      example:
+        id: 1
+        userId: 1
+        title: "React Nativeの基礎"
+        body: "React Nativeを使ったモバイルアプリ開発について解説します。クロスプラットフォーム開発の魅力をお伝えします。"
+        isNew: false
+        modified: false
 
     # リクエスト型(schemas/requestsに定義)
     # ※「Request」を名前に含めること
@@ -436,6 +463,11 @@ components:
           type: string
         completed:
           type: boolean
+      example:
+        id: 1
+        userId: 1
+        title: "プロジェクトのセットアップ"
+        completed: false
 
     CreateTodoRequest:
       type: object

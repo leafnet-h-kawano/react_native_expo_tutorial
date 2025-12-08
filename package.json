@@ -38,8 +38,10 @@
     "test:coverage": "jest --coverage",
     "generate:types": "orval --config orval.config.ts && node scripts/organize-types.js",
     "generate:schemas": "node scripts/generate-schemas.js",
-    "generate:all": "npm run generate:types && npm run generate:schemas",
-    "swagger": "node scripts/swagger-server.js"
+    "generate:mocks": "node scripts/generate-mock-data.js",
+    "generate:all": "npm run generate:types && npm run generate:schemas && npm run generate:mocks",
+    "swagger": "node scripts/swagger-server.js",
+    "mock:server": "prism mock openapi/api-spec.yaml --port 4010"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -93,7 +95,7 @@
     "jest-expo": "^54.0.13",
     "orval": "^7.17.0",
     "swagger-ui-express": "^5.0.1",
-    "ts-to-zod": "^5.1.0",
+    "ts-to-zod": "^5.0.1",
     "typescript": "~5.9.2",
     "yamljs": "^0.3.0"
   },
