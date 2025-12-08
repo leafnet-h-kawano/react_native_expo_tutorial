@@ -1,10 +1,11 @@
-import { Post, Posts } from '@/model/genSchemasTypes/posts';
+import { CreatePostRequest, UpdatePostRequest } from '@/model/genTypes';
+import { CreatePostResponse, GetPostResponse, GetPostsResponse, UpdatePostResponse } from '@/model/genTypes/responses';
 import { apiClient } from '@/services/api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { postQueryKeys } from './queryKeys';
 import {
-    CallbackArgs,
-    executeApiCall
+  CallbackArgs,
+  executeApiCall
 } from './useApiClient';
 
 /**
@@ -12,7 +13,7 @@ import {
  */
 export const postQueryFunctions = {
   // 投稿一覧取得
-  getAllPosts: async (callbacks?: CallbackArgs<Posts>): Promise<Posts> => {
+  getAllPosts: async (callbacks?: CallbackArgs<GetPostsResponse>): Promise<GetPostsResponse> => {
     return executeApiCall({
       apiCall: () => apiClient.posts.getAll(),
       onSuccess: callbacks?.onSuccess,
@@ -21,7 +22,7 @@ export const postQueryFunctions = {
   },
 
   // 特定投稿取得
-  getPostById: async (id: number, callbacks?: CallbackArgs<Post>): Promise<Post> => {
+  getPostById: async (id: number, callbacks?: CallbackArgs<GetPostResponse>): Promise<GetPostResponse> => {
     return executeApiCall({
       apiCall: () => apiClient.posts.getById(id),
       onSuccess: callbacks?.onSuccess,
@@ -35,7 +36,7 @@ export const postQueryFunctions = {
  */
 
 // 投稿一覧取得フック
-export function usePosts(callbacks?: CallbackArgs<Posts>) {
+export function usePosts(callbacks?: CallbackArgs<GetPostsResponse>) {
   return useQuery({
     queryKey: postQueryKeys.all,
     queryFn: () => postQueryFunctions.getAllPosts(callbacks),
@@ -43,7 +44,7 @@ export function usePosts(callbacks?: CallbackArgs<Posts>) {
 }
 
 // 特定投稿取得フック
-export function usePost(id: number, callbacks?: CallbackArgs<Post>) {
+export function usePost(id: number, callbacks?: CallbackArgs<GetPostResponse>) {
   return useQuery({
     queryKey: postQueryKeys.detail(id),
     queryFn: () => postQueryFunctions.getPostById(id, callbacks),
@@ -52,11 +53,11 @@ export function usePost(id: number, callbacks?: CallbackArgs<Post>) {
 }
 
 // 投稿作成ミューテーション
-export function useCreatePost(callbacks?: CallbackArgs<Post>) {
+export function useCreatePost(callbacks?: CallbackArgs<CreatePostResponse>) {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (postData: Omit<Post, 'id'>) =>
+    mutationFn: (postData: CreatePostRequest) =>
       executeApiCall({
         apiCall: () => apiClient.posts.create(postData),
         onSuccess: callbacks?.onSuccess,
@@ -74,11 +75,11 @@ export function useCreatePost(callbacks?: CallbackArgs<Post>) {
 }
 
 // 投稿更新ミューテーション
-export function useUpdatePost(callbacks?: CallbackArgs<Post>) {
+export function useUpdatePost(callbacks?: CallbackArgs<UpdatePostResponse>) {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: ({ id, updates }: { id: number; updates: Partial<Post> }) =>
+    mutationFn: ({ id, updates }: { id: number; updates: Partial<UpdatePostRequest> }) =>
       executeApiCall({
         apiCall: () => apiClient.posts.update(id, updates),
         onSuccess: callbacks?.onSuccess,

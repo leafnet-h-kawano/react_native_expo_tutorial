@@ -1,4 +1,4 @@
-import { Todo, Todos } from "@/model/genSchemasTypes/todos";
+import { GetTodoResponse, GetTodosResponse } from "@/model/genTypes/responses";
 import { ApiResult } from "@/utils/types";
 import { AxiosRequestConfig } from "axios";
 import { customValidators } from "../validations.ts/validation";
@@ -23,9 +23,9 @@ export const TodoApiEndpoints = {
  */
 export type TodoApiClient = {
   todos: {
-    getAll: () => Promise<ApiResult<Todos>>;
-    getById: (id: number) => Promise<ApiResult<Todo>>;
-    getByUser: (userId: number) => Promise<ApiResult<Todos>>;
+    getAll: () => Promise<ApiResult<GetTodosResponse>>;
+    getById: (id: number) => Promise<ApiResult<GetTodoResponse>>;
+    getByUser: (userId: number) => Promise<ApiResult<GetTodosResponse>>;
   };
 }
 
@@ -35,28 +35,28 @@ export type TodoApiClient = {
 export const todoApiClient: TodoApiClient = {
   // ToDo関連API
   todos: {
-    getAll: async (): Promise<ApiResult<Todos>> => {
+    getAll: async (): Promise<ApiResult<GetTodosResponse>> => {
         const config: AxiosRequestConfig = {
             method: 'GET',
             url: `${TodoApiEndpoints.todos.list}`
         };
-        return commonApiService<Todos>(config, customValidators.validateTodos);
+        return commonApiService<GetTodosResponse>(config, customValidators.validateTodos);
     },
 
-    getById: async (id: number): Promise<ApiResult<Todo>> => {
+    getById: async (id: number): Promise<ApiResult<GetTodoResponse>> => {
         const config: AxiosRequestConfig = {
             method: 'GET',
             url: `${TodoApiEndpoints.todos.detail(id)}`
         };
-        return commonApiService<Todo>(config, customValidators.validateTodo);
+        return commonApiService<GetTodoResponse>(config, customValidators.validateTodo);
     },
 
-    getByUser: async (userId: number): Promise<ApiResult<Todos>> => {
+    getByUser: async (userId: number): Promise<ApiResult<GetTodosResponse>> => {
         const config: AxiosRequestConfig = {
             method: 'GET',
             url: `${TodoApiEndpoints.todos.byUser(userId)}`
         };
-        return commonApiService<Todos>(config, customValidators.validateTodos);
+        return commonApiService<GetTodosResponse>(config, customValidators.validateTodos);
     },
   },
 } as const;

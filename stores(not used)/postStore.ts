@@ -1,6 +1,6 @@
 // import { create } from 'zustand';
 // import { devtools, persist } from 'zustand/middleware';
-// import { Post, Posts } from '../model/genSchemasTypes/posts';
+// import { Post, Posts } from '../model/genTypes/posts';
 // import { ApiState, CommonApiActions, createCommonApiActions } from './common';
 
 // // 投稿関連の状態

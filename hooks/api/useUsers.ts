@@ -1,5 +1,7 @@
-import { Posts } from '@/model/genSchemasTypes/posts';
-import { User, Users } from '@/model/genSchemasTypes/users';
+import { CreateUserRequest } from '@/model/genTypes';
+import { CreateUserResponse, GetPostsResponse } from '@/model/genTypes/responses';
+import { GetUserResponse } from '@/model/genTypes/responses/getUserResponse';
+import { GetUsersResponse } from '@/model/genTypes/responses/getUsersResponse';
 import { apiClient } from '@/services/api';
 import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 import { userQueryKeys } from './queryKeys';
@@ -13,7 +15,7 @@ import {
  */
 export const userQueryFunctions = {
   // ユーザー一覧取得
-  getAllUsers: async (callbacks?: CallbackArgs<Users>): Promise<Users> => {
+  getAllUsers: async (callbacks?: CallbackArgs<GetUsersResponse>): Promise<GetUsersResponse> => {
     return executeApiCall({
       apiCall: () => apiClient.users.getAll(),
       onSuccess: callbacks?.onSuccess,
@@ -22,7 +24,7 @@ export const userQueryFunctions = {
   },
 
   // 特定ユーザー取得
-  getUserById: async (id: number, callbacks?: CallbackArgs<User>): Promise<User> => {
+  getUserById: async (id: number, callbacks?: CallbackArgs<GetUserResponse>): Promise<GetUserResponse> => {
     return executeApiCall({
       apiCall: () => apiClient.users.getById(id),
       onSuccess: callbacks?.onSuccess,
@@ -31,7 +33,7 @@ export const userQueryFunctions = {
   },
 
   // ユーザーの投稿取得
-  getUserPosts: async (userId: number, callbacks?: CallbackArgs<Posts>): Promise<Posts> => {
+  getUserPosts: async (userId: number, callbacks?: CallbackArgs<GetPostsResponse>): Promise<GetPostsResponse> => {
     return executeApiCall({
       apiCall: () => apiClient.users.getPosts(userId),
       onSuccess: callbacks?.onSuccess,
@@ -45,7 +47,7 @@ export const userQueryFunctions = {
  */
 
 // ユーザー一覧取得フック
-export function useUsers(callbacks?: CallbackArgs<Users>) {
+export function useUsers(callbacks?: CallbackArgs<GetUsersResponse>) {
   return useQuery({
     queryKey: userQueryKeys.all,
     queryFn: () => userQueryFunctions.getAllUsers(callbacks),
@@ -53,7 +55,7 @@ export function useUsers(callbacks?: CallbackArgs<Users>) {
 }
 
 // 特定ユーザー取得フック
-export function useUser(id: number, callbacks?: CallbackArgs<User>) {
+export function useUser(id: number, callbacks?: CallbackArgs<GetUserResponse>) {
   return useQuery({
     queryKey: userQueryKeys.detail(id),
     queryFn: () => userQueryFunctions.getUserById(id, callbacks),
@@ -62,7 +64,7 @@ export function useUser(id: number, callbacks?: CallbackArgs<User>) {
 }
 
 // ユーザーの投稿取得フック
-export function useUserPosts(userId: number, callbacks?: CallbackArgs<Posts>) {
+export function useUserPosts(userId: number, callbacks?: CallbackArgs<GetPostsResponse>) {
   return useQuery({
     queryKey: userQueryKeys.posts(userId),
     queryFn: () => userQueryFunctions.getUserPosts(userId, callbacks),
@@ -71,11 +73,11 @@ export function useUserPosts(userId: number, callbacks?: CallbackArgs<Posts>) {
 }
 
 // ユーザー作成ミューテーション（例 - 実際のAPIがあれば実装可能）
-export function useCreateUser(callbacks?: CallbackArgs<User>) {
+export function useCreateUser(callbacks?: CallbackArgs<CreateUserResponse>) {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async (userData: Omit<User, 'id'>): Promise<User> => {
+    mutationFn: async (userData: CreateUserRequest): Promise<CreateUserResponse> => {
       // TODO: 実際のcreate APIが実装されたら以下を有効化
     //   return executeApiCall({
     //     apiCall: () => apiClient.users.create(userData),
@@ -83,11 +85,11 @@ export function useCreateUser(callbacks?: CallbackArgs<User>) {
     //   onError: callbacks?.onError
     //   });
       
-      // 仮実装（モックデータ）
-      const mockUser: User = {
+      // 仮実装（モックレスポンスデータ）
+      const mockUser: CreateUserResponse = {
         id: Date.now(),
         ...userData
-      } as User;
+      } as CreateUserResponse;
       
       console.log(`仮ユーザー(ID:${mockUser.id}, Name:${mockUser.name})を作成しました（モック）`);
       callbacks?.onSuccess?.(mockUser);
@@ -102,8 +104,8 @@ export function useCreateUser(callbacks?: CallbackArgs<User>) {
 export function useUserWithPosts(
   userId: number, 
   callbacks?: {
-    userCallbacks?: CallbackArgs<User>;
-    postsCallbacks?: CallbackArgs<Posts>;
+    userCallbacks?: CallbackArgs<GetUserResponse>;
+    postsCallbacks?: CallbackArgs<GetPostsResponse>;
   }
 ) {
   const results = useQueries({
@@ -140,7 +142,7 @@ export function useUserWithPosts(
 // 複数ユーザーの詳細を一括取得
 export function useMultipleUsers(
   userIds: number[], 
-  callbacks?: CallbackArgs<User>
+  callbacks?: CallbackArgs<GetUserResponse>
 ) {
   const results = useQueries({
     queries: userIds.map(id => ({

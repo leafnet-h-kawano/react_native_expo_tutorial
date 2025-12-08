@@ -1,5 +1,6 @@
-import { Posts } from "@/model/genSchemasTypes/posts";
-import { User, Users } from "@/model/genSchemasTypes/users";
+import { GetPostsResponse } from "@/model/genTypes";
+import { GetUserResponse } from "@/model/genTypes/responses/getUserResponse";
+import { GetUsersResponse } from "@/model/genTypes/responses/getUsersResponse";
 import { ApiResult } from "@/utils/types";
 import { AxiosRequestConfig } from "axios";
 import { customValidators } from "../validations.ts/validation";
@@ -21,42 +22,43 @@ export const UserApiEndpoints = {
  */
 export type UserApiClient = {
   users: {
-    getAll: () => Promise<ApiResult<Users>>;
-    getById: (id: number) => Promise<ApiResult<User>>;
-    getPosts: (userId: number) => Promise<ApiResult<Posts>>;
+    getAll: () => Promise<ApiResult<GetUsersResponse>>;
+    getById: (id: number) => Promise<ApiResult<GetUserResponse>>;
+    getPosts: (userId: number) => Promise<ApiResult<GetPostsResponse>>;
   };
 }
 
 /**
  * APIクライアント
  */
+
+  // MEMO:ジェネリクスとバリデータのmodelを合わせること！！！　
+  // こちらからvalidatorに渡してもいいがvalidatorが汎用的になりすぎる気がする。。
 export const userApiClient: UserApiClient = {
   // ユーザー関連API
   users: {
-    getAll: async (): Promise<ApiResult<Users>> => {
+    getAll: async (): Promise<ApiResult<GetUsersResponse>> => {
         const config: AxiosRequestConfig = {
             method: 'GET',
             url: `${UserApiEndpoints.users.list}`
         };
-        return commonApiService<Users>(config, customValidators.validateUsers);
+        return commonApiService<GetUsersResponse>(config, customValidators.validateUsers);
     },
 
-    getById: async (id: number): Promise<ApiResult<User>> => {
+    getById: async (id: number): Promise<ApiResult<GetUserResponse>> => {
         const config: AxiosRequestConfig = {
             method: 'GET',
             url: `${UserApiEndpoints.users.detail(id)}`
         };
-        // MEMO:ジェネリクスとバリデータのmodelを合わせること！！！　
-        // こちらからvalidatorに渡してもいいがvalidatorが汎用的になりすぎる気がする。。
-        return commonApiService<User>(config, customValidators.validateUser);
+        return commonApiService<GetUserResponse>(config, customValidators.validateUser);
     },
 
-    getPosts: async (userId: number): Promise<ApiResult<Posts>> => {
+    getPosts: async (userId: number): Promise<ApiResult<GetPostsResponse>> => {
         const config: AxiosRequestConfig = {
             method: 'GET',
             url: `${UserApiEndpoints.users.posts(userId)}`
         };
-        return commonApiService<Posts>(config, customValidators.validatePosts);
+        return commonApiService<GetPostsResponse>(config, customValidators.validatePosts);
     },
   },
 } as const;

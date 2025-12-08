@@ -1,5 +1,5 @@
-import { Post, Posts } from "@/model/genSchemasTypes/posts";
-import { PostUpdate } from "@/model/types/types";
+import { CreatePostRequest, UpdatePostRequest } from "@/model/genTypes";
+import { CreatePostResponse, GetPostResponse, GetPostsResponse, UpdatePostResponse } from "@/model/genTypes/responses";
 import { ApiResult } from "@/utils/types";
 import { AxiosRequestConfig } from "axios";
 import { customValidators } from "../validations.ts/validation";
@@ -23,10 +23,10 @@ export const PostApiEndpoints = {
  */
 export type PostApiClient = {
   posts: {
-    getAll: () => Promise<ApiResult<Posts>>;
-    getById: (id: number) => Promise<ApiResult<Post>>;
-    create: (postData: Omit<Post, 'id'>) => Promise<ApiResult<Post>>;
-    update: (id: number, updates: PostUpdate) => Promise<ApiResult<Post>>;
+    getAll: () => Promise<ApiResult<GetPostsResponse>>;
+    getById: (id: number) => Promise<ApiResult<GetPostResponse>>;
+    create: (postData: CreatePostRequest) => Promise<ApiResult<CreatePostResponse>>;
+    update: (id: number, updates: UpdatePostRequest) => Promise<ApiResult<UpdatePostResponse>>;
   };
 }
 
@@ -36,38 +36,38 @@ export type PostApiClient = {
 export const postApiClient: PostApiClient = {
    // 投稿関連API
     posts: {
-      getAll: async (): Promise<ApiResult<Posts>> => {
+      getAll: async (): Promise<ApiResult<GetPostsResponse>> => {
           const config: AxiosRequestConfig = {
               method: 'GET',
               url: `${PostApiEndpoints.posts.list}`
           };
-          return commonApiService<Posts>(config, customValidators.validatePosts);
+          return commonApiService<GetPostsResponse>(config, customValidators.validatePosts);
       },
 
-      getById: async (id: number): Promise<ApiResult<Post>> => {
+      getById: async (id: number): Promise<ApiResult<GetPostResponse>> => {
           const config: AxiosRequestConfig = {
               method: 'GET',
               url: `${PostApiEndpoints.posts.detail(id)}`
           };
-          return commonApiService<Post>(config, customValidators.validatePost);
+          return commonApiService<GetPostResponse>(config, customValidators.validatePost);
       },
 
-      create: async (postData: Omit<Post, 'id'>): Promise<ApiResult<Post>> => {
+      create: async (postData: CreatePostRequest): Promise<ApiResult<CreatePostResponse>> => {
           const config: AxiosRequestConfig = {
               method: 'POST',
               url: `${PostApiEndpoints.posts.create}`,
               data: postData
           };
-          return commonApiService<Post>(config, customValidators.validatePost);
+          return commonApiService<CreatePostResponse>(config, customValidators.validatePost);
       },
 
-      update: async (id: number, updates: PostUpdate): Promise<ApiResult<Post>> => {
+      update: async (id: number, updates: UpdatePostRequest): Promise<ApiResult<UpdatePostResponse>> => {
           const config: AxiosRequestConfig = {
               method: 'PATCH',
               url: `${PostApiEndpoints.posts.update(id)}`,
               data: updates
           };
-          return commonApiService<Post>(config, customValidators.validatePost);
+          return commonApiService<UpdatePostResponse>(config, customValidators.validatePost);
       },
     },
 } as const;

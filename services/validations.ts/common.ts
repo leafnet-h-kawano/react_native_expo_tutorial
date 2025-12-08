@@ -1,13 +1,6 @@
-// 新しいvalidation.ts - 型定義からスキーマを自動生成する方式
+// validation.ts - Orvalで生成した型定義からts-to-zodでスキーマを生成する方式
 import { z } from 'zod';
 import { utils } from '../../utils/utils';
-
-// 型定義のre-export
-export type { Post, Posts } from '../../model/genSchemasTypes/posts';
-export type { Todo, Todos } from '../../model/genSchemasTypes/todos';
-export type { User, Users } from '../../model/genSchemasTypes/users';
-
-// 生成されたスキーマのimport
 import { Messages } from '@/utils/const';
 import { ValidationResult } from '../../utils/types';
 
@@ -16,7 +9,7 @@ export function validateData<T>(
   schema: z.ZodSchema<T>,
   data: unknown
 ): ValidationResult<T> {
-// バリデーション処理(エラーをthrowしない)
+  // バリデーション処理(エラーをthrowしない)
   const result = schema.safeParse(data);
   
   if (result.success) {
@@ -48,6 +41,7 @@ export function validateDataWithFallback<T>(
   if (validation.success && validation.data) {
     return validation.data;
   }
+
   utils.devPrint(`Invalid ${typeName} data:`, validation.errors);
 
   // バリデーション失敗時はエラー情報を返す
@@ -56,3 +50,5 @@ export function validateDataWithFallback<T>(
     rawErrorMessage: Messages.validationRawError,
   };
 }
+
+

@@ -1,17 +1,19 @@
-import { postSchema, todoSchema, userSchema } from '@/model/generatedSchemas';
+import { GetPostResponse, GetTodoResponse, GetUserResponse } from '@/model/genTypes';
+import { postSchema, userSchema } from '@/model/schemas/common';
+import { getPostResponseSchema, getTodoResponseSchema, getUserResponseSchema } from '@/model/schemas/responses';
 import { describe, expect, it } from '@jest/globals';
-import type { Post, Todo, User } from '../../model/typeDefinitions';
-import {
-  customValidators,
-  validateData,
-} from '../../services/validation';
+import { validateData } from '../../services/validations.ts/common';
+import { customValidators } from '../../services/validations.ts/validation';
 
-/// バリデーションロジックのテスト
+/**
+ * Orval + ts-to-zod バリデーションテスト
+ * Orvalで生成した型からts-to-zodでZodスキーマを生成
+ */
 
-describe('Type-First Validation (ts-to-zod)', () => {
+describe('Orval + ts-to-zod Validation', () => {
   describe('Generated Schemas', () => {
     it('should validate User correctly', () => {
-      const validUser: User = {
+      const validUser: GetUserResponse = {
         id: 1,
         name: '山田太郎',
         username: 'yamada_taro',
@@ -21,14 +23,14 @@ describe('Type-First Validation (ts-to-zod)', () => {
         selected: true
       };
 
-      const result = validateData(userSchema, validUser);
+      const result = validateData(getUserResponseSchema, validUser);
       expect(result.success).toBe(true);
       expect(result.data).toEqual(validUser);
       expect(result.errors).toBeUndefined();
     });
 
     it('should validate Post correctly', () => {
-      const validPost: Post = {
+      const validPost: GetPostResponse = {
         id: 1,
         userId: 1,
         title: 'Test Post',
@@ -36,38 +38,41 @@ describe('Type-First Validation (ts-to-zod)', () => {
         isNew: true
       };
 
-      const result = validateData(postSchema, validPost);
+      const result = validateData(getPostResponseSchema, validPost);
       expect(result.success).toBe(true);
       expect(result.data).toEqual(validPost);
     });
 
     it('should validate Todo correctly', () => {
-      const validTodo: Todo = {
+      const validTodo: GetTodoResponse = {
         id: 1,
         userId: 1,
         title: 'Test Todo',
         completed: false
       };
 
-      const result = validateData(todoSchema, validTodo);
+      const result = validateData(getTodoResponseSchema, validTodo);
       expect(result.success).toBe(true);
       expect(result.data).toEqual(validTodo);
     });
   });
 
   describe('Validation Errors', () => {
-    it('should handle invalid User data', () => {
+    it('should handle invalid User data with base schema', () => {
       const invalidUser = {
         id: 'not-a-number', // should be number
         name: 123, // should be string
         email: 'invalid-email' // invalid email format
+
       };
 
       const result = customValidators.validateUser(invalidUser);
-      expect(result).toBeNull();
+      // 無効なデータの場合、エラーオブジェクトが返される
+      expect(result).toHaveProperty('errorMessage');
+      expect(result).toHaveProperty('rawErrorMessage', 'validation failed');
     });
 
-    it('should handle missing required fields', () => {
+    it('should handle missing required fields with base schema', () => {
       const incompletePost = {
         id: 1,
         // userId: missing
@@ -75,8 +80,10 @@ describe('Type-First Validation (ts-to-zod)', () => {
         // body: missing
       };
 
-      const result = customValidators.validatePost(incompletePost);
-      expect(result).toBeNull();
+      // postSchemaを直接使ってバリデーション（厳密なチェック）
+      const result = validateData(postSchema, incompletePost);
+      expect(result.success).toBe(false);
+      expect(result.errors).toBeDefined();
     });
 
     it('should handle safe validation without throwing', () => {
@@ -90,7 +97,7 @@ describe('Type-First Validation (ts-to-zod)', () => {
 
   describe('Optional Fields', () => {
     it('should handle optional User fields', () => {
-      const userWithoutOptional: User = {
+      const userWithoutOptional: GetUserResponse = {
         id: 1,
         name: '田中次郎',
         username: 'tanaka_jiro',
@@ -106,7 +113,7 @@ describe('Type-First Validation (ts-to-zod)', () => {
     });
 
     it('should handle optional Post fields', () => {
-      const basicPost: Post = {
+      const basicPost: GetPostResponse = {
         id: 1,
         userId: 1,
         title: 'Basic Post',
@@ -122,7 +129,7 @@ describe('Type-First Validation (ts-to-zod)', () => {
 
   describe('Complex Nested Objects', () => {
     it('should validate User with address and company', () => {
-      const fullUser: User = {
+      const fullUser: GetUserResponse = {
         id: 1,
         name: '佐藤花子',
         username: 'sato_hanako',
@@ -172,8 +179,11 @@ describe('Type-First Validation (ts-to-zod)', () => {
         }
       };
 
-      const result = customValidators.validateUser(userWithInvalidNested);
-      expect(result).toBeNull();
+      // ネストされたオブジェクトも正しくバリデーションされる
+      // userSchemaを直接使用してバリデーション
+      const result = validateData(userSchema, userWithInvalidNested);
+      // addressのcityがnumber（stringであるべき）、geo.latがboolean（stringであるべき）のため失敗
+      expect(result.success).toBe(false);
     });
   });
 });
@@ -181,7 +191,7 @@ describe('Type-First Validation (ts-to-zod)', () => {
 describe('Type-Schema Consistency', () => {
   it('should maintain consistency between TypeScript types and Zod schemas', () => {
     // TypeScriptの型定義とZodスキーマが一致していることを確認
-    const user: User = {
+    const user: GetUserResponse = {
       id: 1,
       name: 'Test User',
       username: 'test_user',
@@ -196,7 +206,7 @@ describe('Type-Schema Consistency', () => {
     
     // 型推論も正しく動作
     if (result) {
-      const validatedUser: User = result;
+      const validatedUser: GetUserResponse = result as GetUserResponse;
       expect(validatedUser.id).toBe(1);
       expect(validatedUser.name).toBe('Test User');
     }

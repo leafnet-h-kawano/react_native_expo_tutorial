@@ -1,6 +1,6 @@
 // import { create } from 'zustand';
 // import { devtools, persist } from 'zustand/middleware';
-// import { User, Users } from '../model/genSchemasTypes/users';
+// import { User, Users } from '../model/genTypes/users';
 // import { ApiState, CommonApiActions, createCommonApiActions } from './common';
 
 // // ユーザー関連の状態

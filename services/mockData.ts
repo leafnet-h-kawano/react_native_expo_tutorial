@@ -1,9 +1,7 @@
-import type { Post } from '../model/genSchemasTypes/posts';
-import type { Todo } from '../model/genSchemasTypes/todos';
-import type { User } from '../model/genSchemasTypes/users';
+import type { GetPostsResponse, GetTodosResponse, GetUsersResponse } from '@/model/genTypes/responses';
 
 // モックユーザーデータ
-export const mockUsers: User[] = [
+export const mockUsers: GetUsersResponse = [
   {
     id: 1,
     name: "山田太郎",
@@ -61,7 +59,7 @@ export const mockUsers: User[] = [
 ];
 
 // モックポストデータ
-export const mockPosts: Post[] = [
+export const mockPosts: GetPostsResponse = [
   {
     id: 1,
     userId: 1,
@@ -95,7 +93,7 @@ export const mockPosts: Post[] = [
 ];
 
 // モックTODOデータ
-export const mockTodos: Todo[] = [
+export const mockTodos: GetTodosResponse = [
   {
     id: 1,
     userId: 1,

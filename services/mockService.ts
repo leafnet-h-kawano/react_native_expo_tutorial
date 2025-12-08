@@ -1,14 +1,12 @@
-import type { Post } from '../model/genSchemasTypes/posts';
-import type { Todo } from '../model/genSchemasTypes/todos';
-import type { User } from '../model/genSchemasTypes/users';
+import type { GetPostsResponse, GetTodosResponse, GetUsersResponse } from '@/model/genTypes/responses';
 import type { ApiResponse } from '../utils/types';
 
 // モックモードの制御
 export type MockConfig = {
   enabled: boolean;
-  users?: User[];
-  posts?: Post[];
-  todos?: Todo[];
+  users?: GetUsersResponse;
+  posts?: GetPostsResponse;
+  todos?: GetTodosResponse;
   delay?: number; // モック時の遅延（ms）
 }
 
