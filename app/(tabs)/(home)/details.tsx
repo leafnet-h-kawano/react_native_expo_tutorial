@@ -1,9 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { ScrollView, Text, View } from 'react-native';
-import { useEnvironment } from '../../../hooks/useEnvironment';
+import { getEnvironmentConfig } from '../../../utils/utils';
 
 export default function DetailsScreen() {
-  const env = useEnvironment();
+  const env = getEnvironmentConfig();
 
   const getThemeColor = () => {
     switch (env.appVariant) {

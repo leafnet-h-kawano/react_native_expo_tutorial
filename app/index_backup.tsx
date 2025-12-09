@@ -1,24 +1,24 @@
 import { Text, View } from "react-native";
 import {
-  debugLog,
-  useEnvironment,
-  useIsDevelopment,
-  useIsProduction,
-  useIsStaging
-} from '../hooks/useEnvironment';
+  getEnvironmentConfig,
+  isDevelopment,
+  isProduction,
+  isStaging,
+  utils
+} from '../utils/utils';
 import { Link } from "expo-router";
 
 export default function Index() {
   console.log(process.env.APP_VARIANT);
   
-  // React Hooksを使用
-  const env = useEnvironment();
-  const isDev = useIsDevelopment();
-  const isStag = useIsStaging();
-  const isProd = useIsProduction();
+  // 環境設定を取得
+  const env = getEnvironmentConfig();
+  const isDev = isDevelopment();
+  const isStag = isStaging();
+  const isProd = isProduction();
   
   // 環境に応じたデバッグログ
-  debugLog('App started', { environment: env.appVariant });
+  utils.debugLog('App started', { environment: env.appVariant });
   
   // 環境別の背景色
   const getBackgroundColor = () => {

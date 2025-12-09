@@ -1,10 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import { Platform } from 'react-native';
-import { useEnvironment } from '../../hooks/useEnvironment';
+import { getEnvironmentConfig } from '../../utils/utils';
 
 export default function TabLayout() {
-  const env = useEnvironment();
+  const env = getEnvironmentConfig();
   
   // 環境に応じた色設定
   const getThemeColor = () => {

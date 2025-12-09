@@ -1,9 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { useEnvironment } from '../../hooks/useEnvironment';
+import { getEnvironmentConfig } from '../../utils/utils';
 
 export default function ProfileTab() {
-  const env = useEnvironment();
+  const env = getEnvironmentConfig();
 
   const profileItems = [
     {

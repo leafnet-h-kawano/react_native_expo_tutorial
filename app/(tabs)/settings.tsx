@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Alert, ScrollView, Switch, Text, TouchableOpacity, View } from "react-native";
-import { useEnvironment } from '../../hooks/useEnvironment';
+import { getEnvironmentConfig } from '../../utils/utils';
 
 interface SwitchItem {
   icon: string;
@@ -28,7 +28,7 @@ interface SettingSection {
 }
 
 export default function SettingsTab() {
-  const env = useEnvironment();
+  const env = getEnvironmentConfig();
   const [notifications, setNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [autoUpdate, setAutoUpdate] = useState(true);

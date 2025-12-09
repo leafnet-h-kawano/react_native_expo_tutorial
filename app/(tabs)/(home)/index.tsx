@@ -2,24 +2,24 @@ import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import {
-  debugLog,
-  useEnvironment,
-  useIsDevelopment,
-  useIsProduction,
-  useIsStaging
-} from '../../../hooks/useEnvironment';
+  getEnvironmentConfig,
+  isDevelopment,
+  isProduction,
+  isStaging,
+  utils
+} from '../../../utils/utils';
 
 export default function HomeTab() {
   console.log(process.env.APP_VARIANT);
   
-  // React Hooksを使用
-  const env = useEnvironment();
-  const isDev = useIsDevelopment();
-  const isStag = useIsStaging();
-  const isProd = useIsProduction();
+  // 環境設定を取得
+  const env = getEnvironmentConfig();
+  const isDev = isDevelopment();
+  const isStag = isStaging();
+  const isProd = isProduction();
   
   // 環境に応じたデバッグログ
-  debugLog('Home tab loaded', { environment: env.appVariant });
+  utils.debugLog('Home tab loaded', { environment: env.appVariant });
   
   // 環境別の背景色
   const getBackgroundColor = () => {

@@ -10,7 +10,7 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
-import { useEnvironment } from '../../../hooks/useEnvironment';
+import { getEnvironmentConfig } from '../../../utils/utils';
 
 // API型定義
 interface User {
@@ -30,7 +30,7 @@ interface Post {
 }
 
 export default function ApiSampleScreen() {
-  const env = useEnvironment();
+  const env = getEnvironmentConfig();
   const [users, setUsers] = useState<User[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);

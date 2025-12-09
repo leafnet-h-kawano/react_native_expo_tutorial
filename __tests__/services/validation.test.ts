@@ -7,7 +7,7 @@ import {
   mockGetUsersResponse
 } from '@/services/mockData/index.g';
 import { describe, expect, it } from '@jest/globals';
-import { validateData } from '../../services/validations.ts/common';
+import { validateData } from '../../services/validations.ts';
 
 /**
  * mockDataバリデーションテスト

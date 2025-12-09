@@ -1,8 +1,18 @@
 // validation.ts - Orvalで生成した型定義からts-to-zodでスキーマを生成する方式
-import { z } from 'zod';
-import { utils } from '../../utils/utils';
+import type { ApiError } from '@/model/genTypes';
+import { apiErrorSchema } from '@/model/schemas/common/arrays';
 import { Messages } from '@/utils/const';
+import { z } from 'zod';
 import { ValidationResult } from '../../utils/types';
+import { utils } from '../../utils/utils';
+import { postValidators } from './posts';
+import { todoValidators } from './todos';
+import { userValidators } from './users';
+
+
+// =============================================================================
+// 汎用バリデーション関数
+// =============================================================================
 
 // 汎用なバリデーション関数
 export function validateData<T>(
@@ -42,7 +52,7 @@ export function validateDataWithFallback<T>(
     return validation.data;
   }
 
-  utils.devPrint(`Invalid ${typeName} data:`, validation.errors);
+  utils.debugLog(`Invalid ${typeName} data:`, validation.errors);
 
   // バリデーション失敗時はエラー情報を返す
   return {
@@ -51,4 +61,24 @@ export function validateDataWithFallback<T>(
   };
 }
 
+// =============================================================================
+// 統合バリデーター（各エンティティのバリデーターを統合）
+// =============================================================================
+// 共通バリデーター
+const commonValidators = {
+  // APIエラーの検証
+  validateApiError: (data: unknown): ApiError | { errorMessage: string; rawErrorMessage: string } => 
+    validateDataWithFallback<ApiError>(apiErrorSchema, data, 'API error'),
+} as const;
+
+// 統合バリデーター
+export const customValidators = {
+  ...userValidators,
+  ...postValidators,
+  ...todoValidators,
+  ...commonValidators,
+} as const;
+
+// 型エクスポート
+export type CustomValidators = typeof customValidators;
 
