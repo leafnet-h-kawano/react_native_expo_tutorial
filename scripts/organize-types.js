@@ -13,7 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const sourceFile = './model/genTypes/reactNativeTutorialAPI.ts';
+const sourceFile = './model/genTypes/reactNativeTutorialAPI.g.ts';
 const baseDir = './model/genTypes';
 
 // ディレクトリ作成
@@ -89,7 +89,7 @@ function getImports(definition, availableTypes, currentTypeName) {
 
 // ファイル名を生成（PascalCase → camelCase）
 function toFileName(typeName) {
-  return typeName.charAt(0).toLowerCase() + typeName.slice(1) + '.ts';
+  return typeName.charAt(0).toLowerCase() + typeName.slice(1) + '.g.ts';
 }
 
 // Common型を個別ファイルに出力（依存関係のインポート付き）
@@ -130,8 +130,8 @@ responseTypes.forEach(type => {
     imports.forEach(imp => {
       // commonにあるかresponsesにあるか判定
       const isCommon = commonTypes.some(t => t.name === imp);
-      const impFileName = toFileName(imp).replace('.ts', '');
-      const importPath = isCommon ? `../common/${impFileName}` : `./${impFileName}`;
+      const impFileName = toFileName(imp).replace('.g.ts', '');
+      const importPath = isCommon ? `../common/${impFileName}.g` : `./${impFileName}.g`;
       fileContent += `import type { ${imp} } from '${importPath}';\n`;
     });
     fileContent += '\n';
@@ -143,7 +143,7 @@ responseTypes.forEach(type => {
 
 // common/index.ts（配列型のエイリアスも含む）
 let commonIndex = header + '\n' +
-  commonTypes.map(t => `export * from './${toFileName(t.name).replace('.ts', '')}';`).join('\n') + '\n\n';
+  commonTypes.map(t => `export * from './${toFileName(t.name).replace('.g.ts', '.g')}';`).join('\n') + '\n\n';
 
 // 配列型のエイリアスを追加（エンティティ型のみ）
 const entityTypes = commonTypes.filter(t => 
@@ -152,7 +152,7 @@ const entityTypes = commonTypes.filter(t =>
 if (entityTypes.length > 0) {
   commonIndex += '// 配列型のエイリアス\n';
   entityTypes.forEach(t => {
-    commonIndex += `import type { ${t.name} } from './${toFileName(t.name).replace('.ts', '')}';\n`;
+    commonIndex += `import type { ${t.name} } from './${toFileName(t.name).replace('.g.ts', '.g')}';\n`;
   });
   commonIndex += '\n';
   entityTypes.forEach(t => {
@@ -174,7 +174,7 @@ fs.writeFileSync(path.join(baseDir, 'common', 'index.ts'), commonIndex);
 
 // requests/index.ts
 const requestsIndex = header + '\n' +
-  requestTypes.map(t => `export * from './${toFileName(t.name).replace('.ts', '')}';`).join('\n') + '\n';
+  requestTypes.map(t => `export * from './${toFileName(t.name).replace('.g.ts', '.g')}';`).join('\n') + '\n';
 fs.writeFileSync(path.join(baseDir, 'requests', 'index.ts'), requestsIndex);
 
 // responses/index.ts（commonからのre-exportも含む）
@@ -185,7 +185,7 @@ let responsesIndex = header + '\n';
 // Response型
 if (responseTypes.length > 0) {
   responsesIndex += '// Response型\n';
-  responsesIndex += responseTypes.map(t => `export * from './${toFileName(t.name).replace('.ts', '')}';`).join('\n') + '\n';
+  responsesIndex += responseTypes.map(t => `export * from './${toFileName(t.name).replace('.g.ts', '.g')}';`).join('\n') + '\n';
 }
 fs.writeFileSync(path.join(baseDir, 'responses', 'index.ts'), responsesIndex);
 

@@ -1,5 +1,4 @@
-import { GetPostsResponse } from "@/model/genTypes";
-import { GetUserResponse } from "@/model/genTypes/responses/getUserResponse";
+import { GetPostsResponse, GetUserResponse } from "@/model/genTypes";
 import { GetUsersResponse } from "@/model/genTypes/responses/getUsersResponse";
 import { ApiResult } from "@/utils/types";
 import { AxiosRequestConfig } from "axios";

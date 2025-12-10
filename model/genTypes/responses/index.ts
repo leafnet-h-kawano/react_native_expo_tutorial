@@ -5,15 +5,15 @@
  */
 
 // Response型
-export * from './getUsersResponse';
-export * from './getUserResponse';
-export * from './createUserResponse';
-export * from './updateUserResponse';
-export * from './getPostsResponse';
-export * from './getPostResponse';
-export * from './createPostResponse';
-export * from './updatePostResponse';
-export * from './getTodosResponse';
-export * from './getTodoResponse';
-export * from './createTodoResponse';
-export * from './updateTodoResponse';
+export * from './getUsersResponse.g';
+export * from './getUserResponse.g';
+export * from './createUserResponse.g';
+export * from './updateUserResponse.g';
+export * from './getPostsResponse.g';
+export * from './getPostResponse.g';
+export * from './createPostResponse.g';
+export * from './updatePostResponse.g';
+export * from './getTodosResponse.g';
+export * from './getTodoResponse.g';
+export * from './createTodoResponse.g';
+export * from './updateTodoResponse.g';

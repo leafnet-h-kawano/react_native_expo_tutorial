@@ -5,15 +5,15 @@
  */
 
 // responsesのZodスキーマ
-export * from './createPostResponse';
-export * from './createTodoResponse';
-export * from './createUserResponse';
-export * from './getPostResponse';
-export * from './getPostsResponse';
-export * from './getTodoResponse';
-export * from './getTodosResponse';
-export * from './getUserResponse';
-export * from './getUsersResponse';
-export * from './updatePostResponse';
-export * from './updateTodoResponse';
-export * from './updateUserResponse';
+export * from './createPostResponse.g';
+export * from './createTodoResponse.g';
+export * from './createUserResponse.g';
+export * from './getPostResponse.g';
+export * from './getPostsResponse.g';
+export * from './getTodoResponse.g';
+export * from './getTodosResponse.g';
+export * from './getUserResponse.g';
+export * from './getUsersResponse.g';
+export * from './updatePostResponse.g';
+export * from './updateTodoResponse.g';
+export * from './updateUserResponse.g';

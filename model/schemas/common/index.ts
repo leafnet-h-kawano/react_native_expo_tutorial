@@ -5,9 +5,9 @@
  */
 
 // commonのZodスキーマ
-export * from './post';
-export * from './todo';
-export * from './user';
-export * from './userAddress';
-export * from './userAddressGeo';
-export * from './userCompany';
+export * from './post.g';
+export * from './todo.g';
+export * from './user.g';
+export * from './userAddress.g';
+export * from './userAddressGeo.g';
+export * from './userCompany.g';

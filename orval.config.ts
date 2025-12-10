@@ -6,7 +6,7 @@ export default defineConfig({
       target: './openapi/api-spec.yaml',
     },
     output: {
-      target: './model/genTypes',
+      target: './model/genTypes/reactNativeTutorialAPI.g.ts',
       mode: 'single',
       clean: true,
     },

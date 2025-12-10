@@ -4,17 +4,17 @@
  * Do not edit manually.
  */
 
-export * from './userAddressGeo';
-export * from './userAddress';
-export * from './userCompany';
-export * from './user';
-export * from './post';
-export * from './todo';
+export * from './userAddressGeo.g';
+export * from './userAddress.g';
+export * from './userCompany.g';
+export * from './user.g';
+export * from './post.g';
+export * from './todo.g';
 
 // 配列型のエイリアス
-import type { User } from './user';
-import type { Post } from './post';
-import type { Todo } from './todo';
+import type { User } from './user.g';
+import type { Post } from './post.g';
+import type { Todo } from './todo.g';
 
 export type Users = User[];
 export type Posts = Post[];

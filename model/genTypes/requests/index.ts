@@ -4,9 +4,9 @@
  * Do not edit manually.
  */
 
-export * from './createUserRequest';
-export * from './updateUserRequest';
-export * from './createPostRequest';
-export * from './updatePostRequest';
-export * from './createTodoRequest';
-export * from './updateTodoRequest';
+export * from './createUserRequest.g';
+export * from './updateUserRequest.g';
+export * from './createPostRequest.g';
+export * from './updatePostRequest.g';
+export * from './createTodoRequest.g';
+export * from './updateTodoRequest.g';

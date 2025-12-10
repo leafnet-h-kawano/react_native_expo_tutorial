@@ -1,7 +1,4 @@
-import { CreateUserRequest } from '@/model/genTypes';
-import { CreateUserResponse, GetPostsResponse } from '@/model/genTypes/responses';
-import { GetUserResponse } from '@/model/genTypes/responses/getUserResponse';
-import { GetUsersResponse } from '@/model/genTypes/responses/getUsersResponse';
+import { CreateUserRequest, CreateUserResponse, GetPostsResponse, GetUserResponse, GetUsersResponse } from '@/model/genTypes';
 import { apiClient } from '@/services/api';
 import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 import { userQueryKeys } from './queryKeys';

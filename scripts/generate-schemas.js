@@ -2,6 +2,7 @@
 
 /**
  * common/, requests/, responses/ フォルダ内の型ファイルからZodスキーマを生成
+ * model/types/ フォルダ内の手動定義型からもZodスキーマを生成
  * 
  * 処理方針:
  * - すべての型ファイルに対してts-to-zodを使用（並列処理で高速化）
@@ -11,6 +12,7 @@
  * - model/schemas/common/ ← common/の型から生成（エンティティ）
  * - model/schemas/requests/ ← requests/の型から生成
  * - model/schemas/responses/ ← responses/の型から生成
+ * - model/schemas/types/ ← types/の手動定義型から生成
  */
 
 const { execSync, exec } = require('child_process');
@@ -20,6 +22,7 @@ const { promisify } = require('util');
 const execAsync = promisify(exec);
 
 const baseTypesDir = './model/genTypes';
+const manualTypesDir = './model/types';
 const baseSchemasDir = './model/schemas';
 
 // ts-to-zodのパス（npxを使わず直接実行して高速化）
@@ -39,7 +42,7 @@ if (fs.existsSync(baseSchemasDir)) {
 }
 
 // サブディレクトリを作成
-['common', 'requests', 'responses'].forEach(dir => {
+['common', 'requests', 'responses', 'types'].forEach(dir => {
   fs.mkdirSync(path.join(baseSchemasDir, dir), { recursive: true });
 });
 
@@ -47,7 +50,7 @@ console.log('🔄 Zodスキーマを生成中...\n');
 
 /**
  * 型名からファイル名を生成
- * 例: User → user, GetUserResponse → getUserResponse
+ * 例: User → user.g, GetUserResponse → getUserResponse.g
  */
 function toFileName(typeName) {
   return typeName.charAt(0).toLowerCase() + typeName.slice(1);
@@ -59,7 +62,7 @@ function toFileName(typeName) {
 function findEntityFolder(entityName) {
   const folders = ['common', 'requests', 'responses'];
   for (const folder of folders) {
-    const filePath = path.join(baseTypesDir, folder, toFileName(entityName) + '.ts');
+    const filePath = path.join(baseTypesDir, folder, toFileName(entityName) + '.g.ts');
     if (fs.existsSync(filePath)) {
       return folder;
     }
@@ -96,12 +99,12 @@ function fixNestedTypes(content, currentFolder) {
       const fileName = toFileName(typeName);
       
       // 同じフォルダ内に対応する型ファイルがあるかチェック
-      const typeFilePath = path.join(baseTypesDir, folder, fileName + '.ts');
+      const typeFilePath = path.join(baseTypesDir, folder, fileName + '.g.ts');
       if (fs.existsSync(typeFilePath)) {
         localSchemaRemovals.add(schemaName);
         const relativePath = currentFolder === folder 
-          ? './' + fileName
-          : '../' + folder + '/' + fileName;
+          ? './' + fileName + '.g'
+          : '../' + folder + '/' + fileName + '.g';
         imports.add('import { ' + schemaName + ' } from "' + relativePath + '";');
       }
     }
@@ -181,9 +184,9 @@ async function processFolderParallel(folder) {
   
   console.log('📁 ' + folder + '/');
   
-  // .tsファイルを取得（index.ts以外）
+  // .g.tsファイルを取得（index.ts以外）
   const files = fs.readdirSync(typesDir)
-    .filter(f => f.endsWith('.ts') && f !== 'index.ts');
+    .filter(f => f.endsWith('.g.ts') && f !== 'index.ts');
   
   if (files.length === 0) {
     console.log('  (ファイルなし)');
@@ -193,6 +196,7 @@ async function processFolderParallel(folder) {
   // 全ファイルを並列処理
   const promises = files.map(file => {
     const inputPath = path.join(typesDir, file);
+    // 出力ファイル名も .g.ts にする
     const outputPath = path.join(schemasDir, file);
     return generateSchemaForFile(inputPath, outputPath, folder);
   });
@@ -210,10 +214,10 @@ async function processFolderParallel(folder) {
   
   // index.tsを生成
   const schemaFiles = fs.readdirSync(schemasDir)
-    .filter(f => f.endsWith('.ts') && f !== 'index.ts');
+    .filter(f => f.endsWith('.g.ts') && f !== 'index.ts');
   
   if (schemaFiles.length > 0) {
-    const indexContent = generatedHeader + '\n// ' + folder + 'のZodスキーマ\n' + schemaFiles.map(f => "export * from './" + f.replace('.ts', '') + "';").join('\n') + '\n';
+    const indexContent = generatedHeader + '\n// ' + folder + 'のZodスキーマ\n' + schemaFiles.map(f => "export * from './" + f.replace('.g.ts', '') + ".g';").join('\n') + '\n';
     fs.writeFileSync(path.join(schemasDir, 'index.ts'), indexContent);
   }
 }
@@ -230,10 +234,55 @@ async function main() {
     processFolderParallel('responses')
   ]);
 
+  // ===== model/types/ フォルダの手動定義型からスキーマを生成 =====
+  if (fs.existsSync(manualTypesDir)) {
+    console.log('📁 types/ (手動定義型)');
+    const typesDir = manualTypesDir;
+    const schemasDir = path.join(baseSchemasDir, 'types');
+    
+    // .tsファイルを取得（index.ts以外）
+    const files = fs.readdirSync(typesDir)
+      .filter(f => f.endsWith('.ts') && f !== 'index.ts');
+    
+    if (files.length > 0) {
+      // 全ファイルを並列処理
+      const promises = files.map(file => {
+        const inputPath = path.join(typesDir, file);
+        // 出力ファイル名は.g.tsではなく元のファイル名.ts
+        const outputFileName = file.replace('.ts', '.g.ts');
+        const outputPath = path.join(schemasDir, outputFileName);
+        return generateSchemaForFile(inputPath, outputPath, 'types');
+      });
+      
+      const results = await Promise.all(promises);
+      
+      // 結果を表示
+      results.forEach(result => {
+        if (result.success) {
+          console.log('  ✅ ' + result.file);
+        } else {
+          console.error('  ❌ ' + result.file + ': ' + result.error);
+        }
+      });
+      
+      // index.tsを生成
+      const schemaFiles = fs.readdirSync(schemasDir)
+        .filter(f => f.endsWith('.g.ts') && f !== 'index.ts');
+      
+      if (schemaFiles.length > 0) {
+        const indexContent = generatedHeader + '\n// 手動定義型のZodスキーマ\n' + 
+          schemaFiles.map(f => "export * from './" + f.replace('.g.ts', '.g') + "';").join('\n') + '\n';
+        fs.writeFileSync(path.join(schemasDir, 'index.ts'), indexContent);
+      }
+    } else {
+      console.log('  (ファイルなし)');
+    }
+  }
+
   // ===== common用の配列型とAPIエラーのスキーマを追加 =====
   const commonSchemaPath = path.join(baseSchemasDir, 'common');
   const schemaFiles = fs.readdirSync(commonSchemaPath)
-    .filter(f => f.endsWith('.ts') && f !== 'index.ts' && f !== 'arrays.ts');
+    .filter(f => f.endsWith('.g.ts') && f !== 'index.ts' && f !== 'arrays.ts');
 
   // 配列型に使うエンティティを動的に判定（Address, Company, Geo を除く）
   const entityFiles = schemaFiles.filter(f => 
@@ -244,16 +293,16 @@ async function main() {
 
   // エンティティスキーマのインポート
   entityFiles.forEach(f => {
-    const baseName = f.replace('.ts', '');
+    const baseName = f.replace('.g.ts', '');
     const schemaName = baseName + 'Schema';
-    arraysContent += 'import { ' + schemaName + ' } from "./' + baseName + '";\n';
+    arraysContent += 'import { ' + schemaName + ' } from "./' + baseName + '.g";\n';
   });
 
   arraysContent += '\n';
 
   // 配列スキーマの定義
   entityFiles.forEach(f => {
-    const baseName = f.replace('.ts', '');
+    const baseName = f.replace('.g.ts', '');
     const schemaName = baseName + 'Schema';
     const pluralName = baseName + 'sSchema';
     arraysContent += 'export const ' + pluralName + ' = z.array(' + schemaName + ');\n';
@@ -265,7 +314,15 @@ async function main() {
   console.log('\n  ✅ common/arrays.ts (配列型・APIエラー)');
 
   // メインのindex.tsを生成
-  const mainIndexContent = generatedHeader + "\n// Zodスキーマのエクスポート\n\nexport * from './common';\nexport * from './requests';\nexport * from './responses';\n";
+  let mainIndexContent = generatedHeader + "\n// Zodスキーマのエクスポート\n\n";
+  mainIndexContent += "export * from './common';\n";
+  mainIndexContent += "export * from './requests';\n";
+  mainIndexContent += "export * from './responses';\n";
+  
+  // typesフォルダがある場合はexport
+  if (fs.existsSync(path.join(baseSchemasDir, 'types', 'index.ts'))) {
+    mainIndexContent += "export * from './types';\n";
+  }
 
   fs.writeFileSync(path.join(baseSchemasDir, 'index.ts'), mainIndexContent);
 
@@ -273,6 +330,9 @@ async function main() {
   console.log('   common/ → ' + baseSchemasDir + '/common/');
   console.log('   requests/ → ' + baseSchemasDir + '/requests/');
   console.log('   responses/ → ' + baseSchemasDir + '/responses/');
+  if (fs.existsSync(path.join(baseSchemasDir, 'types'))) {
+    console.log('   types/ → ' + baseSchemasDir + '/types/');
+  }
 }
 
 // メイン処理を実行

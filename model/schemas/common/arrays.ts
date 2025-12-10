@@ -6,9 +6,9 @@
 
 // 配列型とAPIエラーのZodスキーマ
 import { z } from "zod";
-import { postSchema } from "./post";
-import { todoSchema } from "./todo";
-import { userSchema } from "./user";
+import { postSchema } from "./post.g";
+import { todoSchema } from "./todo.g";
+import { userSchema } from "./user.g";
 
 export const postsSchema = z.array(postSchema);
 export const todosSchema = z.array(todoSchema);

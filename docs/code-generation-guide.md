@@ -80,6 +80,7 @@ project/
 
 ```
 api-spec.yaml → Orval → reactNativeTutorialAPI.ts → organize-types.js → 分類されたフォルダ
+※typesフォルダ下のファイルは自動生成ではありません。
 ```
 
 ### 実行

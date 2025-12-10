@@ -5,9 +5,9 @@
  */
 
 // requestsのZodスキーマ
-export * from './createPostRequest';
-export * from './createTodoRequest';
-export * from './createUserRequest';
-export * from './updatePostRequest';
-export * from './updateTodoRequest';
-export * from './updateUserRequest';
+export * from './createPostRequest.g';
+export * from './createTodoRequest.g';
+export * from './createUserRequest.g';
+export * from './updatePostRequest.g';
+export * from './updateTodoRequest.g';
+export * from './updateUserRequest.g';
