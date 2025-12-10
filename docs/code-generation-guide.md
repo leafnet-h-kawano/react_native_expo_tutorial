@@ -9,20 +9,35 @@
 │                           OpenAPI (api-spec.yaml)                           │
 └─────────────────────────────────────────────────────────────────────────────┘
                                       │
-     ┌────────────────┬───────────────┼───────────────┬────────────────┐
-     ▼                ▼               ▼               ▼                ▼
-┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐
-│  Orval + │   │ ts-to-zod│   │ Mock生成  │   │ Swagger  │   │  Prism   │
-│  script  │   │ + script │   │ スクリプト │   │   UI     │   │  Mock    │
-└──────────┘   └──────────┘   └──────────┘   └──────────┘   └──────────┘
-     │                │               │               │                │
-     ▼                ▼               ▼               ▼                ▼
-┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐
-│ genTypes/│   │ schemas/ │   │ mockData/│   │ :4000    │   │  :4010   │
-│ common/  │   │ common/  │   │ *.g.ts   │   │ api-docs │   │  API     │
-│ requests/│   │ requests/│   └──────────┘   └──────────┘   └──────────┘
-│ responses│   │ responses│
-└──────────┘   └──────────┘
+           ┌──────────────┬───────────┼───────────────┐
+           ▼              ▼           ▼               ▼
+      ┌──────────┐   ┌─────────┐ 　  ┌────────┐  　┌────────┐
+      │  Orval + │   │ Mock生成 │ 　  │Swagger │  　│ Prism  │
+      │  script  │   │スクリプト │ 　  │  UI    │  　│ Mock   │
+      └──────────┘   └─────────┘ 　  └────────┘  　└────────┘
+           │              │             │             │
+           ▼              ▼             ▼             ▼
+      ┌──────────┐   ┌──────────┐   ┌─────────┐   ┌────────┐
+      │ genTypes/│   │mockData /│   │ :4000   │   │ :4010  │
+      │ common/  │   │ *.g.ts   │   │api-docs │   │  API   │
+      │ requests/│   └──────────┘   └─────────┘   └────────┘
+      │ responses│
+      └────┬─────┘
+           │
+           ▼
+      ┌──────────┐
+      │ ts-to-zod│ ← genTypes/ (*.g.ts) から生成
+      │ + script │ ← model/types/ (*.ts) からも生成
+      └────┬─────┘
+           │
+           ▼
+      ┌──────────┐
+      │ schemas/ │
+      │ common/  │
+      │ requests/│
+      │ responses│
+      │  types/  │
+      └──────────┘
 ```
 
 ## ディレクトリ構成
@@ -33,24 +48,32 @@ project/
 │   └── api-spec.yaml              # OpenAPI定義（単一ソース）
 │
 ├── model/
-│   ├── genTypes/                  # 生成されたTypeScript型
+│   ├── genTypes/                  # 生成されたTypeScript型（.g.ts）
 │   │   ├── common/                # エンティティ型（User, Post, Todo等）
 │   │   ├── requests/              # リクエスト型（*Request）
 │   │   ├── responses/             # レスポンス型（*Response）
 │   │   └── index.ts               # re-export
 │   │
-│   └── schemas/                   # 生成されたZodスキーマ
-│       ├── common/                # エンティティのZodスキーマ
-│       ├── requests/              # リクエストのZodスキーマ
-│       ├── responses/             # レスポンスのZodスキーマ
-│       └── index.ts               # re-export
-│
-├── services/
-│   └── mockData/                  # 生成されたモックデータ
+│   ├── schemas/                   # 生成されたZodスキーマ（.g.ts）
+│   │   ├── common/                # エンティティのZodスキーマ
+│   │   ├── requests/              # リクエストのZodスキーマ
+│   │   ├── responses/             # レスポンスのZodスキーマ
+│   │   ├── types/                 # model/types/から生成されたスキーマ
+│   │   └── index.ts               # re-export
+│   │
+│   ├── types/                     # 手動で定義する型（.ts）
+│   │   ├── commons.ts             # プロジェクト共通型
+│   │   ├── forms.ts               # フォーム関連型
+│   │   └── index.ts
+│   │
+│   └── mockData/                  # 生成されたモックデータ（.g.ts）
 │       ├── getUserResponse.g.ts   # 単一データ
 │       ├── getUsersResponse.g.ts  # 配列データ（10件）
 │       ├── index.g.ts             # re-export
 │       └── ...
+│
+├── services/
+│   └── api/                       # API呼び出しロジック
 │
 └── scripts/
     ├── organize-types.js          # 型をフォルダ分け
@@ -79,8 +102,8 @@ project/
 ### 処理フロー
 
 ```
-api-spec.yaml → Orval → reactNativeTutorialAPI.ts → organize-types.js → 分類されたフォルダ
-※typesフォルダ下のファイルは自動生成ではありません。
+api-spec.yaml → Orval → reactNativeTutorialAPI.g.ts → organize-types.js → 分類されたフォルダ（.g.ts）
+※model/types/フォルダ下のファイルは自動生成ではなく手動作成です。
 ```
 
 ### 実行
@@ -96,12 +119,12 @@ npm run generate:types
 ✔ api was generated successfully
 
 📁 型ファイルを分類中...
-  ✅ common/user.ts (User, Address, Geo, Company)
-  ✅ common/post.ts (Post)
-  ✅ common/todo.ts (Todo)
-  ✅ requests/createUserRequest.ts (CreateUserRequest)
-  ✅ responses/getUserResponse.ts (GetUserResponse)
-  ✅ responses/getUsersResponse.ts (GetUsersResponse)
+  ✅ common/user.g.ts (User, Address, Geo, Company)
+  ✅ common/post.g.ts (Post)
+  ✅ common/todo.g.ts (Todo)
+  ✅ requests/createUserRequest.g.ts (CreateUserRequest)
+  ✅ responses/getUserResponse.g.ts (GetUserResponse)
+  ✅ responses/getUsersResponse.g.ts (GetUsersResponse)
   ...
 ```
 
@@ -120,9 +143,10 @@ npm run generate:types
 ### 処理フロー
 
 ```
-genTypes/common/*.ts    → ts-to-zod → schemas/common/*.g.ts
-genTypes/requests/*.ts  → ts-to-zod → schemas/requests/*.g.ts
-genTypes/responses/*.ts → ts-to-zod → schemas/responses/*.g.ts
+genTypes/common/*.g.ts    → ts-to-zod → schemas/common/*.g.ts
+genTypes/requests/*.g.ts  → ts-to-zod → schemas/requests/*.g.ts
+genTypes/responses/*.g.ts → ts-to-zod → schemas/responses/*.g.ts
+model/types/*.ts          → ts-to-zod → schemas/types/*.g.ts
 ```
 
 ### 実行
@@ -147,6 +171,11 @@ npm run generate:schemas
 📁 Processing responses...
   ✅ responses/getUserResponse.g.ts
   ✅ responses/getUsersResponse.g.ts
+
+📁 Processing types...
+  ✅ types/commons.g.ts
+  ✅ types/forms.g.ts
+  ...
   ...
 
 ✨ Zodスキーマ生成完了！
@@ -191,7 +220,7 @@ export const userSchema = z.object({
 ### 処理フロー
 
 ```
-api-spec.yaml (examples) → generate-mock-data.js → services/mockData/*.g.ts
+api-spec.yaml (examples) → generate-mock-data.js → model/mockData/*.g.ts
 ```
 
 ### 実行
@@ -241,7 +270,7 @@ components:
 ### 生成されるモックデータの例
 
 ```typescript
-// services/mockData/getUserResponse.g.ts
+// model/mockData/getUserResponse.g.ts
 export const mockGetUserResponse = {
   "id": 1,
   "name": "山田太郎",
@@ -250,7 +279,7 @@ export const mockGetUserResponse = {
   ...
 };
 
-// services/mockData/getUsersResponse.g.ts
+// model/mockData/getUsersResponse.g.ts
 export const mockGetUsersResponse = [
   { "id": 1, "name": "山田太郎", ... },
   { "id": 2, "name": "山田太郎", ... },  // idは自動で連番
@@ -262,7 +291,7 @@ export const mockGetUsersResponse = [
 ### 使用方法
 
 ```typescript
-import { mockGetUserResponse, mockGetUsersResponse } from '@/services/mockData/index.g';
+import { mockGetUserResponse, mockGetUsersResponse } from '@/model/mockData/index.g';
 
 // テストで使用
 describe('User API', () => {

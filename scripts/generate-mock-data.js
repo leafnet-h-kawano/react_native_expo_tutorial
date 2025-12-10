@@ -6,7 +6,7 @@
  * 処理方針:
  * - OpenAPIのスキーマからexampleを抽出
  * - 複数のバリエーションを自動生成（ID変更、データ変更など）
- * - services/mockData/ にTypeScriptファイルとして出力
+ * - model/mockData/ にTypeScriptファイルとして出力
  * 
  */
 
@@ -15,7 +15,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 const openapiPath = './openapi/api-spec.yaml';
-const outputDir = './services/mockData';
+const outputDir = './model/mockData';
 
 // 生成ファイル用のヘッダーコメント
 const generatedHeader = `/**

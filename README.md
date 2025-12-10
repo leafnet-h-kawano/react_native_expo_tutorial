@@ -84,3 +84,27 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+
+## Api追加、修正、削除に関する手順
+1. openAPI[openapi/api-spec.yaml]にAPI情報を追加　
+　　　※型定義を自動生成する必要があるのでパラメータに関してはcomponentに記載してください。
+　　　※モックデータが必要になるのでexampleを記載してください。
+2. Sweagger UIでデータを確認 
+```bash
+npm run swagger
+``` 
+
+3. openAPIから型データ、zodスキーマ,mockを生成 (zodスキーマは実際には型データをもとにスクリプトから生成されます)
+```bash
+npm run generate:all
+```
+
+4. 出力した型とスキーマを元にvalidationを追加　[services/validations.ts]
+
+5. 出力した型とvalidationを元にapiを追加　[services/apis.ts]
+
+6. 作成したapiと出力したmockデータを元にtestを作成　
+
+
+コード生成に関しての詳しい情報は [docs/code-generation-guide.md] を確認してください

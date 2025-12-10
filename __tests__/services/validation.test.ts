@@ -1,11 +1,11 @@
 import { GetPostResponse, GetTodoResponse, GetUserResponse } from '@/model/genTypes';
-import { getPostResponseSchema, getTodoResponseSchema, getUserResponseSchema, getUsersResponseSchema } from '@/model/schemas/responses';
 import {
   mockGetPostResponse,
   mockGetTodoResponse,
   mockGetUserResponse,
   mockGetUsersResponse
-} from '@/services/mockData/index.g';
+} from '@/model/mockData/index.g';
+import { getPostResponseSchema, getTodoResponseSchema, getUserResponseSchema, getUsersResponseSchema } from '@/model/schemas/responses';
 import { describe, expect, it } from '@jest/globals';
 import { validateData } from '../../services/validations.ts';
 

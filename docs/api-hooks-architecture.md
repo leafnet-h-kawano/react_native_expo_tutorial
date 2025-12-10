@@ -8,32 +8,46 @@ React Query + APIClient統合の基盤となる共通関数・型・ヘルパー
 #### 主要エクスポート：
 - `executeApiCall<T>()`: 共通API呼び出し処理関数
 - `ExecuteApiCallArgs<T>`: executeApiCall関数の引数型定義
-- `createErrorHandler()`: エラーハンドリング用ヘルパー関数
-- `createSuccessHandler()`: 成功時ログ用ヘルパー関数
+- `CallbackArgs<T>`: onSuccess/onErrorコールバック型定義（各hooksで共通使用）
 
 ### `hooks/api/queryKeys.ts` - React Query キー管理
 全てのReact Query キーを一元管理する専用ファイル：
 
 #### 主要エクスポート：
 - `userQueryKeys`: ユーザー関連のクエリキー定義
-- `postQueryKeys`: 投稿関連のクエリキー定義  
+  - `all`: ユーザー一覧
+  - `detail(id)`: 特定ユーザー詳細
+  - `posts(userId)`: ユーザーの投稿
+- `postQueryKeys`: 投稿関連のクエリキー定義
+  - `all`: 投稿一覧
+  - `detail(id)`: 特定投稿詳細
+  - `byUser(userId)`: ユーザー別投稿
+  - `filtered(filters)`: フィルター付き投稿一覧
 - `todoQueryKeys`: Todo関連のクエリキー定義
+  - `all`: Todo一覧
+  - `detail(id)`: 特定Todo詳細
+  - `byUser(userId)`: ユーザー別Todo
+  - `byStatus(completed)`: 完了状態別Todo
 - `commentQueryKeys`: コメント関連のクエリキー定義（将来用）
 - `queryKeys`: 全エンティティのキーを統合したオブジェクト
+- ユーティリティ関数:
+  - `createEntityKey(entity)`: エンティティキー生成
+  - `createDetailKey(entity, id)`: 詳細キー生成
+  - `createFilteredKey(entity, filters)`: フィルターキー生成
 
 #### 使用例：
 ```typescript
-import { executeApiCall, createErrorHandler } from './useApiClient';
+import { executeApiCall } from './useApiClient';
 import { userQueryKeys } from './queryKeys';
 import { useUsers, useUser } from './useUsers';
 
 // view側でコールバックを渡す基本パターン
 const { data: users, isLoading } = useUsers({
   onSuccess: (data) => {
-    Alert.alert('成功', `${data.length}件のユーザーを取得しました`);
+    console.log('成功', `${data.length}件のユーザーを取得しました`);
   },
   onError: (error) => {
-    Alert.alert('エラー', `データ取得に失敗: ${error.message}`);
+    console.error('エラー', `データ取得に失敗: ${error.errorMessage}`);
   }
 });
 
@@ -44,7 +58,7 @@ const { data: user } = useUser(userId, {
     // UI固有の処理（ページタイトル更新等）
   },
   onError: (error) => {
-    console.error('エラー:', error);
+    console.error('エラー:', error.errorMessage);
     // UI固有のエラー処理（404ページへのリダイレクト等）
   }
 });
