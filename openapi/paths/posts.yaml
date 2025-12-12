@@ -1,0 +1,91 @@
+# /posts エンドポイント
+/posts:
+  get:
+    summary: 投稿一覧を取得
+    operationId: getPosts
+    tags:
+      - posts
+    responses:
+      '200':
+        description: 投稿一覧
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/responses.yaml#/GetPostsResponse'
+  post:
+    summary: 投稿を作成
+    operationId: createPost
+    tags:
+      - posts
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/requests.yaml#/CreatePostRequest'
+    responses:
+      '201':
+        description: 作成された投稿
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/responses.yaml#/CreatePostResponse'
+
+# /posts/{id} エンドポイント
+/posts/{id}:
+  get:
+    summary: 特定の投稿を取得
+    operationId: getPostById
+    tags:
+      - posts
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: number
+    responses:
+      '200':
+        description: 投稿情報
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/responses.yaml#/GetPostResponse'
+  put:
+    summary: 投稿を更新
+    operationId: updatePost
+    tags:
+      - posts
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: number
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/requests.yaml#/UpdatePostRequest'
+    responses:
+      '200':
+        description: 更新された投稿
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/responses.yaml#/UpdatePostResponse'
+  delete:
+    summary: 投稿を削除
+    operationId: deletePost
+    tags:
+      - posts
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: number
+    responses:
+      '204':
+        description: 削除成功

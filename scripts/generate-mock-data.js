@@ -14,7 +14,8 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 
-const openapiPath = './openapi/api-spec.yaml';
+// バンドル済みのOpenAPIファイルを使用（$refが解決済み）
+const openapiPath = './openapi/bundled.g.yaml';
 const outputDir = './model/mockData';
 
 // 生成ファイル用のヘッダーコメント

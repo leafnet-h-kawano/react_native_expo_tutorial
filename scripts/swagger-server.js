@@ -15,7 +15,7 @@ const app = express();
 const PORT = process.env.SWAGGER_PORT || 4000;
 
 // OpenAPI仕様ファイルのパス
-const specPath = path.join(__dirname, '../openapi/api-spec.yaml');
+const specPath = path.join(__dirname, '../openapi/bundled.g.yaml');
 
 // YAMLファイルを読み込み
 let swaggerDocument;

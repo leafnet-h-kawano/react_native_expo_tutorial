@@ -6,7 +6,11 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                           OpenAPI (api-spec.yaml)                           │
+│          　  OpenAPI (api-spec.yaml + 分割されたファイル)          　　         │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │  openapi:bundleコマンドによりバンドル
+┌─────────────────────────────────────────────────────────────────────────────┐
+│          　             OpenAPI (bundled.g.yaml)          　　               │
 └─────────────────────────────────────────────────────────────────────────────┘
                                       │
            ┌──────────────┬───────────┼───────────────┐
@@ -45,7 +49,16 @@
 ```
 project/
 ├── openapi/
-│   └── api-spec.yaml              # OpenAPI定義（単一ソース）
+│   ├── api-spec.yaml              # OpenAPI定義（メインファイル、$refで分割ファイルを参照）
+│   ├── bundled.g.yaml             # 自動生成：バンドル済みOpenAPI（Orval/Prism用）
+│   ├── paths/                     # パス定義（エンドポイント別）
+│   │   ├── users.yaml             # /users エンドポイント
+│   │   ├── posts.yaml             # /posts エンドポイント
+│   │   └── todos.yaml             # /todos エンドポイント
+│   └── schemas/                   # スキーマ定義（種類別）
+│       ├── common.yaml            # エンティティ型（User, Post, Todo）
+│       ├── requests.yaml          # リクエスト型（*Request）
+│       └── responses.yaml         # レスポンス型（*Response）
 │
 ├── model/
 │   ├── genTypes/                  # 生成されたTypeScript型（.g.ts）

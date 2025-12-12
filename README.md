@@ -90,21 +90,27 @@ Join our community of developers creating universal apps.
 1. openAPI[openapi/api-spec.yaml]にAPI情報を追加　
 　　　※型定義を自動生成する必要があるのでパラメータに関してはcomponentに記載してください。
 　　　※モックデータが必要になるのでexampleを記載してください。
-2. Sweagger UIでデータを確認 
+
+2. openAPIファイルをバンドル　[openapi/bundled.g.yaml]ファイルが生成される
+```bash
+npm run openapi:bundle　
+```
+
+3. Sweagger UIでデータを確認 
 ```bash
 npm run swagger
 ``` 
 
-3. openAPIから型データ、zodスキーマ,mockを生成 (zodスキーマは実際には型データをもとにスクリプトから生成されます)
+4. openAPIから型データ、zodスキーマ,mockを生成 (zodスキーマは実際には型データをもとにスクリプトから生成されます) 一応このコマンドの最初にopenAPIのバンドルも行われます
 ```bash
 npm run generate:all
 ```
 
-4. 出力した型とスキーマを元にvalidationを追加　[services/validations.ts]
+5. 出力した型とスキーマを元にvalidationを追加　[services/validations.ts]
 
-5. 出力した型とvalidationを元にapiを追加　[services/apis.ts]
+6. 出力した型とvalidationを元にapiを追加　[services/apis.ts]
 
-6. 作成したapiと出力したmockデータを元にtestを作成　
+7. 作成したapiと出力したmockデータを元にtestを作成　
 
 
 コード生成に関しての詳しい情報は [docs/code-generation-guide.md] を確認してください

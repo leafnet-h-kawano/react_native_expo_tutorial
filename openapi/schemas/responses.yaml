@@ -1,0 +1,47 @@
+# レスポンス型
+# ※「Response」を名前に含めること
+
+# User系
+GetUsersResponse:
+  type: array
+  items:
+    $ref: './common.yaml#/User'
+
+GetUserResponse:
+  $ref: './common.yaml#/User'
+
+CreateUserResponse:
+  $ref: './common.yaml#/User'
+
+UpdateUserResponse:
+  $ref: './common.yaml#/User'
+
+# Post系
+GetPostsResponse:
+  type: array
+  items:
+    $ref: './common.yaml#/Post'
+
+GetPostResponse:
+  $ref: './common.yaml#/Post'
+
+CreatePostResponse:
+  $ref: './common.yaml#/Post'
+
+UpdatePostResponse:
+  $ref: './common.yaml#/Post'
+
+# Todo系
+GetTodosResponse:
+  type: array
+  items:
+    $ref: './common.yaml#/Todo'
+
+GetTodoResponse:
+  $ref: './common.yaml#/Todo'
+
+CreateTodoResponse:
+  $ref: './common.yaml#/Todo'
+
+UpdateTodoResponse:
+  $ref: './common.yaml#/Todo'

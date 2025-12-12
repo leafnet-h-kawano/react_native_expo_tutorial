@@ -1,0 +1,499 @@
+openapi: 3.0.3
+info:
+  title: React Native Tutorial API
+  version: 1.0.0
+  description: React Native チュートリアルアプリのAPI仕様
+servers:
+  - url: https://api.example.com
+    description: Production server
+  - url: http://localhost:3000
+    description: Development server (MSW)
+paths:
+  /users:
+    get:
+      summary: ユーザー一覧を取得
+      operationId: getUsers
+      tags:
+        - users
+      responses:
+        '200':
+          description: ユーザー一覧
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUsersResponse'
+    post:
+      summary: ユーザーを作成
+      operationId: createUser
+      tags:
+        - users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '201':
+          description: 作成されたユーザー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /users/{id}:
+    get:
+      summary: 特定のユーザーを取得
+      operationId: getUserById
+      tags:
+        - users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ユーザー情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      summary: ユーザー情報を更新
+      operationId: updateUser
+      tags:
+        - users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        '200':
+          description: 更新されたユーザー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      summary: ユーザーを削除
+      operationId: deleteUser
+      tags:
+        - users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '204':
+          description: 削除成功
+  /posts:
+    get:
+      summary: 投稿一覧を取得
+      operationId: getPosts
+      tags:
+        - posts
+      responses:
+        '200':
+          description: 投稿一覧
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPostsResponse'
+    post:
+      summary: 投稿を作成
+      operationId: createPost
+      tags:
+        - posts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePostRequest'
+      responses:
+        '201':
+          description: 作成された投稿
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+  /posts/{id}:
+    get:
+      summary: 特定の投稿を取得
+      operationId: getPostById
+      tags:
+        - posts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: 投稿情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+    put:
+      summary: 投稿を更新
+      operationId: updatePost
+      tags:
+        - posts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePostRequest'
+      responses:
+        '200':
+          description: 更新された投稿
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+    delete:
+      summary: 投稿を削除
+      operationId: deletePost
+      tags:
+        - posts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '204':
+          description: 削除成功
+  /todos:
+    get:
+      summary: TODO一覧を取得
+      operationId: getTodos
+      tags:
+        - todos
+      responses:
+        '200':
+          description: TODO一覧
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTodosResponse'
+    post:
+      summary: TODOを作成
+      operationId: createTodo
+      tags:
+        - todos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTodoRequest'
+      responses:
+        '201':
+          description: 作成されたTODO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+  /todos/{id}:
+    get:
+      summary: 特定のTODOを取得
+      operationId: getTodoById
+      tags:
+        - todos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: TODO情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+    put:
+      summary: TODOを更新
+      operationId: updateTodo
+      tags:
+        - todos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTodoRequest'
+      responses:
+        '200':
+          description: 更新されたTODO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+    delete:
+      summary: TODOを削除
+      operationId: deleteTodo
+      tags:
+        - todos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '204':
+          description: 削除成功
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - username
+        - email
+        - phone
+        - website
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        website:
+          type: string
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+            suite:
+              type: string
+            city:
+              type: string
+            zipcode:
+              type: string
+            geo:
+              type: object
+              properties:
+                lat:
+                  type: string
+                lng:
+                  type: string
+        company:
+          type: object
+          properties:
+            name:
+              type: string
+            catchPhrase:
+              type: string
+            bs:
+              type: string
+        selected:
+          type: boolean
+      example:
+        id: 1
+        name: 山田太郎
+        username: yamada_taro
+        email: taro@example.com
+        phone: 090-1234-5678
+        website: https://yamada.example.com
+        address:
+          street: 渋谷1-2-3
+          suite: マンション101
+          city: 渋谷区
+          zipcode: 150-0001
+          geo:
+            lat: '35.6762'
+            lng: '139.6503'
+        company:
+          name: 株式会社サンプル
+          catchPhrase: 革新的なソリューションを提供
+          bs: synergize scalable solutions
+        selected: false
+    Post:
+      type: object
+      required:
+        - id
+        - userId
+        - title
+        - body
+      properties:
+        id:
+          type: number
+        userId:
+          type: number
+        title:
+          type: string
+        body:
+          type: string
+        isNew:
+          type: boolean
+        modified:
+          type: boolean
+      example:
+        id: 1
+        userId: 1
+        title: React Nativeの基礎
+        body: React Nativeを使ったモバイルアプリ開発について解説します。クロスプラットフォーム開発の魅力をお伝えします。
+        isNew: false
+        modified: false
+    Todo:
+      type: object
+      required:
+        - id
+        - userId
+        - title
+        - completed
+      properties:
+        id:
+          type: number
+        userId:
+          type: number
+        title:
+          type: string
+        completed:
+          type: boolean
+      example:
+        id: 1
+        userId: 1
+        title: プロジェクトのセットアップ
+        completed: false
+    CreateUserRequest:
+      type: object
+      required:
+        - name
+        - username
+        - email
+      properties:
+        name:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        website:
+          type: string
+    UpdateUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        website:
+          type: string
+    CreatePostRequest:
+      type: object
+      required:
+        - userId
+        - title
+        - body
+      properties:
+        userId:
+          type: number
+        title:
+          type: string
+        body:
+          type: string
+    UpdatePostRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        body:
+          type: string
+    CreateTodoRequest:
+      type: object
+      required:
+        - userId
+        - title
+      properties:
+        userId:
+          type: number
+        title:
+          type: string
+        completed:
+          type: boolean
+          default: false
+    UpdateTodoRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        completed:
+          type: boolean
+    GetUsersResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+    GetUserResponse:
+      $ref: '#/components/schemas/User'
+    CreateUserResponse:
+      $ref: '#/components/schemas/User'
+    UpdateUserResponse:
+      $ref: '#/components/schemas/User'
+    GetPostsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Post'
+    GetPostResponse:
+      $ref: '#/components/schemas/Post'
+    CreatePostResponse:
+      $ref: '#/components/schemas/Post'
+    UpdatePostResponse:
+      $ref: '#/components/schemas/Post'
+    GetTodosResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Todo'
+    GetTodoResponse:
+      $ref: '#/components/schemas/Todo'
+    CreateTodoResponse:
+      $ref: '#/components/schemas/Todo'
+    UpdateTodoResponse:
+      $ref: '#/components/schemas/Todo'

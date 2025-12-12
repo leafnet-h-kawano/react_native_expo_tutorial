@@ -1,0 +1,91 @@
+# /todos エンドポイント
+/todos:
+  get:
+    summary: TODO一覧を取得
+    operationId: getTodos
+    tags:
+      - todos
+    responses:
+      '200':
+        description: TODO一覧
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/responses.yaml#/GetTodosResponse'
+  post:
+    summary: TODOを作成
+    operationId: createTodo
+    tags:
+      - todos
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/requests.yaml#/CreateTodoRequest'
+    responses:
+      '201':
+        description: 作成されたTODO
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/responses.yaml#/CreateTodoResponse'
+
+# /todos/{id} エンドポイント
+/todos/{id}:
+  get:
+    summary: 特定のTODOを取得
+    operationId: getTodoById
+    tags:
+      - todos
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: number
+    responses:
+      '200':
+        description: TODO情報
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/responses.yaml#/GetTodoResponse'
+  put:
+    summary: TODOを更新
+    operationId: updateTodo
+    tags:
+      - todos
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: number
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/requests.yaml#/UpdateTodoRequest'
+    responses:
+      '200':
+        description: 更新されたTODO
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/responses.yaml#/UpdateTodoResponse'
+  delete:
+    summary: TODOを削除
+    operationId: deleteTodo
+    tags:
+      - todos
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: number
+    responses:
+      '204':
+        description: 削除成功

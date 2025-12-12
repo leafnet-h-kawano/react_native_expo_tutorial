@@ -1,0 +1,91 @@
+# /users エンドポイント
+/users:
+  get:
+    summary: ユーザー一覧を取得
+    operationId: getUsers
+    tags:
+      - users
+    responses:
+      '200':
+        description: ユーザー一覧
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/responses.yaml#/GetUsersResponse'
+  post:
+    summary: ユーザーを作成
+    operationId: createUser
+    tags:
+      - users
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/requests.yaml#/CreateUserRequest'
+    responses:
+      '201':
+        description: 作成されたユーザー
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/responses.yaml#/CreateUserResponse'
+
+# /users/{id} エンドポイント
+/users/{id}:
+  get:
+    summary: 特定のユーザーを取得
+    operationId: getUserById
+    tags:
+      - users
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: number
+    responses:
+      '200':
+        description: ユーザー情報
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/responses.yaml#/GetUserResponse'
+  put:
+    summary: ユーザー情報を更新
+    operationId: updateUser
+    tags:
+      - users
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: number
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/requests.yaml#/UpdateUserRequest'
+    responses:
+      '200':
+        description: 更新されたユーザー
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/responses.yaml#/UpdateUserResponse'
+  delete:
+    summary: ユーザーを削除
+    operationId: deleteUser
+    tags:
+      - users
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: number
+    responses:
+      '204':
+        description: 削除成功

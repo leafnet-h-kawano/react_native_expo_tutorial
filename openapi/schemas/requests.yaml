@@ -1,0 +1,83 @@
+# リクエスト型
+# ※「Request」を名前に含めること
+
+# User系
+CreateUserRequest:
+  type: object
+  required:
+    - name
+    - username
+    - email
+  properties:
+    name:
+      type: string
+    username:
+      type: string
+    email:
+      type: string
+      format: email
+    phone:
+      type: string
+    website:
+      type: string
+
+UpdateUserRequest:
+  type: object
+  properties:
+    name:
+      type: string
+    username:
+      type: string
+    email:
+      type: string
+      format: email
+    phone:
+      type: string
+    website:
+      type: string
+
+# Post系
+CreatePostRequest:
+  type: object
+  required:
+    - userId
+    - title
+    - body
+  properties:
+    userId:
+      type: number
+    title:
+      type: string
+    body:
+      type: string
+
+UpdatePostRequest:
+  type: object
+  properties:
+    title:
+      type: string
+    body:
+      type: string
+
+# Todo系
+CreateTodoRequest:
+  type: object
+  required:
+    - userId
+    - title
+  properties:
+    userId:
+      type: number
+    title:
+      type: string
+    completed:
+      type: boolean
+      default: false
+
+UpdateTodoRequest:
+  type: object
+  properties:
+    title:
+      type: string
+    completed:
+      type: boolean

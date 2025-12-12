@@ -36,12 +36,13 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "generate:types": "orval --config orval.config.ts && node scripts/organize-types.js",
+    "openapi:bundle": "redocly bundle openapi/api-spec.yaml -o openapi/bundled.g.yaml",
+    "generate:types": "npm run openapi:bundle && orval --config orval.config.ts && node scripts/organize-types.js",
     "generate:schemas": "node scripts/generate-schemas.js",
     "generate:mocks": "node scripts/generate-mock-data.js",
     "generate:all": "npm run generate:types && npm run generate:schemas && npm run generate:mocks",
     "swagger": "node scripts/swagger-server.js",
-    "mock:server": "prism mock openapi/api-spec.yaml --port 4010"
+    "mock:server": "prism mock openapi/bundled.g.yaml --port 4010"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -81,6 +82,7 @@
   "devDependencies": {
     "@jest/globals": "^30.2.0",
     "@orval/core": "^7.17.0",
+    "@redocly/cli": "^2.12.6",
     "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^30.0.0",
