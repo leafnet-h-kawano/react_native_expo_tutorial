@@ -11,4 +11,6 @@ export const ApiStatusMessages : Record<string, {status: number, message: string
     forbidden: {status: 403, message: 'アクセスが禁止されています'},
     notFound: {status: 404, message: 'ページが見つかりません'},
     internalServerError: {status: 500, message: 'サーバー内部エラーが発生しました'},
+    uniqueError1: {status: 598, message: '特殊なエラー1が発生しました'},
+    uniqueError2: {status: 599, message: '特殊なエラー2が発生しました'},
 };

@@ -2,7 +2,7 @@ import { GetPostsResponse, GetUserResponse } from "@/model/genTypes";
 import { GetUsersResponse } from "@/model/genTypes/responses/getUsersResponse";
 import { ApiResult } from "@/utils/types";
 import { AxiosRequestConfig } from "axios";
-import { customValidators } from "../validations.ts/validation";
+import { customValidators } from "../validations";
 import { commonApiService } from "./common";
 
 /**

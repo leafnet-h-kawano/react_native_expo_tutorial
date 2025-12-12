@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { todoQueryKeys } from './queryKeys';
 import {
     CallbackArgs,
+    createDefaultQueryMeta,
     executeApiCall
 } from './useApiClient';
 
@@ -17,7 +18,6 @@ export const todoQueryFunctions = {
     return executeApiCall({
       apiCall: () => apiClient.todos.getAll(),
       onSuccess: callbacks?.onSuccess,
-      onError: callbacks?.onError
     });
   },
 
@@ -26,7 +26,6 @@ export const todoQueryFunctions = {
     return executeApiCall({
       apiCall: () => apiClient.todos.getByUser(userId),
       onSuccess: callbacks?.onSuccess,
-      onError: callbacks?.onError
     });
   },
 
@@ -35,7 +34,6 @@ export const todoQueryFunctions = {
     return executeApiCall({
       apiCall: () => apiClient.todos.getById(id),
       onSuccess: callbacks?.onSuccess,
-      onError: callbacks?.onError
     });
   },
 };
@@ -50,6 +48,7 @@ export function useTodos(callbacks?: CallbackArgs<GetTodosResponse>) {
   return useQuery({
     queryKey: todoQueryKeys.all,
     queryFn: () => todoQueryFunctions.getAllTodos(callbacks),
+    meta: { ...createDefaultQueryMeta(callbacks) }
   });
 }
 
@@ -59,6 +58,7 @@ export function useUserTodos(userId: number, callbacks?: CallbackArgs<GetTodosRe
     queryKey: todoQueryKeys.byUser(userId),
     queryFn: () => todoQueryFunctions.getUserTodos(userId, callbacks),
     enabled: !!userId,
+    meta: { ...createDefaultQueryMeta(callbacks) }
   });
 }
 
@@ -68,6 +68,7 @@ export function useTodo(id: number, callbacks?: CallbackArgs<GetTodoResponse>) {
     queryKey: todoQueryKeys.detail(id),
     queryFn: () => todoQueryFunctions.getTodoById(id, callbacks),
     enabled: !!id,
+    meta: { ...createDefaultQueryMeta(callbacks) }
   });
 }
 

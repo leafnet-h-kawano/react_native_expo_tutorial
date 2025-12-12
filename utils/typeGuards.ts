@@ -10,8 +10,13 @@ export function isApiSuccess<T>(result: ApiResult<T>): result is ApiResult<T> & 
 }
 
 // 型ガード関数：ApiResult<T>がエラーかどうかを判定
-export function isApiError<T>(result: ApiResult<T>): result is ApiResult<T> & { success: false } {
-  return result.success === false;
+export function isApiError<T>(result: ApiResult<T> | any): result is ApiResult<T> & { success: false } {
+  return (
+    typeof result === 'object' &&
+    result !== null &&
+    'success' in result &&
+    result.success === false
+  );
 }
 
 // 型ガード関数：バリデーション結果がエラー情報オブジェクトかどうかを判定

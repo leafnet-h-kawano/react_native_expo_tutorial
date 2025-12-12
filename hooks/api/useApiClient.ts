@@ -4,82 +4,63 @@ import { ApiResult } from '@/utils/types';
 
 // コールバック型定義 (各hooksで使用)
 export type CallbackArgs<T> = {
+ /**
+ * apiCall成功時のコールバック関数
+ * @param data - APIから取得したデータ
+ * @returns T型のデータ　- APIから取得したデータに変更を加えた場合
+ */
   onSuccess?: (data: T) => T | void;
+ /**
+ * apiCall失敗時のコールバック関数 (基本的なエラーハンドリングは別で処理を行うため、これは追加処理用)
+ * @param  error - エラー情報オブジェクト  | null
+ * @returns void
+ */
   onError?: ((error: { statusCode: number | null; errorMessage: string }) => void) | (() => void);
 };
 
 // executeApiCall関数の引数型定義
 export type ExecuteApiCallArgs<T> = {
   apiCall: () => Promise<ApiResult<T>>;
-  onSuccess?: (data: T) => T | void;
-  onError?: ((error: { statusCode: number | null; errorMessage: string }) => void) | (() => void);
+  onSuccess?: (data: T) => T | void; //現在不使用
+  onError?: ((error: { statusCode: number | null; errorMessage: string }) => void) | (() => void); //現在不使用
 };
 
-// 共通API呼び出し処理関数
+/**
+ * Queryのmetaオブジェクトを生成するヘルパー関数
+ * QueryProviderのQueryCache.onErrorで個別のコールバックを実行するために使用
+ * @param callbacks - コールバック関数（onSuccess, onError）
+ * @returns Queryのmetaオブジェクト
+ */
+export function createDefaultQueryMeta<T>(callbacks?: CallbackArgs<T>) {
+  return {
+    // 成功時のコールバック
+    onSuccess: callbacks?.onSuccess ? callbacks.onSuccess : undefined,
+    // エラー時の追加コールバック(基本的なエラーハンドリングはQueryProviderで行う)
+    onError: callbacks?.onError ? callbacks.onError : undefined,
+    // バックグラウンド処理フラグ（デフォルトはfalse）
+    isBackground: false
+  };
+}
+
+/**
+ * 共通API呼び出し処理関数
+ * @param args - API呼び出し関数とコールバック関数(onSuccess, onErrorは現在使用していない)
+ */
 export async function executeApiCall<T>(args: ExecuteApiCallArgs<T>): Promise<T> {
 
   // API呼び出し実行
   const result = await args.apiCall();
-  
+
   if (isApiSuccess(result)) {
-    // 成功時のコールバック実行
+    // 成功時の後続処理はuseQuery、useMutation共にQueryProviderで実装
+    // 取得したデータの操作は,hooks/queryManager内の各マネージャーフックで行う
+    return result.data;
 
-    //onSuccessが未定義の場合は元のデータを返す
-    if(!args.onSuccess) {
-      return result.data;
-    }
-    //成功時の処理(データ編集可能)
-    const data = args.onSuccess(result.data);
-    //onSuccessでデータの更新が行われなかった場合は元のデータを返す
-    return data ? data : result.data; 
   } else if (isApiError(result)) {
-    // エラー時は、ステータスコードを確認して処理を分岐
-    //TODO: ダイアログ表示や通知表示などのUI連携を追加したい
-    // （zustandを使用してグローバル変数を更新することにより、ブローバル変数のリスナーを叩いてダイアログや遷移を実行する想定）
-    switch (result.statusCode) {
-      case 400:
-        console.error('Bad Request:', result.rawErrorMessage);
-        break;
-      case 404:
-        console.error('Not Found:', result.rawErrorMessage);
-        break;
-      case 500:
-        console.error('Internal Server Error:', result.rawErrorMessage);
-        break;
-      default:
-        console.error('Unknown Error:', result.rawErrorMessage);
-    }
-
-    // エラー時のコールバック実行
-    if (args.onError) {
-      // 関数の引数の数を確認して適切に呼び出し
-      if (args.onError.length >= 1) {
-        // 引数ありの関数として呼び出し
-        (args.onError as (error: { statusCode: number | null; errorMessage: string }) => void)({
-          statusCode: result.statusCode,
-          errorMessage: result.rawErrorMessage
-        });
-      } else {
-        // 引数なしの関数として呼び出し
-        (args.onError as () => void)();
-      }
-    }
-    throw new Error(result.rawErrorMessage);
+    // エラー処理はuseQuery、useMutation共にQueryProviderで実装
+    // MEMO: ReactQueryにはデフォルトでリクエストのリトライ機能があるため、ここに処理を書くとリトライするたびにエラー処理が実行されてしまう
+    throw result;
   }
   
   throw new Error('予期しないエラーが発生しました');
 }
-
-// エラーハンドリング用のヘルパー関数
-export const createErrorHandler = (context: string) => 
-  ({ statusCode, errorMessage }: { statusCode: number | null; errorMessage: string }) => {
-    console.error(`API Error (Status ${statusCode}): ${context}: ${errorMessage}`);
-    return new Error(`${context}中にエラーが発生しました: ${errorMessage}`);
-  };
-
-// 成功時ログ用のヘルパー関数
-export const createSuccessHandler = <T>(successMessage: string) => 
-  (data: T): T => {
-    console.log(successMessage);
-    return data;
-  };

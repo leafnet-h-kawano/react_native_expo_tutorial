@@ -11,19 +11,13 @@ export function statusCodeToErrorMessage(errorStatusCode: number | null): string
     return Messages.apiDefaultError;
   }
 
-  switch (errorStatusCode) {
-    case ApiStatusMessages.badRequest.status:
-      return ApiStatusMessages.badRequest.message;
-    case ApiStatusMessages.unauthorized.status:
-      return ApiStatusMessages.unauthorized.message;
-    case ApiStatusMessages.forbidden.status:
-      return ApiStatusMessages.forbidden.message;
-    case ApiStatusMessages.notFound.status:
-      return ApiStatusMessages.notFound.message;
-    case ApiStatusMessages.internalServerError.status:
-      return ApiStatusMessages.internalServerError.message;
-    default:
-      // その他のステータスコードの場合はデフォルトメッセージを返す
-      return Messages.apiDefaultError;
+  // 定義されたステータスコードの場合は対応するメッセージを返す
+  for (const key in ApiStatusMessages) {
+    if (ApiStatusMessages[key].status === errorStatusCode) {
+      return ApiStatusMessages[key].message;
+    }
   }
+
+  // その他のステータスコードの場合はデフォルトメッセージを返す
+  return Messages.apiDefaultError;
 }

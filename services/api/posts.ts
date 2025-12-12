@@ -2,7 +2,7 @@ import { CreatePostRequest, UpdatePostRequest } from "@/model/genTypes";
 import { CreatePostResponse, GetPostResponse, GetPostsResponse, UpdatePostResponse } from "@/model/genTypes/responses";
 import { ApiResult } from "@/utils/types";
 import { AxiosRequestConfig } from "axios";
-import { customValidators } from "../validations.ts/validation";
+import { customValidators } from "../validations";
 import { commonApiService } from "./common";
 
 /**

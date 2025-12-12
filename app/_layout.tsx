@@ -1,5 +1,6 @@
 import { Stack } from "expo-router";
 import { QueryProvider } from '../providers/QueryProvider';
+import { ErrorModal } from './components/ErrorModal';
 
 export default function RootLayout() {
   return (
@@ -10,6 +11,9 @@ export default function RootLayout() {
           options={{ headerShown: false }}
         />
       </Stack>
+      
+      {/* グローバルエラーモーダル */}
+      <ErrorModal />
     </QueryProvider>
   );
 }

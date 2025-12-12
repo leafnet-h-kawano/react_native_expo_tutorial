@@ -4,9 +4,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import Constants from "expo-constants";
 import { Messages } from "../../utils/const";
 import { statusCodeToErrorMessage } from "../apiResponseHandler";
-import { postApiClient, PostApiClient, PostApiEndpoints, } from "./posts";
-import { todoApiClient, TodoApiClient, TodoApiEndpoints } from "./todos";
-import { userApiClient, UserApiClient, UserApiEndpoints } from "./users";
+import utils from "@/utils/utils";
 
 // =============================================================================
 // 型安全なAPIクライアント関数（静的メソッド）
@@ -26,6 +24,17 @@ export const httpClient = axios.create({
   timeout: 10000,
 });
 
+//インターセプター
+httpClient.interceptors.request.use(request => {
+  utils.debugLog('Request URL:', request.url ?? '')
+  return request
+})
+httpClient.interceptors.response.use(response => {
+  utils.debugLog(`Response URL: ${response.config.url ?? ''} / status: ${response.status ?? ''}`)
+  utils.debugLog('Response Data:', response.data ?? '')
+  return response
+})
+
 /// 共通のAPIサービス関数
 export const commonApiService = async <T>(
     config: AxiosRequestConfig, 
@@ -33,7 +42,6 @@ export const commonApiService = async <T>(
     ) : Promise<ApiResult<T>> => {
       const response = await httpClient(config)
         .then((response) => {
-
           // バリデーションを実行（バリデーションに失敗した場合はエラー情報を返す）
           const validateResult = validator(response.data);
           if(isValidationError(validateResult)) {
@@ -64,22 +72,5 @@ export const commonApiService = async <T>(
       return response;
 }
 
-// APIクライアントの型 - 各ファイルから継承
-export type ApiClient = UserApiClient & PostApiClient & TodoApiClient;
-
-// APIクライアント - 各ファイルから継承
-export const apiClient: ApiClient = {
-  ...userApiClient,
-  ...postApiClient,
-  ...todoApiClient,
-} as const;
-
-// APIエンドポイント - 各ファイルから継承
-export const ApiEndpoints = {
-  ...UserApiEndpoints,
-  ...PostApiEndpoints,
-  ...TodoApiEndpoints,
-} as const;
-
-// APIエンドポイントの型
-export type ApiEndpointPaths = typeof ApiEndpoints;
+// NOTE: apiClient と ApiEndpoints は循環依存を避けるため、
+//       services/api/index.ts で統合されます。

@@ -4,6 +4,7 @@ import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/rea
 import { userQueryKeys } from './queryKeys';
 import {
   CallbackArgs,
+  createDefaultQueryMeta,
   executeApiCall
 } from './useApiClient';
 
@@ -16,7 +17,6 @@ export const userQueryFunctions = {
     return executeApiCall({
       apiCall: () => apiClient.users.getAll(),
       onSuccess: callbacks?.onSuccess,
-      onError: callbacks?.onError
     });
   },
 
@@ -25,7 +25,6 @@ export const userQueryFunctions = {
     return executeApiCall({
       apiCall: () => apiClient.users.getById(id),
       onSuccess: callbacks?.onSuccess,
-      onError: callbacks?.onError
     });
   },
 
@@ -34,7 +33,6 @@ export const userQueryFunctions = {
     return executeApiCall({
       apiCall: () => apiClient.users.getPosts(userId),
       onSuccess: callbacks?.onSuccess,
-      onError: callbacks?.onError
     });
   },
 };
@@ -48,6 +46,9 @@ export function useUsers(callbacks?: CallbackArgs<GetUsersResponse>) {
   return useQuery({
     queryKey: userQueryKeys.all,
     queryFn: () => userQueryFunctions.getAllUsers(callbacks),
+    // QueryClientで使用するmeta情報
+    // success処理はレスポンスデータの編集も行うのでqueryFn内で行う
+    meta: { ...createDefaultQueryMeta(callbacks) , isBackground: true}
   });
 }
 
@@ -57,6 +58,7 @@ export function useUser(id: number, callbacks?: CallbackArgs<GetUserResponse>) {
     queryKey: userQueryKeys.detail(id),
     queryFn: () => userQueryFunctions.getUserById(id, callbacks),
     enabled: !!id, // idが存在する場合のみクエリを実行
+    meta: { ...createDefaultQueryMeta(callbacks) }
   });
 }
 
@@ -66,6 +68,7 @@ export function useUserPosts(userId: number, callbacks?: CallbackArgs<GetPostsRe
     queryKey: userQueryKeys.posts(userId),
     queryFn: () => userQueryFunctions.getUserPosts(userId, callbacks),
     enabled: !!userId, // userIdが存在する場合のみクエリを実行
+    meta: { ...createDefaultQueryMeta(callbacks) }
   });
 }
 
@@ -73,28 +76,20 @@ export function useUserPosts(userId: number, callbacks?: CallbackArgs<GetPostsRe
 export function useCreateUser(callbacks?: CallbackArgs<CreateUserResponse>) {
   const queryClient = useQueryClient();
   
-  return useMutation({
-    mutationFn: async (userData: CreateUserRequest): Promise<CreateUserResponse> => {
-      // TODO: 実際のcreate APIが実装されたら以下を有効化
-    //   return executeApiCall({
-    //     apiCall: () => apiClient.users.create(userData),
-    //   onSuccess: callbacks?.onSuccess,
-    //   onError: callbacks?.onError
-    //   });
-      
-      // 仮実装（モックレスポンスデータ）
-      const mockUser: CreateUserResponse = {
-        id: Date.now(),
-        ...userData
-      } as CreateUserResponse;
-      
-      console.log(`仮ユーザー(ID:${mockUser.id}, Name:${mockUser.name})を作成しました（モック）`);
-      callbacks?.onSuccess?.(mockUser);
-      return Promise.resolve(mockUser);
-    },
-    onSuccess: callbacks?.onSuccess,
-    onError: callbacks?.onError
-  });
+  // return useMutation({
+  //   mutationFn: (userData: CreateUserRequest) =>
+  //     executeApiCall({
+  //       apiCall: () => apiClient.users.create(userData),
+  //       onSuccess: callbacks?.onSuccess,
+  //     }),
+  //     // QueryClientで使用するmeta情報
+  //     // success処理はレスポンスデータの編集も行うのでqueryFn内で行う
+  //     meta: { ...createDefaultQueryMeta(callbacks), isBackground: true },
+ 
+  //   /// WARNING: useQueryと挙動を合わせるためにonSuccess, onErrorはここでは使用しない
+  //   // onSuccess: callbacks?.onSuccess,
+  //   // onError: callbacks?.onError
+  // });
 }
 
 // useQueriesを使用した一括データ取得：ユーザーと投稿
@@ -111,11 +106,13 @@ export function useUserWithPosts(
         queryKey: userQueryKeys.detail(userId),
         queryFn: () => userQueryFunctions.getUserById(userId, callbacks?.userCallbacks),
         enabled: !!userId,
+        meta: { ...createDefaultQueryMeta(callbacks?.userCallbacks) }
       },
       {
         queryKey: userQueryKeys.posts(userId),
         queryFn: () => userQueryFunctions.getUserPosts(userId, callbacks?.postsCallbacks),
         enabled: !!userId,
+        meta: { ...createDefaultQueryMeta(callbacks?.postsCallbacks) }
       },
     ],
   });
@@ -146,6 +143,7 @@ export function useMultipleUsers(
       queryKey: userQueryKeys.detail(id),
       queryFn: () => userQueryFunctions.getUserById(id, callbacks),
       enabled: !!id,
+      meta: { ...createDefaultQueryMeta(callbacks) }
     })),
   });
 

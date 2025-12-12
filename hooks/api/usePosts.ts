@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { postQueryKeys } from './queryKeys';
 import {
   CallbackArgs,
+  createDefaultQueryMeta,
   executeApiCall
 } from './useApiClient';
 
@@ -17,7 +18,6 @@ export const postQueryFunctions = {
     return executeApiCall({
       apiCall: () => apiClient.posts.getAll(),
       onSuccess: callbacks?.onSuccess,
-      onError: callbacks?.onError
     });
   },
 
@@ -26,7 +26,6 @@ export const postQueryFunctions = {
     return executeApiCall({
       apiCall: () => apiClient.posts.getById(id),
       onSuccess: callbacks?.onSuccess,
-      onError: callbacks?.onError
     });
   },
 };
@@ -40,6 +39,7 @@ export function usePosts(callbacks?: CallbackArgs<GetPostsResponse>) {
   return useQuery({
     queryKey: postQueryKeys.all,
     queryFn: () => postQueryFunctions.getAllPosts(callbacks),
+    meta: { ...createDefaultQueryMeta(callbacks)}
   });
 }
 
@@ -49,6 +49,7 @@ export function usePost(id: number, callbacks?: CallbackArgs<GetPostResponse>) {
     queryKey: postQueryKeys.detail(id),
     queryFn: () => postQueryFunctions.getPostById(id, callbacks),
     enabled: !!id,
+    meta: { ...createDefaultQueryMeta(callbacks)}
   });
 }
 
@@ -57,20 +58,19 @@ export function useCreatePost(callbacks?: CallbackArgs<CreatePostResponse>) {
   const queryClient = useQueryClient();
   
   return useMutation({
+    mutationKey: postQueryKeys.create(),
     mutationFn: (postData: CreatePostRequest) =>
       executeApiCall({
         apiCall: () => apiClient.posts.create(postData),
         onSuccess: callbacks?.onSuccess,
-        onError: callbacks?.onError
       }),
-    onSuccess: (newPost) => {
-      // 投稿一覧のキャッシュを無効化して再取得
-      queryClient.invalidateQueries({ queryKey: postQueryKeys.all });
-      console.log('投稿が正常に作成されました:', newPost.title);
-    },
-    onError: (error) => {
-      console.error('投稿作成エラー:', error);
-    },
+      // QueryClientで使用するmeta情報
+      // success処理はレスポンスデータの編集も行うのでqueryFn内で行う
+      meta: { ...createDefaultQueryMeta(callbacks), isBackground: true }
+
+    /// WARNING: useQueryと挙動を合わせるためにonSuccess, onErrorはここでは使用しない
+    // onSuccess: callbacks?.onSuccess,
+    // onError: callbacks?.onError
   });
 }
 
@@ -83,16 +83,7 @@ export function useUpdatePost(callbacks?: CallbackArgs<UpdatePostResponse>) {
       executeApiCall({
         apiCall: () => apiClient.posts.update(id, updates),
         onSuccess: callbacks?.onSuccess,
-        onError: callbacks?.onError
       }),
-    onSuccess: (updatedPost) => {
-      // 関連するキャッシュを更新
-      queryClient.invalidateQueries({ queryKey: postQueryKeys.all });
-      queryClient.invalidateQueries({ queryKey: postQueryKeys.detail(updatedPost.id) });
-      console.log('投稿が正常に更新されました:', updatedPost.title);
-    },
-    onError: (error) => {
-      console.error('投稿更新エラー:', error);
-    },
+      meta: { ...createDefaultQueryMeta(callbacks), isBackground: true }
   });
 }

@@ -1,14 +1,17 @@
 import React from 'react';
 import {
-    Alert,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 // React QueryとAPIクライアントを使用した統合デモ
+import { useCreatePost } from '@/hooks/api/usePosts';
+import { useUserManager } from '@/hooks/queryManager/useUserManager';
+import { CreatePostRequest } from '@/model/genTypes';
 import { useUsers } from '../../../hooks/api/useUsers';
 
 const ComprehensiveDemo: React.FC = () => {
@@ -18,39 +21,55 @@ const ComprehensiveDemo: React.FC = () => {
     isLoading: usersLoading,
     error: usersError,
     refetch: refetchUsers,
-  } = useUsers();
+  } = useUsers({
+    onSuccess: (data) => {
+      console.log('ユーザーデータ取得成功:', data);
+      Alert.alert('成功', `ユーザーデータが取得されました！}`);
+    },
+    // onError: (error) => {
+    //   console.error('ユーザーデータ取得エラー:', error);
+    //   Alert.alert('エラー', 'ユーザーデータの取得に失敗しました');
+    // }
+  });
+
+  const { updateName } = useUserManager();
+
+  const newPost: CreatePostRequest = {
+    userId: 1,
+    title: '新しい投稿',
+    body: '投稿内容'
+  };
+
+  // 投稿作成用のmutation（コンポーネントのトップレベルで呼び出す）
+  const createPostMutation = useCreatePost({
+    onSuccess: (data) => {
+      console.log('投稿作成成功:', data);
+      Alert.alert('成功', `投稿が作成されました！\nID: ${data.id}`);
+    },
+    // onError: (error) => {
+    //   console.error('投稿作成エラー:', error);
+    //   Alert.alert('エラー', '投稿の作成に失敗しました');
+    // }
+  });
+
 
   // React Queryは自動的にデータを取得するので、useEffectは不要
   
-  // 統合デモ - React Query + APIクライアント + バリデーション
+  // ユーザ再取得
   const demonstrateIntegration = async () => {
-    try {
-      // Axios + Zod + Zustand + ts-to-zod + Jest の統合例
-      Alert.alert(
-        '統合デモ開始',
-        '全ライブラリを組み合わせたワークフローを実行します:\n\n1. Axiosでデータ取得\n2. Zodでデータバリデーション\n3. Zustandで状態更新\n4. ts-to-zodで型安全性確保\n5. Jestでテスト実行可能',
-        [
-          {
-            text: '実行',
-            onPress: async () => {
-              // 1. APIクライアント経由でデータ取得 & 2. Zodでバリデーション & 3. React Queryで状態管理
-              await refetchUsers();
-              
-              // 成功メッセージ
-              const userCount = users?.length || 0;
-              
-              Alert.alert(
-                '統合デモ完了', 
-                `✅ React Query + APIクライアントが正常に連携しました！\n\n📊 取得結果:\n・ユーザー: ${userCount}件\n\n🔧 技術スタック:\n・Axios: HTTP通信\n・Zod: データバリデーション\n・React Query: キャッシュ付き状態管理\n・APIClient: 型安全なAPI呼び出し\n・Jest: テスト（74テスト実装済み）`
-              );
-            }
-          },
-          { text: 'キャンセル', style: 'cancel' }
-        ]
-      );
-    } catch (error) {
-      Alert.alert('統合デモエラー', `エラーが発生しました: ${error}`);
-    }
+    await refetchUsers();
+  };
+
+  // ユーザ再取得
+  const chageName = async () => {
+    updateName(1, '新しい名前');
+  };
+
+  // 投稿作成ハンドラー
+  const handleCreatePost = () => {
+
+    // mutate関数を呼び出す
+    createPostMutation.mutate(newPost);
   };
 
   return (
@@ -72,13 +91,44 @@ const ComprehensiveDemo: React.FC = () => {
             <Text style={styles.techItem}>🧪 <Text style={styles.bold}>Jest</Text> - JavaScript testing framework</Text>
           </View>
 
-          {/* 統合デモボタン */}
+          {/* ユーザ再取得ボタン */}
           <TouchableOpacity 
             style={[styles.demoButton, styles.integrationButton]} 
             onPress={demonstrateIntegration}
           >
-            <Text style={styles.buttonText}>🚀 統合デモを実行</Text>
+            <Text style={styles.buttonText}>🚀 ユーザ再取得を実行</Text>
           </TouchableOpacity>
+
+          {/* ユーザ名変更ボタン */}
+          <TouchableOpacity 
+            style={[styles.demoButton, styles.integrationButton]} 
+            onPress={chageName}
+          >
+            <Text style={styles.buttonText}>🚀 ユーザ名変更</Text>
+          </TouchableOpacity>
+
+          <View>
+            <Text style={styles.techItem
+            }>🚀 ユーザ名: {users?.[0]?.name}</Text>
+          </View>
+
+          {/* post作成ボタン */}
+          <TouchableOpacity 
+            style={[styles.demoButton, styles.integrationButton]} 
+            onPress={handleCreatePost}
+            disabled={createPostMutation.isPending}
+          >
+            <Text style={styles.buttonText}>
+              {createPostMutation.isPending ? '⏳ 作成中...' : '🚀 投稿作成'}
+            </Text>
+          </TouchableOpacity>
+
+          {/* 投稿作成の状態表示 */}
+          {createPostMutation.isSuccess && (
+            <View style={styles.successBox}>
+              <Text style={styles.successText}>✅ 投稿が作成されました</Text>
+            </View>
+          )}
 
           {/* 現在の状態表示 */}
           <View style={styles.stateSection}>
@@ -277,6 +327,20 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#0066cc',
     marginBottom: 8,
+  },
+  successBox: {
+    backgroundColor: '#d4edda',
+    borderRadius: 8,
+    padding: 15,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#c3e6cb',
+  },
+  successText: {
+    color: '#155724',
+    fontSize: 16,
+    textAlign: 'center',
+    fontWeight: '600',
   },
 });
 

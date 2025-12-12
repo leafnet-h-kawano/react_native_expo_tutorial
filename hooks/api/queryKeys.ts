@@ -18,6 +18,7 @@ export const postQueryKeys = {
   detail: (id: number) => ['posts', id] as const,  // 特定投稿詳細
   byUser: (userId: number) => ['posts', 'user', userId] as const,  // ユーザー別投稿（重複だがuserQueryKeysと分離）
   filtered: (filters: Record<string, any>) => ['posts', 'filtered', filters] as const,  // フィルター付き投稿一覧
+  create: () => ['posts', 'create'] as const,  // 投稿作成
 } as const;
 
 // Todo関連のクエリキー
