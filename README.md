@@ -1,6 +1,10 @@
-# Welcome to your Expo app 👋
+# react_native_expo_tutorial (monorepo)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This repository is organized as a monorepo:
+
+- `apps/mobile`: Expo (React Native) app
+- `apps/web`: (reserved)
+- `packages/core`: shared code (model/hooks/openapi/providers/scripts/services/stores/utils)
 
 ## Get started
 
@@ -10,10 +14,10 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install
    ```
 
-2. Start the app
+2. Start the mobile app (dev client)
 
    ```bash
-   npx expo start
+   npm run mobile:start
    ```
 
 In the output, you'll find options to open the app in a
@@ -23,7 +27,7 @@ In the output, you'll find options to open the app in a
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+You can start developing by editing the files inside `apps/mobile/app`. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
 ## Environment-specific builds
 
@@ -91,9 +95,9 @@ Join our community of developers creating universal apps.
 　　　※型定義を自動生成する必要があるのでパラメータに関してはcomponentに記載してください。
 　　　※モックデータが必要になるのでexampleを記載してください。
 
-2. openAPIファイルをバンドル　[openapi/bundled.g.yaml]ファイルが生成される
+2. openAPIファイルをバンドル　[`packages/core/openapi/bundled.g.yaml`]ファイルが生成される
 ```bash
-npm run openapi:bundle　
+npm run generate:types
 ```
 
 3. Sweagger UIでデータを確認 

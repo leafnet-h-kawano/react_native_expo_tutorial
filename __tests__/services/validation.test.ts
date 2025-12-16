@@ -1,13 +1,17 @@
-import { GetPostResponse, GetTodoResponse, GetUserResponse } from '@/model/genTypes';
+import type { GetPostResponse, GetTodoResponse, GetUserResponse } from '../../packages/core/src/model/genTypes';
 import {
   mockGetPostResponse,
   mockGetTodoResponse,
   mockGetUserResponse,
   mockGetUsersResponse
-} from '@/model/mockData/index.g';
-import { getPostResponseSchema, getTodoResponseSchema, getUserResponseSchema, getUsersResponseSchema } from '@/model/schemas/responses';
-import { describe, expect, it } from '@jest/globals';
-import { validateData } from '../../services/validations';
+} from '../../packages/core/src/model/mockData/index.g';
+import {
+  getPostResponseSchema,
+  getTodoResponseSchema,
+  getUserResponseSchema,
+  getUsersResponseSchema,
+} from '../../packages/core/src/model/schemas/responses';
+import { validateData } from '../../packages/core/src/services/validations';
 
 /**
  * mockDataバリデーションテスト
@@ -49,7 +53,7 @@ describe('MockData Validation', () => {
     });
 
     it('mockGetUsersResponse の各要素が GetUserResponse として有効', () => {
-      mockGetUsersResponse.forEach((user, index) => {
+      mockGetUsersResponse.forEach((user: GetUserResponse) => {
         const result = validateData(getUserResponseSchema, user);
         expect(result.success).toBe(true);
         expect(result.errors).toBeUndefined();

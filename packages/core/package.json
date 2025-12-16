@@ -1,0 +1,38 @@
+{
+  "name": "@app/core",
+  "private": true,
+  "version": "1.0.0",
+  "dependencies": {
+    "@expo/vector-icons": "^15.0.3",
+    "@tanstack/react-query": "^5.90.11",
+    "axios": "^1.13.2",
+    "expo-constants": "~18.0.10",
+    "expo-router": "~6.0.19",
+    "react": "19.1.0",
+    "react-native": "0.81.5",
+    "zod": "^3.25.76"
+  },
+  "scripts": {
+    "openapi:bundle": "redocly bundle openapi/api-spec.yaml -o openapi/bundled.g.yaml",
+    "generate:types": "npm run openapi:bundle && orval --config ./orval.config.ts && node scripts/organize-types.js",
+    "generate:schemas": "node scripts/generate-schemas.js",
+    "generate:mocks": "node scripts/generate-mock-data.js",
+    "generate:all": "npm run generate:types && npm run generate:schemas && npm run generate:mocks",
+    "swagger": "node scripts/swagger-server.js",
+    "mock:server": "prism mock openapi/bundled.g.yaml --port 4010"
+  },
+  "devDependencies": {
+    "@orval/core": "^7.17.0",
+    "@redocly/cli": "^2.12.6",
+    "@stoplight/prism-cli": "^5.14.2",
+    "@types/react": "~19.1.17",
+    "@types/react-native": "^0.73.0",
+    "express": "^5.2.1",
+    "js-yaml": "^4.1.0",
+    "orval": "^7.17.0",
+    "swagger-ui-express": "^5.0.1",
+    "ts-to-zod": "^3.15.0",
+    "yamljs": "^0.3.0",
+    "zustand": "^5.0.8"
+  }
+}

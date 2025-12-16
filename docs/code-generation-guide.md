@@ -47,7 +47,7 @@
 ## ディレクトリ構成
 
 ```
-project/
+project/core
 ├── openapi/
 │   ├── api-spec.yaml              # OpenAPI定義（メインファイル、$refで分割ファイルを参照）
 │   ├── bundled.g.yaml             # 自動生成：バンドル済みOpenAPI（Orval/Prism用）
@@ -60,39 +60,42 @@ project/
 │       ├── requests.yaml          # リクエスト型（*Request）
 │       └── responses.yaml         # レスポンス型（*Response）
 │
-├── model/
-│   ├── genTypes/                  # 生成されたTypeScript型（.g.ts）
-│   │   ├── common/                # エンティティ型（User, Post, Todo等）
-│   │   ├── requests/              # リクエスト型（*Request）
-│   │   ├── responses/             # レスポンス型（*Response）
-│   │   └── index.ts               # re-export
-│   │
-│   ├── schemas/                   # 生成されたZodスキーマ（.g.ts）
-│   │   ├── common/                # エンティティのZodスキーマ
-│   │   ├── requests/              # リクエストのZodスキーマ
-│   │   ├── responses/             # レスポンスのZodスキーマ
-│   │   ├── types/                 # model/types/から生成されたスキーマ
-│   │   └── index.ts               # re-export
-│   │
-│   ├── types/                     # 手動で定義する型（.ts）
-│   │   ├── commons.ts             # プロジェクト共通型
-│   │   ├── forms.ts               # フォーム関連型
-│   │   └── index.ts
-│   │
-│   └── mockData/                  # 生成されたモックデータ（.g.ts）
-│       ├── getUserResponse.g.ts   # 単一データ
-│       ├── getUsersResponse.g.ts  # 配列データ（10件）
-│       ├── index.g.ts             # re-export
-│       └── ...
+├── scripts/
+│    ├── organize-types.js          # 型をフォルダ分け
+│    ├── generate-schemas.js        # Zodスキーマ生成
+│    ├── generate-mock-data.js      # モックデータ生成
+│    └── swagger-server.js          # Swagger UIサーバー
 │
-├── services/
-│   └── api/                       # API呼び出しロジック
-│
-└── scripts/
-    ├── organize-types.js          # 型をフォルダ分け
-    ├── generate-schemas.js        # Zodスキーマ生成
-    ├── generate-mock-data.js      # モックデータ生成
-    └── swagger-server.js          # Swagger UIサーバー
+└── src/
+    ├── model/
+    │   ├── genTypes/                  # 生成されたTypeScript型（.g.ts）
+    │   │   ├── common/                # エンティティ型（User, Post, Todo等）
+    │   │   ├── requests/              # リクエスト型（*Request）
+    │   │   ├── responses/             # レスポンス型（*Response）
+    │   │   └── index.ts               # re-export
+    │   │
+    │   ├── schemas/                   # 生成されたZodスキーマ（.g.ts）
+    │   │   ├── common/                # エンティティのZodスキーマ
+    │   │   ├── requests/              # リクエストのZodスキーマ
+    │   │   ├── responses/             # レスポンスのZodスキーマ
+    │   │   ├── types/                 # model/types/から生成されたスキーマ
+    │   │   └── index.ts               # re-export
+    │   │
+    │   ├── types/                     # 手動で定義する型（.ts）
+    │   │   ├── commons.ts             # プロジェクト共通型
+    │   │   ├── forms.ts               # フォーム関連型
+    │   │   └── index.ts
+    │   │
+    │   └── mockData/                  # 生成されたモックデータ（.g.ts）
+    │       ├── getUserResponse.g.ts   # 単一データ
+    │       ├── getUsersResponse.g.ts  # 配列データ（10件）
+    │       ├── index.g.ts             # re-export
+    │       └── ...
+    │
+    └── services/
+        ├── apis/                      # API呼び出しロジック
+        └── validations/               # バリデーション定義
+    
 ```
 
 ---

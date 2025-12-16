@@ -1,27 +1,30 @@
+/** @type {import('jest').Config} */
+const path = require('path');
+
 module.exports = {
-  preset: 'react-native',
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  testMatch: ['**/__tests__/**/*.(js|jsx|ts|tsx)', '**/*.(test|spec).(js|jsx|ts|tsx)'],
-  collectCoverageFrom: [
-    '**/{!(node_modules),}/**/*.(ts|tsx)',
-    '!**/coverage/**',
-    '!**/node_modules/**',
-    '!**/babel.config.js',
-    '!**/jest.setup.js',
-    '!**/app-example/**',
-  ],
-  transformIgnorePatterns: [
-    'node_modules/(?!(@react-native|react-native|@expo|expo|@jest|@testing-library)/)',
-  ],
   testEnvironment: 'node',
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/$1',
-  },
+  testMatch: ['<rootDir>/__tests__/**/*.test.(ts|js)'],
+  // monorepo 内のパッケージを source-import するテストのため、
+  // 依存は root と packages/* の node_modules どちらからでも解決できるようにしておく。
+  moduleDirectories: ['node_modules', '<rootDir>/packages/core/node_modules'],
   transform: {
-    '^.+\\.(ts|tsx|js|jsx)$': 'babel-jest',
+    '^.+\\.(ts|tsx)$': [
+      'ts-jest',
+      {
+        tsconfig: '<rootDir>/tsconfig.base.json',
+        diagnostics: false,
+      },
+    ],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
-  globals: {
-    __DEV__: true,
+  moduleNameMapper: {
+    '^@core/(.*)$': '<rootDir>/packages/core/$1',
+    '^expo-constants$': '<rootDir>/__tests__/__mocks__/expo-constants.js',
+    // zod v3 は ESM entry を持つため、Jest(CJS) では CJS ビルドに寄せる
+    '^zod$': path.resolve(
+      __dirname,
+      'packages/core/node_modules/zod/index.cjs'
+    ),
   },
+  // Expo(RN) 用設定は apps/mobile 側の jest.config.js に閉じる
 };

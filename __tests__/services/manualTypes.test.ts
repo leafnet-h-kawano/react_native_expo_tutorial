@@ -1,6 +1,6 @@
 // 手動定義型のZodスキーマテスト
-import { sampleTypeSchema } from '@/model/schemas/types/commons.g';
-import { sampleFormTypeSchema } from '@/model/schemas/types/forms.g';
+import { sampleTypeSchema } from '../../packages/core/src/model/schemas/types/commons.g';
+import { sampleFormTypeSchema } from '../../packages/core/src/model/schemas/types/forms.g';
 
 describe('Manual Types Schema Validation', () => {
   describe('正常系 - sampleTypeSchema', () => {
