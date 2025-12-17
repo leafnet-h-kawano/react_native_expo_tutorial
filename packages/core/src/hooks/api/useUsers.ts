@@ -1,12 +1,13 @@
 import { CreateUserResponse, GetPostsResponse, GetUserResponse, GetUsersResponse } from '@core/src/model/genTypes';
 import { apiClient } from '@core/src/services/api';
 import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
-import { userQueryKeys } from './queryKeys';
+import { postQueryKeys, userQueryKeys } from './queryKeys';
 import {
-    CallbackArgs,
-    createDefaultQueryMeta,
-    executeApiCall
+  CallbackArgs,
+  createDefaultQueryMeta,
+  executeApiCall
 } from './useApiClient';
+import { postQueryFunctions } from './usePosts';
 
 /**
  * ユーザー関連のクエリ関数（useQuery, useQueriesでの使用を前提とした実装）
@@ -16,7 +17,6 @@ export const userQueryFunctions = {
   getAllUsers: async (callbacks?: CallbackArgs<GetUsersResponse>): Promise<GetUsersResponse> => {
     return executeApiCall({
       apiCall: () => apiClient.users.getAll(),
-      onSuccess: callbacks?.onSuccess,
     });
   },
 
@@ -24,15 +24,6 @@ export const userQueryFunctions = {
   getUserById: async (id: number, callbacks?: CallbackArgs<GetUserResponse>): Promise<GetUserResponse> => {
     return executeApiCall({
       apiCall: () => apiClient.users.getById(id),
-      onSuccess: callbacks?.onSuccess,
-    });
-  },
-
-  // ユーザーの投稿取得
-  getUserPosts: async (userId: number, callbacks?: CallbackArgs<GetPostsResponse>): Promise<GetPostsResponse> => {
-    return executeApiCall({
-      apiCall: () => apiClient.users.getPosts(userId),
-      onSuccess: callbacks?.onSuccess,
     });
   },
 };
@@ -58,16 +49,6 @@ export function useUser(id: number, callbacks?: CallbackArgs<GetUserResponse>) {
     queryKey: userQueryKeys.detail(id),
     queryFn: () => userQueryFunctions.getUserById(id, callbacks),
     enabled: !!id, // idが存在する場合のみクエリを実行
-    meta: { ...createDefaultQueryMeta(callbacks) }
-  });
-}
-
-// ユーザーの投稿取得フック
-export function useUserPosts(userId: number, callbacks?: CallbackArgs<GetPostsResponse>) {
-  return useQuery({
-    queryKey: userQueryKeys.posts(userId),
-    queryFn: () => userQueryFunctions.getUserPosts(userId, callbacks),
-    enabled: !!userId, // userIdが存在する場合のみクエリを実行
     meta: { ...createDefaultQueryMeta(callbacks) }
   });
 }
@@ -103,15 +84,15 @@ export function useUserWithPosts(
   const results = useQueries({
     queries: [
       {
-        queryKey: userQueryKeys.detail(userId),
-        queryFn: () => userQueryFunctions.getUserById(userId, callbacks?.userCallbacks),
-        enabled: !!userId,
+        queryKey: userQueryKeys.all,
+        queryFn: () => userQueryFunctions.getAllUsers(),
+        enabled: true,
         meta: { ...createDefaultQueryMeta(callbacks?.userCallbacks) }
       },
       {
-        queryKey: userQueryKeys.posts(userId),
-        queryFn: () => userQueryFunctions.getUserPosts(userId, callbacks?.postsCallbacks),
-        enabled: !!userId,
+        queryKey: postQueryKeys.all,
+        queryFn: () => postQueryFunctions.getAllPosts(callbacks?.postsCallbacks),
+        enabled: true,
         meta: { ...createDefaultQueryMeta(callbacks?.postsCallbacks) }
       },
     ],

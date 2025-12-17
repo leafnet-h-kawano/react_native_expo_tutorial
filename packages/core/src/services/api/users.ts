@@ -23,7 +23,6 @@ export type UserApiClient = {
   users: {
     getAll: () => Promise<ApiResult<GetUsersResponse>>;
     getById: (id: number) => Promise<ApiResult<GetUserResponse>>;
-    getPosts: (userId: number) => Promise<ApiResult<GetPostsResponse>>;
   };
 }
 
@@ -50,14 +49,6 @@ export const userApiClient: UserApiClient = {
             url: `${UserApiEndpoints.users.detail(id)}`
         };
         return commonApiService<GetUserResponse>(config, customValidators.validateUser);
-    },
-
-    getPosts: async (userId: number): Promise<ApiResult<GetPostsResponse>> => {
-        const config: AxiosRequestConfig = {
-            method: 'GET',
-            url: `${UserApiEndpoints.users.posts(userId)}`
-        };
-        return commonApiService<GetPostsResponse>(config, customValidators.validatePosts);
     },
   },
 } as const;

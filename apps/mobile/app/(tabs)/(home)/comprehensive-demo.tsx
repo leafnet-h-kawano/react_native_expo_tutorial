@@ -9,10 +9,10 @@ import {
 } from 'react-native';
 
 // React QueryとAPIクライアントを使用した統合デモ
-import type { CreatePostRequest } from '@core/src/model/genTypes';
 import { useCreatePost } from '@core/src/hooks/api/usePosts';
 import { useUsers } from '@core/src/hooks/api/useUsers';
 import { useUserManager } from '@core/src/hooks/queryManager/useUserManager';
+import type { CreatePostRequest } from '@core/src/model/genTypes';
 
 const ComprehensiveDemo: React.FC = () => {
   // React Query hooks（状態管理）
@@ -32,7 +32,24 @@ const ComprehensiveDemo: React.FC = () => {
     // }
   });
 
-  const { updateName } = useUserManager();
+  /// useQuerysの呼び出しサンプル
+  // useUserWithPosts(1,
+  //   { 
+  //     userCallbacks: { 
+  //       onSuccess: (data) => {
+  //         console.log('ユーザーデータ取得成功:', data);
+  //         Alert.alert('成功', `ユーザーデータが取得されました！}`);
+  //       },
+  //     },
+  //     postsCallbacks: {
+  //       onSuccess: (data) => {
+  //         console.log('投稿データ取得成功:', data);
+  //         Alert.alert('成功', `投稿データが取得されました！}`);
+  //       },
+  //     },
+  //   });
+
+  const { updateName, safeRefetchUserAll } = useUserManager();
 
   const newPost: CreatePostRequest = {
     userId: 1,
@@ -43,6 +60,7 @@ const ComprehensiveDemo: React.FC = () => {
   // 投稿作成用のmutation（コンポーネントのトップレベルで呼び出す）
   const createPostMutation = useCreatePost({
     onSuccess: (data) => {
+      safeRefetchUserAll
       console.log('投稿作成成功:', data);
       Alert.alert('成功', `投稿が作成されました！\nID: ${data.id}`);
     },
