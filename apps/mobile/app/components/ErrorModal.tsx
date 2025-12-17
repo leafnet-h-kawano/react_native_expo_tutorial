@@ -4,15 +4,15 @@ import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 /**
  * グローバルエラーモーダルコンポーネント
- * 
+ *
  * Zustandの状態管理と連携して、API呼び出しエラーを表示します。
  * app/_layout.tsx に配置することで、アプリ全体でエラー表示が可能になります。
- * 
+ *
  * 使用例:
  * ```tsx
  * // app/_layout.tsx
  * import { ErrorModal } from './components/ErrorModal';
- * 
+ *
  * export default function RootLayout() {
  *   return (
  *     <>
@@ -30,13 +30,13 @@ export const ErrorModal: React.FC = () => {
   switch (statusCode) {
     // 特殊な挙動のステータスコードはここで処理
     case 598:
-      return <></>
+      return <></>;
     // case 599:
     //   return <></>
     default:
       // 特殊な挙動のステータスコード以外は汎用モーダルで表示（メッセージはAPIでセット済み）
       // MEMO: 確認ボタン押下時の挙動は渡せるようにした方がいいかも
-      return <CommonErrorModal { ...{ isVisible, statusCode, message, hideError } } />;
+      return <CommonErrorModal {...{ isVisible, statusCode, message, hideError }} />;
   }
 };
 
@@ -45,45 +45,36 @@ type CommonErrorModalProps = {
   statusCode: number | null;
   message: string;
   hideError: () => void;
-}
+};
 
-export const CommonErrorModal: React.FC<CommonErrorModalProps> = (
-  { isVisible, statusCode, message, hideError }
-) => {
-  return(
-    <Modal
-      visible={isVisible}
-      transparent
-      animationType="fade"
-      onRequestClose={hideError}
-    >
+export const CommonErrorModal: React.FC<CommonErrorModalProps> = ({
+  isVisible,
+  statusCode,
+  message,
+  hideError,
+}) => {
+  return (
+    <Modal visible={isVisible} transparent animationType="fade" onRequestClose={hideError}>
       <View style={styles.overlay}>
         <View style={styles.modal}>
           {/* タイトル */}
           <Text style={styles.title}>エラーが発生しました</Text>
-          
+
           {/* ステータスコード（存在する場合のみ表示） */}
-          {statusCode !== null && (
-            <Text style={styles.statusCode}>
-              Status Code: {statusCode}
-            </Text>
-          )}
-          
+          {statusCode !== null && <Text style={styles.statusCode}>Status Code: {statusCode}</Text>}
+
           {/* エラーメッセージ */}
           <Text style={styles.message}>{message}</Text>
-          
+
           {/* OKボタン */}
-          <Pressable 
-            style={styles.button} 
-            onPress={hideError}
-          >
+          <Pressable style={styles.button} onPress={hideError}>
             <Text style={styles.buttonText}>OK</Text>
           </Pressable>
         </View>
       </View>
     </Modal>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   overlay: {

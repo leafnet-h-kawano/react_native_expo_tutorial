@@ -3,17 +3,21 @@
 ## ファイル構成
 
 ### `hooks/api/useApiClient.ts` - 共通基盤
+
 React Query + APIClient統合の基盤となる共通関数・型・ヘルパーを提供：
 
 #### 主要エクスポート：
+
 - `executeApiCall<T>()`: 共通API呼び出し処理関数
 - `ExecuteApiCallArgs<T>`: executeApiCall関数の引数型定義
 - `CallbackArgs<T>`: onSuccess/onErrorコールバック型定義（各hooksで共通使用）
 
 ### `hooks/api/queryKeys.ts` - React Query キー管理
+
 全てのReact Query キーを一元管理する専用ファイル：
 
 #### 主要エクスポート：
+
 - `userQueryKeys`: ユーザー関連のクエリキー定義
   - `all`: ユーザー一覧
   - `detail(id)`: 特定ユーザー詳細
@@ -36,6 +40,7 @@ React Query + APIClient統合の基盤となる共通関数・型・ヘルパー
   - `createFilteredKey(entity, filters)`: フィルターキー生成
 
 #### 使用例：
+
 ```typescript
 import { executeApiCall } from './useApiClient';
 import { userQueryKeys } from './queryKeys';
@@ -48,7 +53,7 @@ const { data: users, isLoading } = useUsers({
   },
   onError: (error) => {
     console.error('エラー', `データ取得に失敗: ${error.errorMessage}`);
-  }
+  },
 });
 
 // 特定ユーザー取得
@@ -60,14 +65,16 @@ const { data: user } = useUser(userId, {
   onError: (error) => {
     console.error('エラー:', error.errorMessage);
     // UI固有のエラー処理（404ページへのリダイレクト等）
-  }
+  },
 });
 ```
 
 ### `hooks/api/useUsers.ts` - ユーザー機能
+
 ユーザー関連のAPI操作とReact Query統合：
 
 #### 主要エクスポート：
+
 - `UserCallbacks<T>`: onSuccess/onErrorコールバック型定義
 - `userQueryFunctions`: 純粋なクエリ関数（useQueriesでも使用可能）
   - `getAllUsers()`: ユーザー一覧取得
@@ -83,11 +90,12 @@ const { data: user } = useUser(userId, {
   - `useMultipleUsers()`: 複数ユーザーを並列取得
 
 #### 使用例：
+
 ```typescript
 // 基本的な使用（コールバック付き）
 const { data: users, isLoading } = useUsers({
   onSuccess: (data) => Alert.alert('成功', `${data.length}件取得`),
-  onError: (error) => Alert.alert('エラー', error.message)
+  onError: (error) => Alert.alert('エラー', error.message),
 });
 
 // ミューテーション（作成）
@@ -98,48 +106,54 @@ const createUserMutation = useCreateUser({
   },
   onError: (error) => {
     setFormError(error.message); // フォームエラー表示
-  }
+  },
 });
 
 // 複合取得（ユーザー + 投稿）
 const { user, posts } = useUserWithPosts(userId, {
   userCallbacks: {
     onSuccess: (userData) => setPageTitle(userData.name),
-    onError: (error) => navigate('/404')
+    onError: (error) => navigate('/404'),
   },
   postsCallbacks: {
     onSuccess: (postsData) => setPostCount(postsData.length),
-    onError: (error) => setErrorMessage(error.message)
-  }
+    onError: (error) => setErrorMessage(error.message),
+  },
 });
 ```
 
 ## アーキテクチャの利点
 
 ### 1. 関心の分離
+
 - **useApiClient.ts**: 汎用的な基盤機能
 - **useUsers.ts**: ユーザー機能に特化
 
 ### 2. 再利用性とメンテナンス性
+
 - `userQueryFunctions`は`useQueries`や他のReact Queryパターンで再利用可能
 - 共通ヘルパー関数により、他のエンティティでも同様のパターン適用可能
 - **一元管理されたクエリキー**により、キーの重複や不整合を防止
 
 ### 3. 型安全性
+
 - TypeScript型定義により、コンパイル時エラー検出
 - ジェネリクスによる柔軟で安全なAPI
 
 ### 4. メンテナンス性
+
 - 機能ごとに分離されたファイル構成
 - 一貫したパターンによる予測可能なコード構造
 
 ## 今後の展開
 
 同様のパターンで以下のファイルも作成済み：
+
 - `hooks/api/usePosts.ts` - postQueryKeysを使用
 - `hooks/api/useTodos.ts` - todoQueryKeysを使用
 
 全てのファイルが以下を活用し、一貫したアーキテクチャを維持：
+
 - `useApiClient.ts`の共通関数
 - `queryKeys.ts`の一元管理されたキー定義
 

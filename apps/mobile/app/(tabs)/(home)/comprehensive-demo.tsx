@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 // React QueryとAPIクライアントを使用した統合デモ
 import { useCreatePost } from '@core/src/hooks/api/usePosts';
@@ -34,8 +27,8 @@ const ComprehensiveDemo: React.FC = () => {
 
   /// useQuerysの呼び出しサンプル
   // useUserWithPosts(1,
-  //   { 
-  //     userCallbacks: { 
+  //   {
+  //     userCallbacks: {
   //       onSuccess: (data) => {
   //         console.log('ユーザーデータ取得成功:', data);
   //         Alert.alert('成功', `ユーザーデータが取得されました！}`);
@@ -54,13 +47,13 @@ const ComprehensiveDemo: React.FC = () => {
   const newPost: CreatePostRequest = {
     userId: 1,
     title: '新しい投稿',
-    body: '投稿内容'
+    body: '投稿内容',
   };
 
   // 投稿作成用のmutation（コンポーネントのトップレベルで呼び出す）
   const createPostMutation = useCreatePost({
     onSuccess: (data) => {
-      safeRefetchUserAll
+      safeRefetchUserAll;
       console.log('投稿作成成功:', data);
       Alert.alert('成功', `投稿が作成されました！\nID: ${data.id}`);
     },
@@ -70,9 +63,8 @@ const ComprehensiveDemo: React.FC = () => {
     // }
   });
 
-
   // React Queryは自動的にデータを取得するので、useEffectは不要
-  
+
   // ユーザ再取得
   const demonstrateIntegration = async () => {
     await refetchUsers();
@@ -85,7 +77,6 @@ const ComprehensiveDemo: React.FC = () => {
 
   // 投稿作成ハンドラー
   const handleCreatePost = () => {
-
     // mutate関数を呼び出す
     createPostMutation.mutate(newPost);
   };
@@ -102,37 +93,46 @@ const ComprehensiveDemo: React.FC = () => {
           {/* 技術スタック概要 */}
           <View style={styles.techStack}>
             <Text style={styles.sectionTitle}>📚 技術スタック</Text>
-            <Text style={styles.techItem}>🌐 <Text style={styles.bold}>Axios</Text> - HTTP クライアント</Text>
-            <Text style={styles.techItem}>🛡️ <Text style={styles.bold}>Zod</Text> - TypeScript-first schema validation</Text>
-            <Text style={styles.techItem}>⚡ <Text style={styles.bold}>React Query</Text> - データフェッチング＆キャッシュ管理</Text>
-            <Text style={styles.techItem}>🔧 <Text style={styles.bold}>APIClient</Text> - 型安全なAPI呼び出し</Text>
-            <Text style={styles.techItem}>🧪 <Text style={styles.bold}>Jest</Text> - JavaScript testing framework</Text>
+            <Text style={styles.techItem}>
+              🌐 <Text style={styles.bold}>Axios</Text> - HTTP クライアント
+            </Text>
+            <Text style={styles.techItem}>
+              🛡️ <Text style={styles.bold}>Zod</Text> - TypeScript-first schema validation
+            </Text>
+            <Text style={styles.techItem}>
+              ⚡ <Text style={styles.bold}>React Query</Text> - データフェッチング＆キャッシュ管理
+            </Text>
+            <Text style={styles.techItem}>
+              🔧 <Text style={styles.bold}>APIClient</Text> - 型安全なAPI呼び出し
+            </Text>
+            <Text style={styles.techItem}>
+              🧪 <Text style={styles.bold}>Jest</Text> - JavaScript testing framework
+            </Text>
           </View>
 
           {/* ユーザ再取得ボタン */}
-          <TouchableOpacity 
-            style={[styles.demoButton, styles.integrationButton]} 
+          <TouchableOpacity
+            style={[styles.demoButton, styles.integrationButton]}
             onPress={demonstrateIntegration}
           >
             <Text style={styles.buttonText}>🚀 ユーザ再取得を実行</Text>
           </TouchableOpacity>
 
           {/* ユーザ名変更ボタン */}
-          <TouchableOpacity 
-            style={[styles.demoButton, styles.integrationButton]} 
+          <TouchableOpacity
+            style={[styles.demoButton, styles.integrationButton]}
             onPress={chageName}
           >
             <Text style={styles.buttonText}>🚀 ユーザ名変更</Text>
           </TouchableOpacity>
 
           <View>
-            <Text style={styles.techItem
-            }>🚀 ユーザ名: {users?.[0]?.name}</Text>
+            <Text style={styles.techItem}>🚀 ユーザ名: {users?.[0]?.name}</Text>
           </View>
 
           {/* post作成ボタン */}
-          <TouchableOpacity 
-            style={[styles.demoButton, styles.integrationButton]} 
+          <TouchableOpacity
+            style={[styles.demoButton, styles.integrationButton]}
             onPress={handleCreatePost}
             disabled={createPostMutation.isPending}
           >
@@ -151,19 +151,24 @@ const ComprehensiveDemo: React.FC = () => {
           {/* 現在の状態表示 */}
           <View style={styles.stateSection}>
             <Text style={styles.stateTitle}>📊 現在の状態</Text>
-            
+
             <View style={styles.stateRow}>
               <Text style={styles.stateLabel}>👥 ユーザー:</Text>
               <Text style={styles.stateValue}>
-                {usersLoading ? '🔄 読み込み中...' : 
-                 usersError ? '❌ エラー' : 
-                 `✅ ${users?.length || 0}件`}
+                {usersLoading
+                  ? '🔄 読み込み中...'
+                  : usersError
+                  ? '❌ エラー'
+                  : `✅ ${users?.length || 0}件`}
               </Text>
             </View>
 
             {/* コントロールボタン */}
             <View style={styles.buttonRow}>
-              <TouchableOpacity style={[styles.smallButton, styles.refreshButton]} onPress={() => refetchUsers()}>
+              <TouchableOpacity
+                style={[styles.smallButton, styles.refreshButton]}
+                onPress={() => refetchUsers()}
+              >
                 <Text style={styles.smallButtonText}>ユーザー更新</Text>
               </TouchableOpacity>
             </View>
@@ -177,7 +182,9 @@ const ComprehensiveDemo: React.FC = () => {
           <View style={styles.workflowBox}>
             <Text style={styles.workflowTitle}>📋 統合ワークフロー</Text>
             <Text style={styles.workflowStep}>1. 🌐 Axios - RESTful APIからデータ取得</Text>
-            <Text style={styles.workflowStep}>2. 🛡️ Zod - 取得データのランタイムバリデーション</Text>
+            <Text style={styles.workflowStep}>
+              2. 🛡️ Zod - 取得データのランタイムバリデーション
+            </Text>
             <Text style={styles.workflowStep}>3. ⚡ React Query - 自動キャッシュ＆状態管理</Text>
             <Text style={styles.workflowStep}>4. � APIClient - 型安全なAPI呼び出し</Text>
             <Text style={styles.workflowStep}>5. 🧪 Jest - 全プロセスの自動テスト</Text>
@@ -187,7 +194,9 @@ const ComprehensiveDemo: React.FC = () => {
           <View style={styles.infoBox}>
             <Text style={styles.infoTitle}>💡 技術的な利点</Text>
             <Text style={styles.infoText}>• 型安全性: TypeScript + Zod による完全型チェック</Text>
-            <Text style={styles.infoText}>• キャッシュ管理: React Query による自動キャッシュ最適化</Text>
+            <Text style={styles.infoText}>
+              • キャッシュ管理: React Query による自動キャッシュ最適化
+            </Text>
             <Text style={styles.infoText}>• テスト品質: Jest による包括的テストカバレッジ</Text>
             <Text style={styles.infoText}>• パフォーマンス: 自動リフェッチ＆背景更新</Text>
             <Text style={styles.infoText}>• 開発効率: APIClient による型安全なAPI呼び出し</Text>

@@ -24,7 +24,6 @@
     "mobile:start:dev": "pnpm -F @app/mobile start:dev",
     "mobile:start:stg": "pnpm -F @app/mobile start:stg",
     "mobile:start:prod": "pnpm -F @app/mobile start:prod",
-
     "mobile:run:ios": "pnpm -F @app/mobile run:ios",
     "mobile:run:ios:dev": "pnpm -F @app/mobile run:ios:dev",
     "mobile:run:ios:stg": "pnpm -F @app/mobile run:ios:stg",
@@ -42,14 +41,12 @@
     "mobile:build:android:prod": "pnpm -F @app/mobile build:android:prod",
     "mobile:test": "pnpm -F @app/mobile test",
     "mobile:lint": "pnpm -F @app/mobile lint",
-
     "web:dev": "pnpm -F @app/web dev",
     "web:stg": "pnpm -F @app/web stg",
     "web:prod": "pnpm -F @app/web prod",
     "web:build": "pnpm -F @app/web build",
     "web:start": "pnpm -F @app/web start",
     "web:lint": "pnpm -F @app/web lint",
-    
     "core:openapi:bundle": "pnpm -F @app/core openapi:bundle",
     "core:generate:types": "pnpm -F @app/core generate:types",
     "core:generate:schemas": "pnpm -F @app/core generate:schemas",

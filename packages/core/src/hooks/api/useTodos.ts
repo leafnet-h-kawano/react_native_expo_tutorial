@@ -1,13 +1,13 @@
 import { CreateTodoRequest } from '@core/src/model/genTypes';
-import { CreateTodoResponse, GetTodoResponse, GetTodosResponse } from '@core/src/model/genTypes/responses';
+import {
+  CreateTodoResponse,
+  GetTodoResponse,
+  GetTodosResponse,
+} from '@core/src/model/genTypes/responses';
 import { apiClient } from '@core/src/services/api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { todoQueryKeys } from './queryKeys';
-import {
-    CallbackArgs,
-    createDefaultQueryMeta,
-    executeApiCall
-} from './useApiClient';
+import { CallbackArgs, createDefaultQueryMeta, executeApiCall } from './useApiClient';
 
 /**
  * TODO関連のクエリ関数（useQuery, useQueriesでの使用を前提とした実装）
@@ -22,7 +22,10 @@ export const todoQueryFunctions = {
   },
 
   // 特定ユーザーのTODO取得
-  getUserTodos: async (userId: number, callbacks?: CallbackArgs<GetTodosResponse>): Promise<GetTodosResponse> => {
+  getUserTodos: async (
+    userId: number,
+    callbacks?: CallbackArgs<GetTodosResponse>,
+  ): Promise<GetTodosResponse> => {
     return executeApiCall({
       apiCall: () => apiClient.todos.getByUser(userId),
       onSuccess: callbacks?.onSuccess,
@@ -30,14 +33,16 @@ export const todoQueryFunctions = {
   },
 
   // 特定TODO取得
-  getTodoById: async (id: number, callbacks?: CallbackArgs<GetTodoResponse>): Promise<GetTodoResponse> => {
+  getTodoById: async (
+    id: number,
+    callbacks?: CallbackArgs<GetTodoResponse>,
+  ): Promise<GetTodoResponse> => {
     return executeApiCall({
       apiCall: () => apiClient.todos.getById(id),
       onSuccess: callbacks?.onSuccess,
     });
   },
 };
-
 
 /**
  * hooks
@@ -48,7 +53,7 @@ export function useTodos(callbacks?: CallbackArgs<GetTodosResponse>) {
   return useQuery({
     queryKey: todoQueryKeys.all,
     queryFn: () => todoQueryFunctions.getAllTodos(callbacks),
-    meta: { ...createDefaultQueryMeta(callbacks) }
+    meta: { ...createDefaultQueryMeta(callbacks) },
   });
 }
 
@@ -58,7 +63,7 @@ export function useUserTodos(userId: number, callbacks?: CallbackArgs<GetTodosRe
     queryKey: todoQueryKeys.byUser(userId),
     queryFn: () => todoQueryFunctions.getUserTodos(userId, callbacks),
     enabled: !!userId,
-    meta: { ...createDefaultQueryMeta(callbacks) }
+    meta: { ...createDefaultQueryMeta(callbacks) },
   });
 }
 
@@ -68,17 +73,16 @@ export function useTodo(id: number, callbacks?: CallbackArgs<GetTodoResponse>) {
     queryKey: todoQueryKeys.detail(id),
     queryFn: () => todoQueryFunctions.getTodoById(id, callbacks),
     enabled: !!id,
-    meta: { ...createDefaultQueryMeta(callbacks) }
+    meta: { ...createDefaultQueryMeta(callbacks) },
   });
 }
 
 // TODO作成ミューテーション（モック実装）
 export function useCreateTodo(callbacks?: CallbackArgs<CreateTodoResponse>) {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (todoData: CreateTodoRequest): Promise<CreateTodoResponse> => {
-
       // 実際のAPIエンドポイントが利用可能になったら以下のように置き換え
       // return executeApiCall({
       //   apiCall: () => apiClient.todos.create(todoData),
@@ -89,17 +93,17 @@ export function useCreateTodo(callbacks?: CallbackArgs<CreateTodoResponse>) {
       const newTodo: CreateTodoResponse = {
         id: Math.floor(Math.random() * 10000), // Mock ID
         ...todoData,
-        completed:true,
+        completed: true,
       };
-      
+
       console.log('TODOを作成しました（モック）:', newTodo.title);
-      
+
       // コールバック実行
       if (callbacks?.onSuccess) {
         const result = callbacks.onSuccess(newTodo);
         return result ? result : newTodo;
       }
-      
+
       return newTodo;
     },
     onSuccess: (newTodo) => {
@@ -119,19 +123,19 @@ export function useCreateTodo(callbacks?: CallbackArgs<CreateTodoResponse>) {
 // // TODO完了状態トグルミューテーション（ローカル状態更新）
 // export function useToggleTodo(callbacks?: CallbackArgs<CreateTodoResponse>) {
 //   const queryClient = useQueryClient();
-  
+
 //   return useMutation({
 //     mutationFn: async (todo: Todo): Promise<CreateTodoResponse> => {
 //       // ローカルでの状態変更（実際のAPIコールは実装されていないため）
 //       const updatedTodo = { ...todo, completed: !todo.completed };
 //       console.log(`TODO(ID:${todo.id})の完了状態を${updatedTodo.completed ? '完了' : '未完了'}に変更しました`);
-      
+
 //       // コールバック実行
 //       if (callbacks?.onSuccess) {
 //         const result = callbacks.onSuccess(updatedTodo);
 //         return result ? result : updatedTodo;
 //       }
-      
+
 //       return updatedTodo;
 //     },
 //     onSuccess: (updatedTodo) => {

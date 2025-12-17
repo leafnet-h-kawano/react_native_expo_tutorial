@@ -1,7 +1,7 @@
 import { getEnvironmentConfig } from '@core/src/utils/utils';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
-import { Alert, ScrollView, Switch, Text, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, Switch, Text, TouchableOpacity, View } from 'react-native';
 
 interface SwitchItem {
   icon: string;
@@ -90,10 +90,11 @@ export default function SettingsTab() {
           title: '環境情報',
           subtitle: `現在: ${env.appVariant}`,
           type: 'button',
-          onPress: () => Alert.alert(
-            '環境情報', 
-            `Environment: ${env.appVariant}\nAPI URL: ${env.apiUrl}\nLog Level: ${env.logLevel}\nBundle ID: ${env.bundleIdentifier}`
-          ),
+          onPress: () =>
+            Alert.alert(
+              '環境情報',
+              `Environment: ${env.appVariant}\nAPI URL: ${env.apiUrl}\nLog Level: ${env.logLevel}\nBundle ID: ${env.bundleIdentifier}`,
+            ),
         },
         {
           icon: 'bug-outline',
@@ -111,27 +112,31 @@ export default function SettingsTab() {
       <ScrollView style={{ flex: 1 }}>
         {settingSections.map((section, sectionIndex) => (
           <View key={sectionIndex} style={{ marginTop: 20 }}>
-            <Text style={{
-              fontSize: 14,
-              fontWeight: 'bold',
-              color: '#666',
-              marginBottom: 10,
-              marginLeft: 20,
-              textTransform: 'uppercase',
-            }}>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: 'bold',
+                color: '#666',
+                marginBottom: 10,
+                marginLeft: 20,
+                textTransform: 'uppercase',
+              }}
+            >
               {section.title}
             </Text>
 
-            <View style={{
-              backgroundColor: 'white',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.05,
-              shadowRadius: 4,
-              elevation: 2,
-            }}>
+            <View
+              style={{
+                backgroundColor: 'white',
+                marginHorizontal: 20,
+                borderRadius: 12,
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 1 },
+                shadowOpacity: 0.05,
+                shadowRadius: 4,
+                elevation: 2,
+              }}
+            >
               {section.items.map((item, itemIndex) => (
                 <TouchableOpacity
                   key={itemIndex}
@@ -146,35 +151,41 @@ export default function SettingsTab() {
                   activeOpacity={item.type === 'switch' ? 1 : 0.7}
                   disabled={item.type === 'switch'}
                 >
-                  <View style={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: 16,
-                    backgroundColor: '#f0f0f0',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginRight: 15,
-                  }}>
+                  <View
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 16,
+                      backgroundColor: '#f0f0f0',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginRight: 15,
+                    }}
+                  >
                     <Ionicons name={item.icon as any} size={18} color="#007AFF" />
                   </View>
-                  
+
                   <View style={{ flex: 1 }}>
-                    <Text style={{
-                      fontSize: 16,
-                      fontWeight: '500',
-                      color: '#333',
-                      marginBottom: 2,
-                    }}>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        fontWeight: '500',
+                        color: '#333',
+                        marginBottom: 2,
+                      }}
+                    >
                       {item.title}
                     </Text>
-                    <Text style={{
-                      fontSize: 14,
-                      color: '#666',
-                    }}>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: '#666',
+                      }}
+                    >
                       {item.subtitle}
                     </Text>
                   </View>
-                  
+
                   {item.type === 'switch' ? (
                     <Switch
                       value={item.value}
@@ -193,17 +204,21 @@ export default function SettingsTab() {
 
         {/* アプリ情報 */}
         <View style={{ padding: 20, marginTop: 30, alignItems: 'center' }}>
-          <Text style={{
-            fontSize: 14,
-            color: '#999',
-            marginBottom: 5,
-          }}>
+          <Text
+            style={{
+              fontSize: 14,
+              color: '#999',
+              marginBottom: 5,
+            }}
+          >
             {env.appName}
           </Text>
-          <Text style={{
-            fontSize: 12,
-            color: '#ccc',
-          }}>
+          <Text
+            style={{
+              fontSize: 12,
+              color: '#ccc',
+            }}
+          >
             Version 1.0.0 ({env.appVariant})
           </Text>
         </View>

@@ -1,11 +1,10 @@
-
 // 共通のAPI型定義
 export type ApiResponse<T> = {
   success: boolean;
   data?: T;
   errors?: string[] | null;
   raw?: any;
-}
+};
 
 export type ValidationResult<T> = {
   success: boolean;
@@ -14,7 +13,7 @@ export type ValidationResult<T> = {
 };
 
 // 統合APIレスポンス型定義（成功とエラーを統一）
-export type ApiResult<T> = 
+export type ApiResult<T> =
   | {
       success: true;
       statusCode: number;

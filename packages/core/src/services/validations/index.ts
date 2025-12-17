@@ -9,4 +9,3 @@ export { validateData, validateDataWithFallback } from './common';
 
 // 型エクスポート
 export type { CustomValidators } from './common';
-

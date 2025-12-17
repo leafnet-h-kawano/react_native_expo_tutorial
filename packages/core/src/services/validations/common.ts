@@ -9,28 +9,22 @@ import { postValidators } from './posts';
 import { todoValidators } from './todos';
 import { userValidators } from './users';
 
-
 // =============================================================================
 // 汎用バリデーション関数
 // =============================================================================
 
 // 汎用なバリデーション関数
-export function validateData<T>(
-  schema: z.ZodSchema<T>,
-  data: unknown
-): ValidationResult<T> {
+export function validateData<T>(schema: z.ZodSchema<T>, data: unknown): ValidationResult<T> {
   // バリデーション処理(エラーをthrowしない)
   const result = schema.safeParse(data);
-  
+
   if (result.success) {
     return {
       success: true,
       data: result.data,
     };
   } else {
-    const errorMessages = result.error.errors.map(err => 
-      `${err.path.join('.')}: ${err.message}`
-    );
+    const errorMessages = result.error.errors.map((err) => `${err.path.join('.')}: ${err.message}`);
     return {
       success: false,
       errors: errorMessages,
@@ -41,11 +35,10 @@ export function validateData<T>(
 // 共通のバリデーション関数(エラー処理付き)
 // T : バリデーション対象のデータ型
 export function validateDataWithFallback<T>(
-  schema: z.ZodSchema<T>, 
-  data: unknown, 
-  typeName: string, 
+  schema: z.ZodSchema<T>,
+  data: unknown,
+  typeName: string,
 ): T | { errorMessage: string; rawErrorMessage: string } {
-    
   // バリデーションを実行
   const validation: ValidationResult<T> = validateData(schema, data);
   if (validation.success && validation.data) {
@@ -67,7 +60,7 @@ export function validateDataWithFallback<T>(
 // 共通バリデーター
 const commonValidators = {
   // APIエラーの検証
-  validateApiError: (data: unknown): ApiError | { errorMessage: string; rawErrorMessage: string } => 
+  validateApiError: (data: unknown): ApiError | { errorMessage: string; rawErrorMessage: string } =>
     validateDataWithFallback<ApiError>(apiErrorSchema, data, 'API error'),
 } as const;
 
@@ -81,4 +74,3 @@ export const customValidators = {
 
 // 型エクスポート
 export type CustomValidators = typeof customValidators;
-

@@ -15,7 +15,7 @@ export default {
     slug: 'react_native_expo_tutorial',
     version: '1.0.0',
     orientation: 'portrait',
-  icon: './assets/images/icon.png',
+    icon: './assets/images/icon.png',
     scheme: 'reactnativeexpotutorial',
     userInterfaceStyle: 'automatic',
     newArchEnabled: true,

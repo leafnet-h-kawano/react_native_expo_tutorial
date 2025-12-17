@@ -9,7 +9,7 @@ const fs = require('fs');
 function parseEnvFile(content) {
   const envVars = {};
   const lines = content.split('\n');
-  
+
   for (const line of lines) {
     const trimmedLine = line.trim();
     if (trimmedLine && !trimmedLine.startsWith('#')) {
@@ -21,7 +21,7 @@ function parseEnvFile(content) {
       }
     }
   }
-  
+
   return envVars;
 }
 
@@ -33,11 +33,11 @@ function parseEnvFile(content) {
 function loadEnvironmentConfig(variant = 'develop') {
   const envFile = `.env.${variant}`;
   const envPath = path.resolve(__dirname, '..', envFile);
-  
+
   console.log(`Loading environment config from ${envPath}`);
-  
+
   let envVars = {};
-  
+
   try {
     if (fs.existsSync(envPath)) {
       const content = fs.readFileSync(envPath, 'utf8');
@@ -54,12 +54,12 @@ function loadEnvironmentConfig(variant = 'develop') {
         console.log('Using fallback .env.develop file');
       }
     }
-    
+
     // Merge with process.env, giving priority to loaded file
-    Object.keys(envVars).forEach(key => {
+    Object.keys(envVars).forEach((key) => {
       process.env[key] = envVars[key];
     });
-    
+
     // Return the configuration object
     return {
       NODE_ENV: envVars.NODE_ENV || process.env.NODE_ENV || 'development',
@@ -68,8 +68,14 @@ function loadEnvironmentConfig(variant = 'develop') {
       APP_NAME: envVars.APP_NAME || process.env.APP_NAME || 'React Native Expo Tutorial (Dev)',
       LOG_LEVEL: envVars.LOG_LEVEL || process.env.LOG_LEVEL || 'debug',
       ENABLE_FLIPPER: envVars.ENABLE_FLIPPER || process.env.ENABLE_FLIPPER || 'true',
-      BUNDLE_IDENTIFIER: envVars.BUNDLE_IDENTIFIER || process.env.BUNDLE_IDENTIFIER || 'jp.leafnet.reactNativeExpoTurtorial.develop',
-      ANDROID_PACKAGE: envVars.ANDROID_PACKAGE || process.env.ANDROID_PACKAGE || 'jp.leafnet.reactNativeExpoTurtorial.develop',
+      BUNDLE_IDENTIFIER:
+        envVars.BUNDLE_IDENTIFIER ||
+        process.env.BUNDLE_IDENTIFIER ||
+        'jp.leafnet.reactNativeExpoTurtorial.develop',
+      ANDROID_PACKAGE:
+        envVars.ANDROID_PACKAGE ||
+        process.env.ANDROID_PACKAGE ||
+        'jp.leafnet.reactNativeExpoTurtorial.develop',
     };
   } catch (error) {
     console.error(`Error loading environment config for ${variant}:`, error);

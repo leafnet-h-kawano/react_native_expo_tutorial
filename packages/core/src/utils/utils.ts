@@ -6,7 +6,6 @@ import Constants from 'expo-constants';
 
 ///NOTE: React Nativeからの呼び出しを想定しているため、Next.jsで使用するには対応が必要になる
 
-
 export interface EnvConfig {
   appVariant: 'develop' | 'staging' | 'production';
   apiUrl: string;
@@ -68,7 +67,7 @@ export const utils = {
    */
   debugLog: (message: string, ...args: any[]): void => {
     const { logLevel } = getEnvironmentConfig();
-    
+
     if (logLevel === 'debug' || isDevelopment()) {
       console.log(`[${new Date().toISOString()}] ${message}`, ...args);
     }

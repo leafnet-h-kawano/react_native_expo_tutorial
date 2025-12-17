@@ -21,29 +21,29 @@
 //         error: null,
 //         validationErrors: [],
 //         selectedUser: null,
-        
+
 //         ...createCommonApiActions(set, get),
-        
+
 //         setSelectedUser: (user) => set({ selectedUser: user }),
-        
-//         setUsers: (users) => set({ 
-//           data: users, 
-//           error: null, 
+
+//         setUsers: (users) => set({
+//           data: users,
+//           error: null,
 //           validationErrors: [],
-//           loading: false 
+//           loading: false
 //         }),
-        
-//         clearUsers: () => set({ 
-//           data: null, 
-//           selectedUser: null, 
-//           error: null, 
+
+//         clearUsers: () => set({
+//           data: null,
+//           selectedUser: null,
+//           error: null,
 //           validationErrors: [],
 //           loading: false
 //         }),
 //       }),
 //       {
 //         name: 'user-storage',
-//         partialize: (state) => ({ 
+//         partialize: (state) => ({
 //           data: state.data,
 //           selectedUser: state.selectedUser,
 //         }),

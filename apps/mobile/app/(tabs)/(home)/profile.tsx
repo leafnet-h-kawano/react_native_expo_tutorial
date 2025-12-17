@@ -7,10 +7,14 @@ export default function ProfileScreen() {
 
   const getThemeColor = () => {
     switch (env.appVariant) {
-      case 'develop': return '#28a745';
-      case 'staging': return '#ffc107';
-      case 'production': return '#007AFF';
-      default: return '#007AFF';
+      case 'develop':
+        return '#28a745';
+      case 'staging':
+        return '#ffc107';
+      case 'production':
+        return '#007AFF';
+      default:
+        return '#007AFF';
     }
   };
 
@@ -24,118 +28,147 @@ export default function ProfileScreen() {
   };
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#f8f9fa' }} contentContainerStyle={{ padding: 20 }}>
+    <ScrollView
+      style={{ flex: 1, backgroundColor: '#f8f9fa' }}
+      contentContainerStyle={{ padding: 20 }}
+    >
       {/* プロフィールカード */}
-      <View style={{
-        backgroundColor: 'white',
-        borderRadius: 12,
-        padding: 30,
-        marginBottom: 20,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 4,
-      }}>
-        <View style={{
-          width: 80,
-          height: 80,
-          borderRadius: 40,
-          backgroundColor: getThemeColor(),
+      <View
+        style={{
+          backgroundColor: 'white',
+          borderRadius: 12,
+          padding: 30,
+          marginBottom: 20,
           alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: 15,
-        }}>
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 8,
+          elevation: 4,
+        }}
+      >
+        <View
+          style={{
+            width: 80,
+            height: 80,
+            borderRadius: 40,
+            backgroundColor: getThemeColor(),
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 15,
+          }}
+        >
           <Ionicons name="person" size={40} color="white" />
         </View>
-        
-        <Text style={{
-          fontSize: 24,
-          fontWeight: 'bold',
-          color: '#333',
-          marginBottom: 5,
-        }}>
+
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: 'bold',
+            color: '#333',
+            marginBottom: 5,
+          }}
+        >
           {userInfo.name}
         </Text>
-        
-        <Text style={{
-          fontSize: 16,
-          color: '#666',
-          marginBottom: 10,
-        }}>
+
+        <Text
+          style={{
+            fontSize: 16,
+            color: '#666',
+            marginBottom: 10,
+          }}
+        >
           {userInfo.email}
         </Text>
 
-        <View style={{
-          backgroundColor: getThemeColor(),
-          paddingHorizontal: 15,
-          paddingVertical: 5,
-          borderRadius: 15,
-        }}>
-          <Text style={{
-            color: 'white',
-            fontSize: 14,
-            fontWeight: '500',
-          }}>
+        <View
+          style={{
+            backgroundColor: getThemeColor(),
+            paddingHorizontal: 15,
+            paddingVertical: 5,
+            borderRadius: 15,
+          }}
+        >
+          <Text
+            style={{
+              color: 'white',
+              fontSize: 14,
+              fontWeight: '500',
+            }}
+          >
             {userInfo.role}
           </Text>
         </View>
       </View>
 
       {/* 統計情報 */}
-      <View style={{
-        backgroundColor: 'white',
-        borderRadius: 12,
-        padding: 20,
-        marginBottom: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 4,
-      }}>
-        <Text style={{
-          fontSize: 18,
-          fontWeight: 'bold',
-          color: '#333',
-          marginBottom: 15,
-        }}>
+      <View
+        style={{
+          backgroundColor: 'white',
+          borderRadius: 12,
+          padding: 20,
+          marginBottom: 20,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 8,
+          elevation: 4,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: 'bold',
+            color: '#333',
+            marginBottom: 15,
+          }}
+        >
           統計情報
         </Text>
 
-        <View style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+          }}
+        >
           <View style={{ alignItems: 'center' }}>
-            <Text style={{
-              fontSize: 24,
-              fontWeight: 'bold',
-              color: getThemeColor(),
-            }}>
+            <Text
+              style={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                color: getThemeColor(),
+              }}
+            >
               {userInfo.projects}
             </Text>
-            <Text style={{
-              fontSize: 14,
-              color: '#666',
-            }}>
+            <Text
+              style={{
+                fontSize: 14,
+                color: '#666',
+              }}
+            >
               プロジェクト
             </Text>
           </View>
 
           <View style={{ alignItems: 'center' }}>
-            <Text style={{
-              fontSize: 24,
-              fontWeight: 'bold',
-              color: getThemeColor(),
-            }}>
+            <Text
+              style={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                color: getThemeColor(),
+              }}
+            >
               {userInfo.commits}
             </Text>
-            <Text style={{
-              fontSize: 14,
-              color: '#666',
-            }}>
+            <Text
+              style={{
+                fontSize: 14,
+                color: '#666',
+              }}
+            >
               コミット
             </Text>
           </View>
@@ -143,22 +176,26 @@ export default function ProfileScreen() {
       </View>
 
       {/* 詳細情報 */}
-      <View style={{
-        backgroundColor: 'white',
-        borderRadius: 12,
-        padding: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 4,
-      }}>
-        <Text style={{
-          fontSize: 18,
-          fontWeight: 'bold',
-          color: '#333',
-          marginBottom: 15,
-        }}>
+      <View
+        style={{
+          backgroundColor: 'white',
+          borderRadius: 12,
+          padding: 20,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 8,
+          elevation: 4,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: 'bold',
+            color: '#333',
+            marginBottom: 15,
+          }}
+        >
           詳細情報
         </Text>
 

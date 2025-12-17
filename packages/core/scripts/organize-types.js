@@ -3,7 +3,7 @@
 /**
  * Orvalで生成された単一ファイルを
  * common/requests/responsesフォルダに分割する
- * 
+ *
  * ルール:
  * - *Request → requests/
  * - *Response → responses/
@@ -18,7 +18,7 @@ const baseDir = './src/model/genTypes';
 
 // ディレクトリ作成
 const dirs = ['common', 'requests', 'responses'];
-dirs.forEach(dir => {
+dirs.forEach((dir) => {
   const dirPath = path.join(baseDir, dir);
   if (fs.existsSync(dirPath)) {
     fs.rmSync(dirPath, { recursive: true });
@@ -49,7 +49,7 @@ let match;
 while ((match = objectTypeRegex.exec(content)) !== null) {
   types.push({
     name: match[1],
-    definition: match[0]
+    definition: match[0],
   });
 }
 
@@ -57,25 +57,25 @@ while ((match = objectTypeRegex.exec(content)) !== null) {
 const typeAliasRegex = /export type (\w+)\s*=\s*([^{][^;]*);/g;
 while ((match = typeAliasRegex.exec(content)) !== null) {
   // 既に抽出済みでないか確認
-  if (!types.some(t => t.name === match[1])) {
+  if (!types.some((t) => t.name === match[1])) {
     types.push({
       name: match[1],
       definition: match[0],
       isAlias: true,
-      aliasTarget: match[2].trim()
+      aliasTarget: match[2].trim(),
     });
   }
 }
 
 // 型を振り分け
-const requestTypes = types.filter(t => /Request$/.test(t.name));
-const responseTypes = types.filter(t => /Response$/.test(t.name));
-const commonTypes = types.filter(t => !/Request$/.test(t.name) && !/Response$/.test(t.name));
+const requestTypes = types.filter((t) => /Request$/.test(t.name));
+const responseTypes = types.filter((t) => /Response$/.test(t.name));
+const commonTypes = types.filter((t) => !/Request$/.test(t.name) && !/Response$/.test(t.name));
 
 // 依存関係を解析して適切なインポートを追加
 function getImports(definition, availableTypes, currentTypeName) {
   const imports = [];
-  availableTypes.forEach(t => {
+  availableTypes.forEach((t) => {
     if (t.name !== currentTypeName) {
       // 型定義内で他の型を参照しているかチェック
       const regex = new RegExp(`\\b${t.name}\\b`, 'g');
@@ -93,43 +93,43 @@ function toFileName(typeName) {
 }
 
 // Common型を個別ファイルに出力（依存関係のインポート付き）
-commonTypes.forEach(type => {
+commonTypes.forEach((type) => {
   const filename = toFileName(type.name);
   const imports = getImports(type.definition, commonTypes, type.name);
-  
+
   let fileContent = header + '\n';
   if (imports.length > 0) {
-    imports.forEach(imp => {
+    imports.forEach((imp) => {
       const impFileName = toFileName(imp).replace('.ts', '');
       fileContent += `import type { ${imp} } from './${impFileName}';\n`;
     });
     fileContent += '\n';
   }
   fileContent += type.definition + '\n';
-  
+
   fs.writeFileSync(path.join(baseDir, 'common', filename), fileContent);
 });
 
 // Request型を個別ファイルに出力
-requestTypes.forEach(type => {
+requestTypes.forEach((type) => {
   const filename = toFileName(type.name);
   const fileContent = header + '\n' + type.definition + '\n';
   fs.writeFileSync(path.join(baseDir, 'requests', filename), fileContent);
 });
 
 // Response型を個別ファイルに出力
-responseTypes.forEach(type => {
+responseTypes.forEach((type) => {
   const filename = toFileName(type.name);
-  
+
   // aliasTargetまたはdefinitionから依存型を取得
   const searchText = type.aliasTarget || type.definition;
   const imports = getImports(searchText, [...commonTypes, ...responseTypes], type.name);
-  
+
   let fileContent = header + '\n';
   if (imports.length > 0) {
-    imports.forEach(imp => {
+    imports.forEach((imp) => {
       // commonにあるかresponsesにあるか判定
-      const isCommon = commonTypes.some(t => t.name === imp);
+      const isCommon = commonTypes.some((t) => t.name === imp);
       const impFileName = toFileName(imp).replace('.g.ts', '');
       const importPath = isCommon ? `../common/${impFileName}.g` : `./${impFileName}.g`;
       fileContent += `import type { ${imp} } from '${importPath}';\n`;
@@ -137,25 +137,33 @@ responseTypes.forEach(type => {
     fileContent += '\n';
   }
   fileContent += type.definition + '\n';
-  
+
   fs.writeFileSync(path.join(baseDir, 'responses', filename), fileContent);
 });
 
 // common/index.ts（配列型のエイリアスも含む）
-let commonIndex = header + '\n' +
-  commonTypes.map(t => `export * from './${toFileName(t.name).replace('.g.ts', '.g')}';`).join('\n') + '\n\n';
+let commonIndex =
+  header +
+  '\n' +
+  commonTypes
+    .map((t) => `export * from './${toFileName(t.name).replace('.g.ts', '.g')}';`)
+    .join('\n') +
+  '\n\n';
 
 // 配列型のエイリアスを追加（エンティティ型のみ）
-const entityTypes = commonTypes.filter(t => 
-  !t.name.includes('Address') && !t.name.includes('Company') && !t.name.includes('Geo')
+const entityTypes = commonTypes.filter(
+  (t) => !t.name.includes('Address') && !t.name.includes('Company') && !t.name.includes('Geo'),
 );
 if (entityTypes.length > 0) {
   commonIndex += '// 配列型のエイリアス\n';
-  entityTypes.forEach(t => {
-    commonIndex += `import type { ${t.name} } from './${toFileName(t.name).replace('.g.ts', '.g')}';\n`;
+  entityTypes.forEach((t) => {
+    commonIndex += `import type { ${t.name} } from './${toFileName(t.name).replace(
+      '.g.ts',
+      '.g',
+    )}';\n`;
   });
   commonIndex += '\n';
-  entityTypes.forEach(t => {
+  entityTypes.forEach((t) => {
     commonIndex += `export type ${t.name}s = ${t.name}[];\n`;
   });
   commonIndex += '\n';
@@ -173,8 +181,13 @@ export type ApiError = {
 fs.writeFileSync(path.join(baseDir, 'common', 'index.ts'), commonIndex);
 
 // requests/index.ts
-const requestsIndex = header + '\n' +
-  requestTypes.map(t => `export * from './${toFileName(t.name).replace('.g.ts', '.g')}';`).join('\n') + '\n';
+const requestsIndex =
+  header +
+  '\n' +
+  requestTypes
+    .map((t) => `export * from './${toFileName(t.name).replace('.g.ts', '.g')}';`)
+    .join('\n') +
+  '\n';
 fs.writeFileSync(path.join(baseDir, 'requests', 'index.ts'), requestsIndex);
 
 // responses/index.ts（commonからのre-exportも含む）
@@ -185,7 +198,10 @@ let responsesIndex = header + '\n';
 // Response型
 if (responseTypes.length > 0) {
   responsesIndex += '// Response型\n';
-  responsesIndex += responseTypes.map(t => `export * from './${toFileName(t.name).replace('.g.ts', '.g')}';`).join('\n') + '\n';
+  responsesIndex +=
+    responseTypes
+      .map((t) => `export * from './${toFileName(t.name).replace('.g.ts', '.g')}';`)
+      .join('\n') + '\n';
 }
 fs.writeFileSync(path.join(baseDir, 'responses', 'index.ts'), responsesIndex);
 
@@ -210,8 +226,6 @@ console.log(`  - common/: ${commonTypes.length}ファイル（エンティティ
 console.log(`  - requests/: ${requestTypes.length}ファイル`);
 console.log(`  - responses/: ${responseTypes.length}ファイル`);
 console.log('');
-console.log('Common型:', commonTypes.map(t => t.name).join(', '));
-console.log('Request型:', requestTypes.map(t => t.name).join(', '));
-console.log('Response型:', responseTypes.map(t => t.name).join(', ') || '(なし)');
-
-
+console.log('Common型:', commonTypes.map((t) => t.name).join(', '));
+console.log('Request型:', requestTypes.map((t) => t.name).join(', '));
+console.log('Response型:', responseTypes.map((t) => t.name).join(', ') || '(なし)');

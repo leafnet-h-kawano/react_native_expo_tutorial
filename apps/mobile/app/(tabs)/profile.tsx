@@ -1,6 +1,6 @@
 import { getEnvironmentConfig } from '@core/src/utils/utils';
 import { Ionicons } from '@expo/vector-icons';
-import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ProfileTab() {
   const env = getEnvironmentConfig();
@@ -34,7 +34,11 @@ export default function ProfileTab() {
       icon: 'information-circle-outline',
       title: 'アプリについて',
       subtitle: `Version 1.0.0 (${env.appVariant})`,
-      onPress: () => Alert.alert('アプリ情報', `アプリバージョン: 1.0.0\n環境: ${env.appVariant}\nBundle ID: ${env.bundleIdentifier}`),
+      onPress: () =>
+        Alert.alert(
+          'アプリ情報',
+          `アプリバージョン: 1.0.0\n環境: ${env.appVariant}\nBundle ID: ${env.bundleIdentifier}`,
+        ),
     },
   ];
 
@@ -42,36 +46,44 @@ export default function ProfileTab() {
     <View style={{ flex: 1, backgroundColor: '#f8f9fa' }}>
       <ScrollView style={{ flex: 1 }}>
         {/* プロフィールヘッダー */}
-        <View style={{
-          backgroundColor: 'white',
-          padding: 30,
-          alignItems: 'center',
-          borderBottomWidth: 1,
-          borderBottomColor: '#e0e0e0',
-        }}>
-          <View style={{
-            width: 80,
-            height: 80,
-            borderRadius: 40,
-            backgroundColor: '#007AFF',
+        <View
+          style={{
+            backgroundColor: 'white',
+            padding: 30,
             alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: 15,
-          }}>
+            borderBottomWidth: 1,
+            borderBottomColor: '#e0e0e0',
+          }}
+        >
+          <View
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: 40,
+              backgroundColor: '#007AFF',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: 15,
+            }}
+          >
             <Ionicons name="person" size={40} color="white" />
           </View>
-          <Text style={{
-            fontSize: 24,
-            fontWeight: 'bold',
-            color: '#333',
-            marginBottom: 5,
-          }}>
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: 'bold',
+              color: '#333',
+              marginBottom: 5,
+            }}
+          >
             ユーザー名
           </Text>
-          <Text style={{
-            fontSize: 16,
-            color: '#666',
-          }}>
+          <Text
+            style={{
+              fontSize: 16,
+              color: '#666',
+            }}
+          >
             user@example.com
           </Text>
         </View>
@@ -97,35 +109,41 @@ export default function ProfileTab() {
               onPress={item.onPress}
               activeOpacity={0.7}
             >
-              <View style={{
-                width: 40,
-                height: 40,
-                borderRadius: 20,
-                backgroundColor: '#f0f0f0',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginRight: 15,
-              }}>
+              <View
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                  backgroundColor: '#f0f0f0',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: 15,
+                }}
+              >
                 <Ionicons name={item.icon as any} size={20} color="#007AFF" />
               </View>
-              
+
               <View style={{ flex: 1 }}>
-                <Text style={{
-                  fontSize: 16,
-                  fontWeight: '600',
-                  color: '#333',
-                  marginBottom: 2,
-                }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: '600',
+                    color: '#333',
+                    marginBottom: 2,
+                  }}
+                >
                   {item.title}
                 </Text>
-                <Text style={{
-                  fontSize: 14,
-                  color: '#666',
-                }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: '#666',
+                  }}
+                >
                   {item.subtitle}
                 </Text>
               </View>
-              
+
               <Ionicons name="chevron-forward" size={20} color="#ccc" />
             </TouchableOpacity>
           ))}
@@ -133,33 +151,45 @@ export default function ProfileTab() {
 
         {/* 環境情報 */}
         <View style={{ padding: 20 }}>
-          <View style={{
-            backgroundColor: 'white',
-            borderRadius: 12,
-            padding: 20,
-            borderLeftWidth: 4,
-            borderLeftColor: env.appVariant === 'develop' ? '#28a745' : 
-                           env.appVariant === 'staging' ? '#ffc107' : '#007bff',
-          }}>
-            <Text style={{
-              fontSize: 14,
-              fontWeight: 'bold',
-              color: '#333',
-              marginBottom: 10,
-            }}>
+          <View
+            style={{
+              backgroundColor: 'white',
+              borderRadius: 12,
+              padding: 20,
+              borderLeftWidth: 4,
+              borderLeftColor:
+                env.appVariant === 'develop'
+                  ? '#28a745'
+                  : env.appVariant === 'staging'
+                  ? '#ffc107'
+                  : '#007bff',
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: 'bold',
+                color: '#333',
+                marginBottom: 10,
+              }}
+            >
               現在の環境
             </Text>
-            <Text style={{
-              fontSize: 16,
-              color: '#666',
-              marginBottom: 5,
-            }}>
+            <Text
+              style={{
+                fontSize: 16,
+                color: '#666',
+                marginBottom: 5,
+              }}
+            >
               Environment: {env.appVariant}
             </Text>
-            <Text style={{
-              fontSize: 14,
-              color: '#666',
-            }}>
+            <Text
+              style={{
+                fontSize: 14,
+                color: '#666',
+              }}
+            >
               API: {env.apiUrl}
             </Text>
           </View>

@@ -5,6 +5,6 @@ const nextConfig = {
   },
   // monorepo の packages をトランスパイル対象にする
   transpilePackages: ['@app/core'],
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

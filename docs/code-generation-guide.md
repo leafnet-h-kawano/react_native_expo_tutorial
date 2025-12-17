@@ -95,21 +95,21 @@ project/core
     └── services/
         ├── apis/                      # API呼び出しロジック
         └── validations/               # バリデーション定義
-    
+
 ```
 
 ---
 
 ## コマンド一覧
 
-| コマンド | 説明 |
-|---------|------|
-| `npm run generate:types` | 型生成（Orval + フォルダ分け） |
-| `npm run generate:schemas` | Zodスキーマ生成（ts-to-zod） |
-| `npm run generate:mocks` | モックデータ生成（OpenAPI examples） |
-| `npm run generate:all` | 上記すべてを順番に実行 |
-| `npm run swagger` | Swagger UIを起動（http://localhost:4000） |
-| `npm run mock:server` | Prismモックサーバーを起動（http://localhost:4010） |
+| コマンド                   | 説明                                               |
+| -------------------------- | -------------------------------------------------- |
+| `npm run generate:types`   | 型生成（Orval + フォルダ分け）                     |
+| `npm run generate:schemas` | Zodスキーマ生成（ts-to-zod）                       |
+| `npm run generate:mocks`   | モックデータ生成（OpenAPI examples）               |
+| `npm run generate:all`     | 上記すべてを順番に実行                             |
+| `npm run swagger`          | Swagger UIを起動（http://localhost:4000）          |
+| `npm run mock:server`      | Prismモックサーバーを起動（http://localhost:4010） |
 
 ---
 
@@ -146,11 +146,11 @@ npm run generate:types
 
 ### 分類ルール
 
-| パターン | 出力先 |
-|---------|--------|
-| `*Request` | `genTypes/requests/` |
+| パターン    | 出力先                |
+| ----------- | --------------------- |
+| `*Request`  | `genTypes/requests/`  |
 | `*Response` | `genTypes/responses/` |
-| その他 | `genTypes/common/` |
+| その他      | `genTypes/common/`    |
 
 ---
 
@@ -201,11 +201,11 @@ npm run generate:schemas
 
 ```typescript
 // schemas/common/user.g.ts
-import { z } from "zod";
+import { z } from 'zod';
 
 export const geoSchema = z.object({
   lat: z.string(),
-  lng: z.string()
+  lng: z.string(),
 });
 
 export const addressSchema = z.object({
@@ -213,7 +213,7 @@ export const addressSchema = z.object({
   suite: z.string(),
   city: z.string(),
   zipcode: z.string(),
-  geo: geoSchema.optional()
+  geo: geoSchema.optional(),
 });
 
 export const userSchema = z.object({
@@ -225,7 +225,7 @@ export const userSchema = z.object({
   website: z.string(),
   address: addressSchema.optional(),
   company: companySchema.optional(),
-  selected: z.boolean().optional()
+  selected: z.boolean().optional(),
 });
 ```
 
@@ -277,10 +277,10 @@ components:
           type: string
         email:
           type: string
-      example:           # ← ここにサンプルデータを定義
+      example: # ← ここにサンプルデータを定義
         id: 1
-        name: "山田太郎"
-        email: "yamada@example.com"
+        name: '山田太郎'
+        email: 'yamada@example.com'
 ```
 
 ### 生成されるモックデータの例
@@ -329,6 +329,7 @@ npm run generate:all
 ```
 
 実行順序：
+
 1. `generate:types` - TypeScript型生成
 2. `generate:schemas` - Zodスキーマ生成
 3. `generate:mocks` - モックデータ生成
@@ -408,9 +409,7 @@ curl -X POST http://localhost:4010/posts \
 
 ```typescript
 // 開発時にモックサーバーに向ける
-const API_BASE_URL = __DEV__ 
-  ? 'http://localhost:4010' 
-  : 'https://api.example.com';
+const API_BASE_URL = __DEV__ ? 'http://localhost:4010' : 'https://api.example.com';
 ```
 
 ---
@@ -440,10 +439,10 @@ components:
           type: number
         body:
           type: string
-      example:                    # ← 必須
+      example: # ← 必須
         id: 1
         postId: 1
-        body: "素晴らしい投稿ですね！"
+        body: '素晴らしい投稿ですね！'
 
     # 2. レスポンス型
     GetCommentResponse:
@@ -457,14 +456,14 @@ components:
 
 ### 命名規則
 
-| 種類 | 命名規則 | 例 |
-|------|---------|-----|
-| エンティティ | PascalCase | `User`, `Post`, `Comment` |
-| リクエスト | `{Action}{Entity}Request` | `CreateUserRequest`, `UpdatePostRequest` |
-| レスポンス（単一） | `Get{Entity}Response` | `GetUserResponse` |
-| レスポンス（配列） | `Get{Entity}sResponse` | `GetUsersResponse` |
-| レスポンス（作成） | `Create{Entity}Response` | `CreateUserResponse` |
-| レスポンス（更新） | `Update{Entity}Response` | `UpdateUserResponse` |
+| 種類               | 命名規則                  | 例                                       |
+| ------------------ | ------------------------- | ---------------------------------------- |
+| エンティティ       | PascalCase                | `User`, `Post`, `Comment`                |
+| リクエスト         | `{Action}{Entity}Request` | `CreateUserRequest`, `UpdatePostRequest` |
+| レスポンス（単一） | `Get{Entity}Response`     | `GetUserResponse`                        |
+| レスポンス（配列） | `Get{Entity}sResponse`    | `GetUsersResponse`                       |
+| レスポンス（作成） | `Create{Entity}Response`  | `CreateUserResponse`                     |
+| レスポンス（更新） | `Update{Entity}Response`  | `UpdateUserResponse`                     |
 
 ---
 

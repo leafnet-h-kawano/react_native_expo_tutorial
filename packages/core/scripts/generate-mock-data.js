@@ -2,12 +2,12 @@
 
 /**
  * OpenAPI仕様のexampleからモックデータを生成
- * 
+ *
  * 処理方針:
  * - OpenAPIのスキーマからexampleを抽出
  * - 複数のバリエーションを自動生成（ID変更、データ変更など）
  * - model/mockData/ にTypeScriptファイルとして出力
- * 
+ *
  */
 
 const fs = require('fs');
@@ -36,9 +36,8 @@ const schemas = openapi.components?.schemas || {};
 
 // 既存の生成ファイルを削除（.g.ts ファイルのみ）
 if (fs.existsSync(outputDir)) {
-  const existingFiles = fs.readdirSync(outputDir)
-    .filter(f => f.endsWith('.g.ts'));
-  existingFiles.forEach(file => {
+  const existingFiles = fs.readdirSync(outputDir).filter((f) => f.endsWith('.g.ts'));
+  existingFiles.forEach((file) => {
     fs.unlinkSync(path.join(outputDir, file));
   });
 }
@@ -55,7 +54,7 @@ if (!fs.existsSync(outputDir)) {
  */
 function generateVariations(example, count) {
   const variations = [];
-  
+
   for (let i = 1; i <= count; i++) {
     const variation = JSON.parse(JSON.stringify(example)); // deep copy
     // idがあれば連番に変更
@@ -64,7 +63,7 @@ function generateVariations(example, count) {
     }
     variations.push(variation);
   }
-  
+
   return variations;
 }
 
@@ -74,7 +73,7 @@ function generateVariations(example, count) {
 function writeTypeScriptFile(entityName, data, typeName) {
   const fileName = `${entityName}.g.ts`;
   const filePath = path.join(outputDir, fileName);
-  
+
   const content = `${generatedHeader}
 export const mock${typeName} = ${JSON.stringify(data, null, 2)};
 `;
@@ -107,7 +106,7 @@ function getResponseExample(schema, count) {
       return generateVariations(itemSchema.example, count);
     }
   }
-  
+
   // $ref参照の場合
   if (schema.$ref) {
     const refSchema = resolveRef(schema);
@@ -115,12 +114,12 @@ function getResponseExample(schema, count) {
       return refSchema.example;
     }
   }
-  
+
   // 直接exampleがある場合
   if (schema.example) {
     return schema.example;
   }
-  
+
   return null;
 }
 
@@ -130,19 +129,19 @@ const responseConfigs = Object.entries(schemas)
   .map(([name, schema]) => ({
     schemaName: name,
     schema: schema,
-    count: 10 // 配列型の場合のデフォルト件数
+    count: 10, // 配列型の場合のデフォルト件数
   }));
 
 // 各Responseを処理
 const generatedFiles = [];
-responseConfigs.forEach(config => {
+responseConfigs.forEach((config) => {
   const example = getResponseExample(config.schema, config.count);
-  
+
   if (!example) {
     console.log(`  ⚠️ ${config.schemaName}: exampleが取得できません`);
     return;
   }
-  
+
   // ファイル名を生成（GetUsersResponse → getUsersResponse.g.ts）
   const fileName = config.schemaName.charAt(0).toLowerCase() + config.schemaName.slice(1);
   writeTypeScriptFile(fileName, example, config.schemaName);
@@ -150,9 +149,7 @@ responseConfigs.forEach(config => {
 });
 
 // index.tsを生成（動的にエクスポート）
-const exportStatements = generatedFiles
-  .map(name => `export * from './${name}.g';`)
-  .join('\n');
+const exportStatements = generatedFiles.map((name) => `export * from './${name}.g';`).join('\n');
 
 const indexContent = `${generatedHeader}
 // 生成されたモックデータのエクスポート

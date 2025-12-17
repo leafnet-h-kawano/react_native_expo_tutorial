@@ -3,7 +3,7 @@
 
 // export const getEnvironmentVars = () => {
 //   const appVariant = (process.env.APP_VARIANT as AppVariant) || 'production';
-  
+
 //   const environments: Record<AppVariant, {
 //     API_URL: string;
 //     APP_NAME: string;

@@ -5,14 +5,18 @@ import { Platform } from 'react-native';
 
 export default function TabLayout() {
   const env = getEnvironmentConfig();
-  
+
   // 環境に応じた色設定
   const getThemeColor = () => {
     switch (env.appVariant) {
-      case 'develop': return '#28a745';
-      case 'staging': return '#ffc107';
-      case 'production': return '#007AFF';
-      default: return '#007AFF';
+      case 'develop':
+        return '#28a745';
+      case 'staging':
+        return '#ffc107';
+      case 'production':
+        return '#007AFF';
+      default:
+        return '#007AFF';
     }
   };
 
@@ -66,11 +70,7 @@ export default function TabLayout() {
           title: 'ホーム',
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons 
-              name={focused ? 'home' : 'home-outline'} 
-              size={24} 
-              color={color} 
-            />
+            <Ionicons name={focused ? 'home' : 'home-outline'} size={24} color={color} />
           ),
         }}
       />
@@ -79,11 +79,7 @@ export default function TabLayout() {
         options={{
           title: '探索',
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons 
-              name={focused ? 'search' : 'search-outline'} 
-              size={24} 
-              color={color} 
-            />
+            <Ionicons name={focused ? 'search' : 'search-outline'} size={24} color={color} />
           ),
         }}
       />
@@ -92,11 +88,7 @@ export default function TabLayout() {
         options={{
           title: 'プロフィール',
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons 
-              name={focused ? 'person' : 'person-outline'} 
-              size={24} 
-              color={color} 
-            />
+            <Ionicons name={focused ? 'person' : 'person-outline'} size={24} color={color} />
           ),
         }}
       />
@@ -105,11 +97,7 @@ export default function TabLayout() {
         options={{
           title: '設定',
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons 
-              name={focused ? 'settings' : 'settings-outline'} 
-              size={24} 
-              color={color} 
-            />
+            <Ionicons name={focused ? 'settings' : 'settings-outline'} size={24} color={color} />
           ),
         }}
       />

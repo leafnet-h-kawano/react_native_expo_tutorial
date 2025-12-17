@@ -24,45 +24,45 @@
 //         error: null,
 //         validationErrors: [],
 //         userPosts: [],
-        
+
 //         ...createCommonApiActions(set, get),
-        
-//         setPosts: (posts) => set({ 
-//           data: posts, 
-//           error: null, 
+
+//         setPosts: (posts) => set({
+//           data: posts,
+//           error: null,
 //           validationErrors: [],
-//           loading: false 
+//           loading: false
 //         }),
-        
+
 //         setUserPosts: (userPosts) => set({ userPosts }),
-        
+
 //         addPost: (post) => set((state) => ({
 //           data: state.data ? [...state.data, post] : [post]
 //         })),
-        
+
 //         updatePost: (id, updates) => set((state) => ({
-//           data: state.data ? 
+//           data: state.data ?
 //             state.data.map((post: Post) => post.id === id ? { ...post, ...updates } : post) :
 //             null
 //         })),
-        
+
 //         removePost: (id) => set((state) => ({
-//           data: state.data ? 
+//           data: state.data ?
 //             state.data.filter((post: Post) => post.id !== id) :
 //             null
 //         })),
-        
-//         clearPosts: () => set({ 
-//           data: null, 
+
+//         clearPosts: () => set({
+//           data: null,
 //           userPosts: [],
-//           error: null, 
+//           error: null,
 //           validationErrors: [],
 //           loading: false
 //         }),
 //       }),
 //       {
 //         name: 'post-storage',
-//         partialize: (state) => ({ 
+//         partialize: (state) => ({
 //           data: state.data,
 //           userPosts: state.userPosts,
 //         }),

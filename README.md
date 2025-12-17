@@ -34,27 +34,34 @@ You can start developing by editing the files inside `apps/mobile/app`. This pro
 This project is configured with three environments: develop, staging, and production.
 
 ### Development Environment
+
 For local development and testing:
+
 ```bash
 eas build --profile develop --platform ios
 eas build --profile develop --platform android
 ```
 
 ### Staging Environment
+
 For internal testing and QA:
+
 ```bash
 eas build --profile staging --platform ios
 eas build --profile staging --platform android
 ```
 
 ### Production Environment
+
 For app store releases:
+
 ```bash
 eas build --profile production --platform ios
 eas build --profile production --platform android
 ```
 
 ### Submit to App Stores
+
 ```bash
 # Staging (internal testing)
 eas submit --profile staging --platform ios
@@ -89,23 +96,26 @@ Join our community of developers creating universal apps.
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
 
-
 ## Api追加、修正、削除に関する手順
+
 1. openAPI[openapi/api-spec.yaml]にAPI情報を追加　
-　　　※型定義を自動生成する必要があるのでパラメータに関してはcomponentに記載してください。
-　　　※モックデータが必要になるのでexampleを記載してください。
+   　　　※型定義を自動生成する必要があるのでパラメータに関してはcomponentに記載してください。
+   　　　※モックデータが必要になるのでexampleを記載してください。
 
 2. openAPIファイルをバンドル　[`packages/core/openapi/bundled.g.yaml`]ファイルが生成される
+
 ```bash
 npm run generate:types
 ```
 
-3. Sweagger UIでデータを確認 
+3. Sweagger UIでデータを確認
+
 ```bash
 npm run swagger
-``` 
+```
 
 4. openAPIから型データ、zodスキーマ,mockを生成 (zodスキーマは実際には型データをもとにスクリプトから生成されます) 一応このコマンドの最初にopenAPIのバンドルも行われます
+
 ```bash
 npm run generate:all
 ```
@@ -114,7 +124,6 @@ npm run generate:all
 
 6. 出力した型とvalidationを元にapiを追加　[services/apis.ts]
 
-7. 作成したapiと出力したmockデータを元にtestを作成　
-
+7. 作成したapiと出力したmockデータを元にtestを作成
 
 コード生成に関しての詳しい情報は [docs/code-generation-guide.md] を確認してください

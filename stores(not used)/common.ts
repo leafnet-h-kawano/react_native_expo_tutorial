@@ -18,15 +18,15 @@
 // // 共通のAPI操作を生成する関数
 // export const createCommonApiActions = (set: any, get: any): CommonApiActions => ({
 //   setLoading: (loading) => set({ loading }),
-  
-//   setError: (error) => set({ 
-//     error, 
+
+//   setError: (error) => set({
+//     error,
 //     loading: false,
 //     validationErrors: error ? [] : get().validationErrors
 //   }),
-  
-//   setValidationErrors: (validationErrors) => set({ 
-//     validationErrors, 
+
+//   setValidationErrors: (validationErrors) => set({
+//     validationErrors,
 //     error: validationErrors.length > 0 ? null : get().error,
 //     loading: false
 //   }),

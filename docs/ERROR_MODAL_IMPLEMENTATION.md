@@ -7,6 +7,7 @@
 API呼び出し時のエラーを自動的にポップアップで表示する機能を実装しました。
 
 ### 実装方法
+
 - **状態管理**: Zustand
 - **UI**: React Native Modal
 - **トリガー**: hooks/api/useApiClient.ts の executeApiCall 関数
@@ -63,11 +64,11 @@ export const useErrorStore = create<ErrorState>((set) => ({
   isVisible: false,
   statusCode: null,
   message: '',
-  
+
   showError: (statusCode, message) => {
     set({ isVisible: true, statusCode, message });
   },
-  
+
   hideError: () => {
     set({ isVisible: false, statusCode: null, message: '' });
   },
@@ -75,6 +76,7 @@ export const useErrorStore = create<ErrorState>((set) => ({
 ```
 
 **特徴**:
+
 - ✅ コンポーネント外から直接呼び出し可能
 - ✅ 状態の変更を自動的にUIに反映
 - ✅ TypeScript完全対応
@@ -96,13 +98,14 @@ export const ErrorModal: React.FC = () => {
 ```
 
 **デザイン**:
+
 - 半透明オーバーレイ
 - 白背景のカード
 - ステータスコード表示（オプション）
 - エラーメッセージ
 - OKボタン
 
-### 3. RootLayout統合 (app/_layout.tsx)
+### 3. RootLayout統合 (app/\_layout.tsx)
 
 アプリ全体でエラーモーダルを利用可能にする：
 
@@ -113,7 +116,7 @@ export default function RootLayout() {
       <Stack>
         {/* ルーティング */}
       </Stack>
-      
+
       {/* グローバルエラーモーダル */}
       <ErrorModal />
     </QueryProvider>
@@ -130,14 +133,11 @@ import { useErrorStore } from '@/stores/errorStore';
 
 export async function executeApiCall<T>(args: ExecuteApiCallArgs<T>): Promise<T> {
   const result = await args.apiCall();
-  
+
   if (isApiError(result)) {
     // Zustandストア経由でエラーモーダルを表示
-    useErrorStore.getState().showError(
-      result.statusCode,
-      result.rawErrorMessage
-    );
-    
+    useErrorStore.getState().showError(result.statusCode, result.rawErrorMessage);
+
     // エラー時のコールバック実行...
   }
 }
@@ -155,7 +155,7 @@ import { useUsers } from '@/hooks/api/useUsers';
 function UserList() {
   // エラー時は自動的にモーダルが表示される
   const { data: users } = useUsers();
-  
+
   return (
     <View>
       {users?.map(user => (
@@ -175,12 +175,12 @@ const { data: user } = useUser(userId, {
   onError: (error) => {
     // モーダルは自動表示される + 独自処理も実行
     console.log('追加のエラー処理:', error.errorMessage);
-    
+
     // 特定のエラーコードで画面遷移など
     if (error.statusCode === 404) {
       router.push('/not-found');
     }
-  }
+  },
 });
 ```
 
@@ -193,11 +193,11 @@ import { useErrorStore } from '@/stores/errorStore';
 
 function SomeComponent() {
   const { showError } = useErrorStore();
-  
+
   const handleCustomError = () => {
     showError(null, 'カスタムエラーメッセージ');
   };
-  
+
   return (
     <Button title="エラー表示" onPress={handleCustomError} />
   );
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
 // useApiClient.ts
 if (isApiError(result)) {
   let customMessage = result.rawErrorMessage;
-  
+
   // カスタムメッセージの設定
   switch (result.statusCode) {
     case 404:
@@ -243,11 +243,8 @@ if (isApiError(result)) {
       customMessage = 'サーバーエラーが発生しました';
       break;
   }
-  
-  useErrorStore.getState().showError(
-    result.statusCode,
-    customMessage
-  );
+
+  useErrorStore.getState().showError(result.statusCode, customMessage);
 }
 ```
 
@@ -288,13 +285,15 @@ const { data } = useUser(99999); // 存在しないID
 
 ### モーダルが表示されない
 
-**原因1**: ErrorModalが_layout.tsxに配置されていない
+**原因1**: ErrorModalが\_layout.tsxに配置されていない
+
 ```typescript
 // 確認: app/_layout.tsx
 <ErrorModal /> // これが存在するか確認
 ```
 
 **原因2**: Zustandのインポートエラー
+
 ```bash
 # zustandがインストールされているか確認
 npm list zustand
@@ -309,24 +308,27 @@ npm list zustand
 showError: (statusCode, message) => {
   console.log(`[ErrorStore] エラー表示: [${statusCode}] ${message}`);
   // ...
-}
+};
 ```
 
 ## まとめ
 
 ### 実装内容
+
 - ✅ Zustandベースのグローバルエラー状態管理
 - ✅ カスタマイズ可能なエラーモーダルUI
 - ✅ executeApiCall関数との自動連携
 - ✅ 既存のonErrorコールバックとの併用可能
 
 ### メリット
+
 - ✅ 一箇所の実装で全APIエラーに対応
 - ✅ デザインを自由にカスタマイズ可能
 - ✅ TypeScript完全対応
 - ✅ テストも全て成功
 
 ### 次のステップ
+
 - [ ] エラーの種類に応じたアイコン表示
 - [ ] 再試行ボタンの追加
 - [ ] エラー履歴の記録機能

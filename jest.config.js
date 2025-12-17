@@ -21,10 +21,7 @@ module.exports = {
     '^@core/(.*)$': '<rootDir>/packages/core/$1',
     '^expo-constants$': '<rootDir>/__tests__/__mocks__/expo-constants.js',
     // zod v3 は ESM entry を持つため、Jest(CJS) では CJS ビルドに寄せる
-    '^zod$': path.resolve(
-      __dirname,
-      'packages/core/node_modules/zod/index.cjs'
-    ),
+    '^zod$': path.resolve(__dirname, 'packages/core/node_modules/zod/index.cjs'),
   },
   // Expo(RN) 用設定は apps/mobile 側の jest.config.js に閉じる
 };

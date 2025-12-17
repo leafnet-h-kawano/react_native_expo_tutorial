@@ -22,50 +22,50 @@
 //         loading: false,
 //         error: null,
 //         validationErrors: [],
-        
+
 //         ...createCommonApiActions(set, get),
-        
-//         setTodos: (todos) => set({ 
-//           data: todos, 
-//           error: null, 
+
+//         setTodos: (todos) => set({
+//           data: todos,
+//           error: null,
 //           validationErrors: [],
-//           loading: false 
+//           loading: false
 //         }),
-        
+
 //         addTodo: (todo) => set((state) => ({
 //           data: state.data ? [...state.data, todo] : [todo]
 //         })),
-        
+
 //         updateTodo: (id, updates) => set((state) => ({
-//           data: state.data ? 
+//           data: state.data ?
 //             state.data.map((todo: Todo) => todo.id === id ? { ...todo, ...updates } : todo) :
 //             null
 //         })),
-        
+
 //         removeTodo: (id) => set((state) => ({
-//           data: state.data ? 
+//           data: state.data ?
 //             state.data.filter((todo: Todo) => todo.id !== id) :
 //             null
 //         })),
-        
+
 //         toggleTodo: (id) => set((state) => ({
-//           data: state.data ? 
-//             state.data.map((todo: Todo) => 
+//           data: state.data ?
+//             state.data.map((todo: Todo) =>
 //               todo.id === id ? { ...todo, completed: !todo.completed } : todo
 //             ) :
 //             null
 //         })),
-        
-//         clearTodos: () => set({ 
-//           data: null, 
-//           error: null, 
+
+//         clearTodos: () => set({
+//           data: null,
+//           error: null,
 //           validationErrors: [],
 //           loading: false
 //         }),
 //       }),
 //       {
 //         name: 'todo-storage',
-//         partialize: (state) => ({ 
+//         partialize: (state) => ({
 //           data: state.data,
 //         }),
 //       }

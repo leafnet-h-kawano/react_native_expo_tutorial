@@ -6,7 +6,7 @@ import { ApiStatusMessages, Messages } from '../utils/const';
 
 // ステータスコードからエラーメッセージを取得する関数
 export function statusCodeToErrorMessage(errorStatusCode: number | null): string {
-  if(errorStatusCode === null) {
+  if (errorStatusCode === null) {
     // ステータスコードがnullの場合はデフォルトメッセージを返す
     return Messages.apiDefaultError;
   }

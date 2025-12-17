@@ -3,13 +3,13 @@ import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import {
-    ActivityIndicator,
-    Alert,
-    RefreshControl,
-    ScrollView,
-    Text,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  Alert,
+  RefreshControl,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 // API型定義
@@ -39,10 +39,14 @@ export default function ApiSampleScreen() {
 
   const getThemeColor = () => {
     switch (env.appVariant) {
-      case 'develop': return '#28a745';
-      case 'staging': return '#ffc107';
-      case 'production': return '#007AFF';
-      default: return '#007AFF';
+      case 'develop':
+        return '#28a745';
+      case 'staging':
+        return '#ffc107';
+      case 'production':
+        return '#007AFF';
+      default:
+        return '#007AFF';
     }
   };
 
@@ -85,10 +89,13 @@ export default function ApiSampleScreen() {
         body: 'これはaxiosを使って作成されたサンプル投稿です。',
         userId: 1,
       };
-      
-      const response = await axios.post<Post>('https://jsonplaceholder.typicode.com/posts', newPost);
+
+      const response = await axios.post<Post>(
+        'https://jsonplaceholder.typicode.com/posts',
+        newPost,
+      );
       console.log('[API] Post created:', response.data);
-      
+
       // 投稿一覧の先頭に追加
       setPosts([response.data, ...posts]);
       Alert.alert('成功', '投稿が作成されました');
@@ -122,21 +129,23 @@ export default function ApiSampleScreen() {
     Alert.alert(
       user.name,
       `ユーザー名: ${user.username}\nメール: ${user.email}\n電話: ${user.phone}\nウェブサイト: ${user.website}`,
-      [{ text: 'OK' }]
+      [{ text: 'OK' }],
     );
   };
 
   return (
     <View style={{ flex: 1, backgroundColor: '#f8f9fa' }}>
       {/* タブ切り替え */}
-      <View style={{
-        flexDirection: 'row',
-        backgroundColor: 'white',
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#e0e0e0',
-      }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          backgroundColor: 'white',
+          paddingHorizontal: 20,
+          paddingVertical: 10,
+          borderBottomWidth: 1,
+          borderBottomColor: '#e0e0e0',
+        }}
+      >
         <TouchableOpacity
           style={{
             flex: 1,
@@ -147,14 +156,16 @@ export default function ApiSampleScreen() {
           }}
           onPress={() => setSelectedTab('users')}
         >
-          <Text style={{
-            color: selectedTab === 'users' ? getThemeColor() : '#666',
-            fontWeight: selectedTab === 'users' ? 'bold' : 'normal',
-          }}>
+          <Text
+            style={{
+              color: selectedTab === 'users' ? getThemeColor() : '#666',
+              fontWeight: selectedTab === 'users' ? 'bold' : 'normal',
+            }}
+          >
             ユーザー ({users.length})
           </Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity
           style={{
             flex: 1,
@@ -165,10 +176,12 @@ export default function ApiSampleScreen() {
           }}
           onPress={() => setSelectedTab('posts')}
         >
-          <Text style={{
-            color: selectedTab === 'posts' ? getThemeColor() : '#666',
-            fontWeight: selectedTab === 'posts' ? 'bold' : 'normal',
-          }}>
+          <Text
+            style={{
+              color: selectedTab === 'posts' ? getThemeColor() : '#666',
+              fontWeight: selectedTab === 'posts' ? 'bold' : 'normal',
+            }}
+          >
             投稿 ({posts.length})
           </Text>
         </TouchableOpacity>
@@ -191,11 +204,13 @@ export default function ApiSampleScreen() {
             disabled={loading}
           >
             <Ionicons name="add-circle-outline" size={20} color="white" />
-            <Text style={{
-              color: 'white',
-              fontWeight: 'bold',
-              marginLeft: 8,
-            }}>
+            <Text
+              style={{
+                color: 'white',
+                fontWeight: 'bold',
+                marginLeft: 8,
+              }}
+            >
               新しい投稿を作成
             </Text>
           </TouchableOpacity>
@@ -222,97 +237,107 @@ export default function ApiSampleScreen() {
         )}
 
         {/* ユーザー一覧 */}
-        {selectedTab === 'users' && users.map((user) => (
-          <TouchableOpacity
-            key={user.id}
-            style={{
-              backgroundColor: 'white',
-              borderRadius: 12,
-              padding: 15,
-              marginBottom: 10,
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 4,
-              elevation: 3,
-            }}
-            onPress={() => showUserDetail(user)}
-          >
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{
-                width: 40,
-                height: 40,
-                borderRadius: 20,
-                backgroundColor: getThemeColor(),
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginRight: 15,
-              }}>
-                <Text style={{ color: 'white', fontWeight: 'bold' }}>
-                  {user.name.charAt(0)}
-                </Text>
+        {selectedTab === 'users' &&
+          users.map((user) => (
+            <TouchableOpacity
+              key={user.id}
+              style={{
+                backgroundColor: 'white',
+                borderRadius: 12,
+                padding: 15,
+                marginBottom: 10,
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 4,
+                elevation: 3,
+              }}
+              onPress={() => showUserDetail(user)}
+            >
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 20,
+                    backgroundColor: getThemeColor(),
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginRight: 15,
+                  }}
+                >
+                  <Text style={{ color: 'white', fontWeight: 'bold' }}>{user.name.charAt(0)}</Text>
+                </View>
+
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 'bold',
+                      color: '#333',
+                      marginBottom: 2,
+                    }}
+                  >
+                    {user.name}
+                  </Text>
+                  <Text style={{ fontSize: 14, color: '#666' }}>
+                    @{user.username} • {user.email}
+                  </Text>
+                </View>
+
+                <Ionicons name="chevron-forward" size={20} color="#ccc" />
               </View>
-              
-              <View style={{ flex: 1 }}>
-                <Text style={{
+            </TouchableOpacity>
+          ))}
+
+        {/* 投稿一覧 */}
+        {selectedTab === 'posts' &&
+          posts.map((post) => (
+            <View
+              key={post.id}
+              style={{
+                backgroundColor: 'white',
+                borderRadius: 12,
+                padding: 15,
+                marginBottom: 10,
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 4,
+                elevation: 3,
+              }}
+            >
+              <Text
+                style={{
                   fontSize: 16,
                   fontWeight: 'bold',
                   color: '#333',
-                  marginBottom: 2,
-                }}>
-                  {user.name}
-                </Text>
-                <Text style={{ fontSize: 14, color: '#666' }}>
-                  @{user.username} • {user.email}
-                </Text>
-              </View>
-              
-              <Ionicons name="chevron-forward" size={20} color="#ccc" />
+                  marginBottom: 8,
+                }}
+              >
+                {post.title}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: '#666',
+                  lineHeight: 20,
+                  marginBottom: 8,
+                }}
+              >
+                {post.body}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: getThemeColor(),
+                  fontWeight: '500',
+                }}
+              >
+                投稿ID: {post.id} • ユーザーID: {post.userId}
+              </Text>
             </View>
-          </TouchableOpacity>
-        ))}
-
-        {/* 投稿一覧 */}
-        {selectedTab === 'posts' && posts.map((post) => (
-          <View
-            key={post.id}
-            style={{
-              backgroundColor: 'white',
-              borderRadius: 12,
-              padding: 15,
-              marginBottom: 10,
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 4,
-              elevation: 3,
-            }}
-          >
-            <Text style={{
-              fontSize: 16,
-              fontWeight: 'bold',
-              color: '#333',
-              marginBottom: 8,
-            }}>
-              {post.title}
-            </Text>
-            <Text style={{
-              fontSize: 14,
-              color: '#666',
-              lineHeight: 20,
-              marginBottom: 8,
-            }}>
-              {post.body}
-            </Text>
-            <Text style={{
-              fontSize: 12,
-              color: getThemeColor(),
-              fontWeight: '500',
-            }}>
-              投稿ID: {post.id} • ユーザーID: {post.userId}
-            </Text>
-          </View>
-        ))}
+          ))}
       </ScrollView>
     </View>
   );

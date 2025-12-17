@@ -18,15 +18,15 @@ type ErrorState = {
 
 /**
  * グローバルエラー状態管理用のZustandストア
- * 
+ *
  * 使用例:
  * ```typescript
  * import { useErrorStore } from '@/stores/errorStore';
- * 
+ *
  * // コンポーネント内で使用
  * const { showError, hideError } = useErrorStore();
  * showError(404, 'ユーザーが見つかりませんでした');
- * 
+ *
  * // 関数内で直接使用
  * useErrorStore.getState().showError(500, 'サーバーエラー');
  * ```
@@ -35,22 +35,22 @@ export const useErrorStore = create<ErrorState>((set) => ({
   isVisible: false,
   statusCode: null,
   message: '',
-  
+
   showError: (statusCode, message) => {
     console.log(`[ErrorStore] エラー表示: [${statusCode}] ${message}`);
-    set({ 
-      isVisible: true, 
-      statusCode, 
-      message 
+    set({
+      isVisible: true,
+      statusCode,
+      message,
     });
   },
-  
+
   hideError: () => {
     console.log('[ErrorStore] エラー非表示');
-    set({ 
-      isVisible: false, 
-      statusCode: null, 
-      message: '' 
+    set({
+      isVisible: false,
+      statusCode: null,
+      message: '',
     });
   },
 }));
