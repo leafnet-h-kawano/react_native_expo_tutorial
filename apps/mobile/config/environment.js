@@ -31,10 +31,28 @@ function parseEnvFile(content) {
  * @returns {object} Environment variables object
  */
 function loadEnvironmentConfig(variant = 'develop') {
+  console.log('__dirname');
+  console.log(__dirname);
   const envFile = `.env.${variant}`;
-  const envPath = path.resolve(__dirname, '..', envFile);
+  // Prefer repository root (three levels up from apps/mobile/config), but also
+  // try process.cwd() and __dirname as fallbacks to be robust across invocations.
+  const possibleRoots = [path.resolve(__dirname, '../../..'), process.cwd(), __dirname];
 
-  console.log(`Loading environment config from ${envPath}`);
+  let envPath = null;
+  for (const root of possibleRoots) {
+    const candidate = path.resolve(root, envFile);
+    if (fs.existsSync(candidate)) {
+      envPath = candidate;
+      break;
+    }
+  }
+
+  // If not found, default to the first candidate (repo root) for logging/fallback
+  if (!envPath) {
+    envPath = path.resolve(__dirname, '../../..', envFile);
+  }
+
+  console.log(`Looking for env file at: ${envPath}`);
 
   let envVars = {};
 
@@ -47,7 +65,7 @@ function loadEnvironmentConfig(variant = 'develop') {
     } else {
       console.warn(`Environment file not found: ${envPath}`);
       // Try fallback to .env.develop
-      const fallbackPath = path.resolve(__dirname, '..', '.env.develop');
+      const fallbackPath = path.resolve(__dirname, '../../..', '.env.develop');
       if (fs.existsSync(fallbackPath)) {
         const content = fs.readFileSync(fallbackPath, 'utf8');
         envVars = parseEnvFile(content);

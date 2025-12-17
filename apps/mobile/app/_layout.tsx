@@ -1,6 +1,6 @@
 import { QueryProvider } from '@core/src/providers/QueryProvider';
 import { Stack } from 'expo-router';
-import { ErrorModal } from './components/ErrorModal';
+import { ErrorModal } from '../components/ErrorModal';
 
 export default function RootLayout() {
   return (

@@ -1,4 +1,4 @@
-const { loadEnvironmentConfig } = require('../../config/environment');
+const { loadEnvironmentConfig } = require('./config/environment');
 
 // Load environment config based on APP_VARIANT
 const appVariant = process.env.APP_VARIANT || 'develop';

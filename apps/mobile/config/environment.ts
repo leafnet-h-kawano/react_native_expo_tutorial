@@ -1,4 +1,7 @@
-// // Environment configuration
+// Environment configuration (copied from root config)
+// This file provides a typed mapping for different app variants.
+// Adjust or enable as needed for the mobile app.
+
 // type AppVariant = 'develop' | 'staging' | 'production';
 
 // export const getEnvironmentVars = () => {

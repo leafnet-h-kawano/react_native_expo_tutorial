@@ -43,7 +43,7 @@ export function useUsers(callbacks?: CallbackArgs<GetUsersResponse>) {
     queryFn: () => userQueryFunctions.getAllUsers(callbacks),
     // QueryClientで使用するmeta情報
     // success処理はレスポンスデータの編集も行うのでqueryFn内で行う
-    meta: { ...createDefaultQueryMeta(callbacks), isBackground: true },
+    meta: { ...createDefaultQueryMeta(callbacks), isBackground: false },
   });
 }
 
