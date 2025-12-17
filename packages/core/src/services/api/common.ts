@@ -12,10 +12,14 @@ import { statusCodeToErrorMessage } from "../apiResponseHandler";
 
 // 環境変数からAPIのベースURLを取得
 const getBaseUrl = (): string => {
-  const apiUrl = Constants.expoConfig?.extra?.apiUrl;
-  console.log('API Base URL:', apiUrl);
-  // 環境変数が設定されていない場合はデフォルトURL
-  return apiUrl || 'https://jsonplaceholder.typicode.com';
+  // 1) Expo (app) の runtime config
+  const expoApi = Constants?.expoConfig?.extra?.apiUrl;
+  // 2) 環境変数（Node / Next）
+  const envApi = process.env.API_URL;
+  const base = expoApi || envApi || 'https://jsonplaceholder.typicode.com';
+  // ログは簡潔に
+  utils.debugLog('Resolved API base URL:', base);
+  return base;
 };
 
 /// APIクライアントの設定

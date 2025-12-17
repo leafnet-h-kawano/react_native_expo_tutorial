@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
+    "dotenv-cli": "^11.0.0",
     "jest": "^30.2.0",
     "ts-jest": "^29.2.6"
   },
@@ -29,9 +30,7 @@
     "mobile:run:android:dev": "pnpm -F @app/mobile run:android:dev",
     "mobile:run:android:stg": "pnpm -F @app/mobile run:android:stg",
     "mobile:run:android:prod": "pnpm -F @app/mobile run:android:prod",
-
     "mobile:ios:launch:dev": "pnpm -F @app/mobile ios:launch:dev",
-
     "mobile:build:ios:dev": "pnpm -F @app/mobile build:ios:dev",
     "mobile:build:ios:stg": "pnpm -F @app/mobile build:ios:stg",
     "mobile:build:ios:prod": "pnpm -F @app/mobile build:ios:prod",
@@ -41,6 +40,13 @@
     "mobile:test": "pnpm -F @app/mobile test",
     "mobile:lint": "pnpm -F @app/mobile lint",
 
+    "web:dev": "pnpm -F @app/web dev",
+    "web:stg": "pnpm -F @app/web stg",
+    "web:prod": "pnpm -F @app/web prod",
+    "web:build": "pnpm -F @app/web build",
+    "web:start": "pnpm -F @app/web start",
+    "web:lint": "pnpm -F @app/web lint",
+    
     "core:openapi:bundle": "pnpm -F @app/core openapi:bundle",
     "core:generate:types": "pnpm -F @app/core generate:types",
     "core:generate:schemas": "pnpm -F @app/core generate:schemas",
@@ -49,5 +55,4 @@
     "core:swagger": "pnpm -F @app/core swagger",
     "core:mock:server": "pnpm -F @app/core mock:server"
   }
-
 }
