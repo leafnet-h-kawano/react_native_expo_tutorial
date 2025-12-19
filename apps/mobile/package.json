@@ -24,7 +24,9 @@
     "build:android:stg": "APP_VARIANT=staging eas build --profile staging --platform android",
     "build:android:prod": "APP_VARIANT=production eas build --profile production --platform android",
     "test": "jest",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
