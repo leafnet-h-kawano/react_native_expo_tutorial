@@ -87,6 +87,20 @@ export default function HomeStackLayout() {
           },
         }}
       />
+      <Stack.Screen
+        name="webview-home"
+        options={{
+          title: 'webview',
+          headerStyle: {
+            backgroundColor: '#007AFF',
+          },
+          headerTintColor: 'white',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+          },
+        }}
+      />
     </Stack>
   );
 }

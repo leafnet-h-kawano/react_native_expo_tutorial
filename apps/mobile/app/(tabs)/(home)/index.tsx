@@ -138,75 +138,8 @@ export default function HomeTab() {
 
         {/* ナビゲーションボタン */}
         <View style={{ gap: 10 }}>
-          <Link href="/details" asChild>
-            <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                backgroundColor: '#f8f9fa',
-                paddingVertical: 12,
-                paddingHorizontal: 16,
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: '#e9ecef',
-              }}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="information-circle-outline" size={20} color={getThemeColor()} />
-              <Text
-                style={{
-                  marginLeft: 10,
-                  fontSize: 16,
-                  color: '#333',
-                  fontWeight: '500',
-                }}
-              >
-                詳細画面へ
-              </Text>
-              <Ionicons
-                name="chevron-forward"
-                size={16}
-                color="#999"
-                style={{ marginLeft: 'auto' }}
-              />
-            </TouchableOpacity>
-          </Link>
 
-          <Link href="/profile" asChild>
-            <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                backgroundColor: '#f8f9fa',
-                paddingVertical: 12,
-                paddingHorizontal: 16,
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: '#e9ecef',
-              }}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="person-circle-outline" size={20} color={getThemeColor()} />
-              <Text
-                style={{
-                  marginLeft: 10,
-                  fontSize: 16,
-                  color: '#333',
-                  fontWeight: '500',
-                }}
-              >
-                ユーザー詳細
-              </Text>
-              <Ionicons
-                name="chevron-forward"
-                size={16}
-                color="#999"
-                style={{ marginLeft: 'auto' }}
-              />
-            </TouchableOpacity>
-          </Link>
-
-          <Link href="/api-sample" asChild>
+          {/* <Link href="/api-sample" asChild>
             <TouchableOpacity
               style={{
                 flexDirection: 'row',
@@ -238,34 +171,8 @@ export default function HomeTab() {
                 style={{ marginLeft: 'auto' }}
               />
             </TouchableOpacity>
-          </Link>
-
-          {/* <Link href="/advanced-api" asChild>
-            <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                backgroundColor: '#f8f9fa',
-                paddingVertical: 12,
-                paddingHorizontal: 16,
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: '#e9ecef',
-              }}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="rocket-outline" size={20} color={getThemeColor()} />
-              <Text style={{ 
-                marginLeft: 10, 
-                fontSize: 16, 
-                color: '#333',
-                fontWeight: '500' 
-              }}>
-                高度なAPI通信
-              </Text>
-              <Ionicons name="chevron-forward" size={16} color="#999" style={{ marginLeft: 'auto' }} />
-            </TouchableOpacity>
           </Link> */}
+
 
           <Link href="/comprehensive-demo" asChild>
             <TouchableOpacity
@@ -306,6 +213,68 @@ export default function HomeTab() {
               <Ionicons name="chevron-forward" size={18} color="#007AFF" />
             </TouchableOpacity>
           </Link>
+
+
+          <Link href="/webview-root" asChild>
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: '#f0f9ff',
+                paddingVertical: 15,
+                paddingHorizontal: 16,
+                borderRadius: 8,
+                borderWidth: 2,
+                borderColor: '#007AFF',
+                marginTop: 10,
+              }}
+              activeOpacity={0.7}
+            >
+              <View style={{ marginLeft: 12, flex: 1 }}>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    color: '#007AFF',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  webviewデモ(tab外遷移)
+                </Text>
+              </View>
+              <Ionicons name="chevron-forward" size={18} color="#007AFF" />
+            </TouchableOpacity>
+          </Link>
+
+          <Link href="/webview-home" asChild>
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: '#f0f9ff',
+                paddingVertical: 15,
+                paddingHorizontal: 16,
+                borderRadius: 8,
+                borderWidth: 2,
+                borderColor: '#007AFF',
+                marginTop: 10,
+              }}
+              activeOpacity={0.7}
+            >
+              <View style={{ marginLeft: 12, flex: 1 }}>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    color: '#007AFF',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  webviewデモ(tab内遷移)
+                </Text>
+              </View>
+              <Ionicons name="chevron-forward" size={18} color="#007AFF" />
+            </TouchableOpacity>
+          </Link>
+
         </View>
       </View>
 

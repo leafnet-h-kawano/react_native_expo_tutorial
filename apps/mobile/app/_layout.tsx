@@ -6,7 +6,7 @@ export default function RootLayout() {
   return (
     <QueryProvider>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false, title: "Home" }} />
       </Stack>
 
       {/* グローバルエラーモーダル */}
