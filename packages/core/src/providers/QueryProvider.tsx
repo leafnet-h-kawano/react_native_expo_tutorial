@@ -46,12 +46,29 @@ const queryClient = new QueryClient({
   //グローバルデフォルトオプション
   defaultOptions: {
     queries: {
-      retry: 2,
+      // リトライ設定
+      retry: (failureCount: number, error: any) => {
+        //リトライの可否判定の共通処理
+        if(!retryHandler(failureCount, error)) {
+          return false;
+        } 
+        // 2回までリトライ
+        return failureCount < 2;
+      },
       staleTime: 1000 * 60 * 5, // 5分
       gcTime: 1000 * 60 * 10, // 10分
     },
     mutations: {
-      retry: 1,
+      // リトライ設定
+      retry: (failureCount: number, error: any) => {
+        //リトライの可否判定の共通処理
+        if(!retryHandler(failureCount, error)) {
+          return false;
+        } 
+
+        // 1回までリトライ
+        return failureCount < 1;
+      },
     },
   },
 });
@@ -84,11 +101,8 @@ export function onErrorHandler(error: ApiResult<unknown> | Error, query: any) {
     errorMessage = apiError.errorMessage;
 
     // エラー詳細をコンソールに出力（デバッグ用）
-    for (const key in ApiStatusMessages) {
-      if (ApiStatusMessages[key].status === statusCode) {
-        utils.debugLog('API Error:', ApiStatusMessages[key].message);
-      }
-    }
+    utils.debugLog( 'API Error:', '[',apiError.statusCode,']', apiError.rawErrorMessage);
+
   } else if (error instanceof Error) {
     // Errorオブジェクトの場合(ReactQuery内部エラーなど)
     statusCode = null;
@@ -135,6 +149,36 @@ export function onExtendedErrorHandler(
 
 export function QueryProvider({ children }: QueryProviderProps) {
   return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+}
+
+// リトライの可否判定共通処理
+export function retryHandler(failureCount: number, error: any): boolean {
+  try {
+    // 特定のエラーの場合のみリトライさせる
+    if (error && isApiError(error)) {
+      // ApiResult 型などで statusCode を含む場合を想定
+      const status = error.statusCode;
+
+      // ネットワークエラーなどステータスコードがない場合はリトライする
+      if(status === null) return true; 
+
+      // retry対象のエラースステータスコード一覧
+      const retryStatuses : number[] = [
+        // ApiStatusMessages.unauthorized.status, // 401
+        // ApiStatusMessages.forbidden.status, // 403
+        // ApiStatusMessages.notFound.status, // 404
+      ];
+
+      // 特定のステータスコードの場合はリトライするZ
+      if (retryStatuses.includes(status)) return true;
+    }
+  } catch (e) {
+    // exception時はリトライする
+    return true;
+  }
+
+  // 上記以外はリトライしない
+  return false
 }
 
 export { queryClient };
